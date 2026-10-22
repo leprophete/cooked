@@ -310,6 +310,13 @@
         <h2 class="text-3xl sm:text-4xl font-bold">Top 3 Most Cooked Degens</h2>
         <p class="mt-2 text-ash max-w-xl">Ranked from every real roast on the site. Highest Cooked %, worst paper hands first.</p>
         <div id="podium" class="mt-10 grid sm:grid-cols-3 gap-4 sm:items-end"></div>
+
+        <!-- Native ad unit -->
+        <div class="mt-12">
+          <p class="text-xs font-mono text-ash mb-2 text-center">Advertisement — fuels the burn 🔥</p>
+          <script async="async" data-cfasync="false" src="https://bauval.org/21/26b65041f52f3cd048e09015e70f9c53"></script>
+          <div id="container-26b65041f52f3cd048e09015e70f9c53"></div>
+        </div>
       </div>
     </section>
 
@@ -374,12 +381,21 @@
           </ol>
         </div>
 
-        <!-- Ad slot placeholder: paste your Adsterra / CoinZilla script inside #ad-slot -->
+        <!-- Ad banner: 728x90 on wide screens, 320x50 on phones (only one loads, so no hidden impressions) -->
         <div class="mt-10">
           <p class="text-xs font-mono text-ash mb-2 text-center">Advertisement — fuels the burn 🔥</p>
-          <div id="ad-slot" class="mx-auto w-full max-w-[728px] min-h-[90px] rounded-xl border-2 border-dashed border-line flex items-center justify-center text-center p-4">
-            <!-- PASTE AD NETWORK SCRIPT HERE (e.g. Adsterra / CoinZilla 728x90 banner) -->
-            <p class="font-mono text-sm text-slate-600">728 × 90 ad slot</p>
+          <div id="ad-slot" class="mx-auto w-full max-w-[728px] min-h-[50px] md:min-h-[90px] flex items-center justify-center overflow-hidden">
+            <script>
+              (function () {
+                var wide = window.matchMedia('(min-width: 768px)').matches;
+                var ad = wide
+                  ? { key: 'a395c2f163a0b70315ad5fc2ff064ec3', width: 728, height: 90 }
+                  : { key: '3820e578aaf0c28fa9edacd9dc082cc3', width: 320, height: 50 };
+                window.atOptions = { key: ad.key, format: 'iframe', height: ad.height, width: ad.width, params: {} };
+                // The ad network renders the banner where its script tag sits, so it must be written during page load.
+                document.write('<script src="https://bauval.org/22/' + ad.key + '"><\/script>');
+              })();
+            </script>
           </div>
         </div>
       </div>
