@@ -1,0 +1,1270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;$COOKED — Am I Cooked? AI Roast Generator&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="description" content="Drop your X handle or Solana wallet and find out how cooked you are. Every roast feeds the $COOKED buyback &amp; burn." /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:title" content="$COOKED — Am I Cooked?" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:description" content="AI Twitter &amp; Wallet Roaster. 100% of ad revenue buys back and burns $COOKED." /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#07090f" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;🔥&lt;/text&gt;&lt;/svg&gt;" /&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ========== 1. CDN IMPORTS ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.googleapis.com" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet" /&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tailwind.config = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>theme: {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>extend: {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>colors: {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ink: '#07090f',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>panel: '#0d1220',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line: '#1c2436',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>neon: '#39ff88',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flame: '#ff7a1a',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ash: '#8a93a8',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>fontFamily: {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">        </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html { scroll-behavior: smooth; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #07090f;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-image:</p>
+<p class="p1"><span class="Apple-converted-space">        </span>linear-gradient(rgba(57,255,136,.035) 1px, transparent 1px),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>linear-gradient(90deg, rgba(57,255,136,.035) 1px, transparent 1px);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-size: 32px 32px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.glow-neon { box-shadow: 0 0 0 1px rgba(57,255,136,.5), 0 0 24px rgba(57,255,136,.25); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.glow-flame { box-shadow: 0 0 0 1px rgba(255,122,26,.5), 0 0 24px rgba(255,122,26,.25); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.text-glow { text-shadow: 0 0 18px rgba(57,255,136,.55); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.flame-text {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: linear-gradient(90deg, #ffb347, #ff7a1a 40%, #ff3d3d);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>-webkit-background-clip: text; background-clip: text; color: transparent;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.meme-frame { container-type: inline-size; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.meme-text {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>position: absolute; left: 4%; right: 4%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: Anton, Impact, 'Arial Black', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: clamp(16px, 7.5cqw, 40px); line-height: 1.05;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-transform: uppercase; text-align: center; color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>-webkit-text-stroke: 1.5px #000; paint-order: stroke fill;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bar-fill { transition: width .8s cubic-bezier(.2,.8,.2,1); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes flicker { 0%,100% { opacity: 1 } 50% { opacity: .55 } }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.live-dot { animation: flicker 1.4s ease-in-out infinite; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes sizzle { 0% { transform: translateY(0) } 50% { transform: translateY(-3px) } 100% { transform: translateY(0) } }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.sizzle { animation: sizzle 2.4s ease-in-out infinite; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (prefers-reduced-motion: reduce) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.live-dot, .sizzle { animation: none; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.bar-fill { transition: none; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html { scroll-behavior: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;body class="text-slate-200 font-display antialiased min-h-screen"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ========== 2. HEADER &amp; NAVIGATION ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;header class="sticky top-0 z-40 border-b border-line bg-ink/85 backdrop-blur"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;a href="#roaster" class="flex items-center gap-2 shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="text-2xl sizzle"&gt;🔥&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="font-mono font-bold text-lg tracking-tight"&gt;&lt;span class="text-neon text-glow"&gt;$&lt;/span&gt;COOKED&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/a&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;nav class="hidden md:flex items-center gap-7 text-sm text-ash"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#roaster" class="hover:text-neon transition-colors"&gt;Roaster&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#battle" class="hover:text-neon transition-colors"&gt;Meme Battle&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#tokenomics" class="hover:text-neon transition-colors"&gt;Tokenomics&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#buy" class="hover:text-flame transition-colors"&gt;Buy Token&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" aria-label="Follow @Crypto_Cycles1 on X"</p>
+<p class="p1"><span class="Apple-converted-space">          </span>class="p-2 rounded-lg border border-line text-slate-200 hover:border-neon hover:text-neon transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"&gt;&lt;path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="connectBtn" class="flex items-center gap-2 rounded-lg bg-neon text-ink font-bold text-sm px-3 sm:px-4 py-2 hover:brightness-110 active:scale-95 transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;i data-lucide="wallet" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span id="connectLabel"&gt;Connect Phantom&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="menuBtn" class="md:hidden p-2 rounded-lg border border-line text-ash" aria-label="Open menu" aria-expanded="false"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;i data-lucide="menu" class="w-5 h-5"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav id="mobileNav" class="md:hidden hidden border-t border-line bg-ink"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="px-4 py-3 flex flex-col text-base"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#roaster" class="py-3 border-b border-line/60"&gt;Roaster&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#battle" class="py-3 border-b border-line/60"&gt;Meme Battle&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#tokenomics" class="py-3 border-b border-line/60"&gt;Tokenomics&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="#buy" class="py-3 text-flame"&gt;Buy Token&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- ========== 3. HERO : AI ROASTER ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;section id="roaster" class="max-w-6xl mx-auto px-4 pt-10 sm:pt-16 pb-16 scroll-mt-20"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="grid lg:grid-cols-2 gap-10 items-start"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="font-mono text-xs text-neon tracking-widest uppercase mb-4 flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="w-2 h-2 rounded-full bg-neon live-dot"&gt;&lt;/span&gt; Roast engine online</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h1 class="text-4xl sm:text-6xl font-bold leading-[1.02] tracking-tight"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Am I &lt;span class="flame-text"&gt;Cooked?&lt;/span&gt;&lt;br /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-slate-400 text-3xl sm:text-5xl"&gt;AI Roast Generator&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="mt-5 text-ash max-w-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Drop your X handle or a Solana wallet. We'll scan the vibes, judge the bags and print your Degen ID. Every roast pumps the burn.</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener"</p>
+<p class="p1"><span class="Apple-converted-space">            </span>class="mt-4 inline-flex items-center gap-2 font-mono text-sm text-slate-300 hover:text-neon transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Built by &lt;span class="text-neon font-bold"&gt;@Crypto_Cycles1&lt;/span&gt; · follow on X →</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/a&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;form id="roastForm" class="mt-8" autocomplete="off"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="roastInput" class="sr-only"&gt;X username or Solana wallet&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex flex-col sm:flex-row gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="relative flex-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="at-sign" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ash"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input id="roastInput" type="text" spellcheck="false" maxlength="64"</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>placeholder="elonmusk or 7xKX…wallet"</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>class="w-full bg-panel border border-line rounded-xl pl-9 pr-3 py-4 font-mono text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-neon focus:ring-2 focus:ring-neon/30" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button id="roastBtn" type="submit"</p>
+<p class="p1"><span class="Apple-converted-space">                </span>class="rounded-xl bg-flame text-ink font-bold px-6 py-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition glow-flame disabled:opacity-60"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="flame" class="w-5 h-5"&gt;&lt;/i&gt; Roast Me!</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="inputError" class="hidden mt-2 text-sm text-red-400 font-mono"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button id="roastWalletBtn" class="hidden mt-3 text-sm font-mono text-neon hover:underline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>→ Roast my connected wallet</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="mt-8 flex flex-wrap gap-2 text-xs font-mono text-ash"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="px-2 py-1 rounded border border-line"&gt;Try:&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="try-chip px-2 py-1 rounded border border-line hover:border-neon hover:text-neon" data-v="saylor"&gt;saylor&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="try-chip px-2 py-1 rounded border border-line hover:border-neon hover:text-neon" data-v="cobie"&gt;cobie&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="try-chip px-2 py-1 rounded border border-line hover:border-neon hover:text-neon" data-v="ansem"&gt;ansem&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Canvas card --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="relative rounded-2xl overflow-hidden border border-line bg-panel glow-neon"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;canvas id="roastCanvas" width="1080" height="1350" class="w-full h-auto block"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="canvasLoading" class="hidden absolute inset-0 bg-ink/80 flex flex-col items-center justify-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="text-5xl sizzle"&gt;🍳&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="font-mono text-sm text-neon"&gt;Cooking your roast…&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="mt-4 grid grid-cols-2 gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="downloadBtn" disabled</p>
+<p class="p1"><span class="Apple-converted-space">              </span>class="rounded-xl border border-line bg-panel py-3 font-bold flex items-center justify-center gap-2 hover:border-neon hover:text-neon transition disabled:opacity-40 disabled:pointer-events-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;i data-lucide="download" class="w-4 h-4"&gt;&lt;/i&gt; Download Image</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="shareBtn" disabled</p>
+<p class="p1"><span class="Apple-converted-space">              </span>class="rounded-xl bg-slate-100 text-ink py-3 font-bold flex items-center justify-center gap-2 hover:bg-white transition disabled:opacity-40 disabled:pointer-events-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"&gt;&lt;path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>Share on X</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="mt-3 text-xs text-ash text-center font-mono"&gt;Tip: download the card, then attach it to your post for max engagement.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- ========== 4. MEME BATTLES ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;section id="battle" class="border-t border-line bg-panel/40 scroll-mt-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="max-w-6xl mx-auto px-4 py-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="font-mono text-xs text-flame tracking-widest uppercase mb-2"&gt;The Daily Arena&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-3xl sm:text-4xl font-bold"&gt;Meme Battle &lt;span class="font-mono text-lg text-ash align-middle"&gt;#&lt;span id="battleRound"&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="font-mono text-sm text-ash"&gt;New arena in &lt;span id="battleTimer" class="text-slate-100"&gt;--:--:--&lt;/span&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;article id="memeA" class="meme-card rounded-2xl border border-line bg-ink p-5 flex flex-col"&gt;&lt;/article&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="flex items-center justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="font-mono font-bold text-2xl text-flame"&gt;VS&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;article id="memeB" class="meme-card rounded-2xl border border-line bg-ink p-5 flex flex-col"&gt;&lt;/article&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="flex justify-between gap-2 font-mono text-xs sm:text-sm mb-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-neon truncate" id="pctA"&gt;50%&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-flame truncate text-right" id="pctB"&gt;50%&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="h-4 rounded-full bg-line overflow-hidden flex"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="barA" class="bar-fill h-full bg-neon" style="width:50%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="barB" class="bar-fill h-full bg-flame" style="width:50%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="mt-2 text-center font-mono text-xs text-ash" id="totalVotes"&gt;0 votes&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="nextBattleBtn" class="hidden mt-6 mx-auto rounded-xl bg-flame text-ink font-bold px-6 py-3 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Next battle &lt;i data-lucide="arrow-right" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- ========== 5. TOKENOMICS &amp; AD-BURN ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;section id="tokenomics" class="border-t border-line scroll-mt-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="max-w-6xl mx-auto px-4 py-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="font-mono text-xs text-neon tracking-widest uppercase mb-2"&gt;For the investors&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2 class="text-3xl sm:text-4xl font-bold mb-8"&gt;Tokenomics &amp;amp; Ad-Burn&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="rounded-2xl border border-line bg-panel p-5 sm:col-span-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-ash text-sm flex items-center gap-2"&gt;&lt;span class="w-2 h-2 rounded-full bg-neon live-dot"&gt;&lt;/span&gt; Total Roasts Generated&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="totalRoasts" class="mt-2 font-mono font-bold text-4xl sm:text-5xl text-neon text-glow tabular-nums"&gt;0&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="rounded-2xl border border-line bg-panel p-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-ash text-sm"&gt;Total Supply&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="mt-2 font-mono font-bold text-2xl"&gt;1,000,000,000&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="rounded-2xl border border-line bg-panel p-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-ash text-sm"&gt;Tax / Team alloc&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="mt-2 font-mono font-bold text-2xl"&gt;0% / 0%&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-4 rounded-2xl border border-line bg-panel p-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="flex justify-between items-baseline gap-3 mb-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="font-bold"&gt;Next 1% Supply Burn&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="font-mono text-sm text-flame"&gt;&lt;span id="burnPct"&gt;0&lt;/span&gt;%&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="h-5 rounded-full bg-line overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="burnBar" class="bar-fill h-full bg-gradient-to-r from-flame to-red-500" style="width:0%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="mt-2 text-xs font-mono text-ash"&gt;&lt;span id="burnLeft"&gt;0&lt;/span&gt; roasts until 10,000,000 $COOKED hit the incinerator&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Ad-Revenue Buyback &amp; Burn explainer --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-10 rounded-2xl border border-flame/40 bg-gradient-to-br from-flame/10 to-transparent p-6 sm:p-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 class="text-2xl font-bold flex items-center gap-2"&gt;&lt;i data-lucide="recycle" class="w-6 h-6 text-flame"&gt;&lt;/i&gt; Ad-Revenue Buyback &amp;amp; Burn&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="mt-2 text-ash max-w-2xl"&gt;100% of the ad revenue this site earns is used to market-buy $COOKED and send it to the burn address. You roast, the ads pay, the supply shrinks.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;ol class="mt-6 grid sm:grid-cols-4 gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li class="rounded-xl bg-ink border border-line p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;i data-lucide="flame" class="w-6 h-6 text-neon"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="mt-2 font-bold"&gt;1. You roast&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="text-sm text-ash"&gt;Every card generated = page views.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li class="rounded-xl bg-ink border border-line p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;i data-lucide="megaphone" class="w-6 h-6 text-neon"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="mt-2 font-bold"&gt;2. Ads pay&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="text-sm text-ash"&gt;Impressions turn into USDC revenue.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li class="rounded-xl bg-ink border border-line p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;i data-lucide="shopping-cart" class="w-6 h-6 text-neon"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="mt-2 font-bold"&gt;3. We buy&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="text-sm text-ash"&gt;100% market-buys $COOKED on-chain.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li class="rounded-xl bg-ink border border-flame/60 p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;i data-lucide="flame-kindling" class="w-6 h-6 text-flame"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="mt-2 font-bold text-flame"&gt;4. We burn&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="text-sm text-ash"&gt;Tokens sent to the incinerator. Forever.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/ol&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Ad slot placeholder: paste your Adsterra / CoinZilla script inside #ad-slot --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="text-xs font-mono text-ash mb-2 text-center"&gt;Advertisement — fuels the burn 🔥&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div id="ad-slot" class="mx-auto w-full max-w-[728px] min-h-[90px] rounded-xl border-2 border-dashed border-line flex items-center justify-center text-center p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- PASTE AD NETWORK SCRIPT HERE (e.g. Adsterra / CoinZilla 728x90 banner) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="font-mono text-sm text-slate-600"&gt;728 × 90 ad slot&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- BUY --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;section id="buy" class="border-t border-line bg-panel/40 scroll-mt-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="max-w-3xl mx-auto px-4 py-16 text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2 class="text-3xl sm:text-5xl font-bold"&gt;Get &lt;span class="flame-text"&gt;$COOKED&lt;/span&gt;&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="mt-3 text-ash"&gt;Before you get cooked.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-8 rounded-xl border border-line bg-ink p-3 flex items-center gap-2 text-left"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span class="font-mono text-xs text-ash shrink-0 pl-1"&gt;CA&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;code id="caText" class="font-mono text-sm text-slate-100 truncate flex-1"&gt;&lt;/code&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;button id="copyCaBtn" class="shrink-0 rounded-lg border border-line px-3 py-2 text-sm hover:border-neon hover:text-neon flex items-center gap-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i data-lucide="copy" class="w-4 h-4"&gt;&lt;/i&gt; &lt;span&gt;Copy&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-4 grid sm:grid-cols-2 gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a id="jupLink" target="_blank" rel="noopener" class="rounded-xl bg-neon text-ink font-bold py-4 flex items-center justify-center gap-2 hover:brightness-110 transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i data-lucide="zap" class="w-5 h-5"&gt;&lt;/i&gt; Buy on Jupiter</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a id="dexLink" target="_blank" rel="noopener" class="rounded-xl border border-line py-4 font-bold flex items-center justify-center gap-2 hover:border-flame hover:text-flame transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i data-lucide="line-chart" class="w-5 h-5"&gt;&lt;/i&gt; Chart on DexScreener</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener"</p>
+<p class="p1"><span class="Apple-converted-space">          </span>class="mt-3 rounded-xl bg-slate-100 text-ink font-bold py-4 flex items-center justify-center gap-2 hover:bg-white transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"&gt;&lt;path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Follow @Crypto_Cycles1 for updates</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;footer class="border-t border-line"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row justify-between gap-3 text-xs font-mono text-ash"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;© &lt;span id="year"&gt;&lt;/span&gt; $COOKED. Memecoin with no intrinsic value. Roasts are jokes, not financial advice.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;Built on Solana ◎ by &lt;a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" class="text-neon hover:underline"&gt;@Crypto_Cycles1&lt;/a&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Toast --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden rounded-lg bg-slate-100 text-ink font-bold text-sm px-4 py-3 shadow-lg"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ========== 6. JAVASCRIPT ========== --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// ---------- CONFIG (edit these before launch) ----------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const CONFIG = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>siteUrl: 'https://cooked.io',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>watermark: 'Generated on Cooked.io • Powered by $COOKED',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>xHandle: '@Crypto_Cycles1',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>xUrl: 'https://x.com/Crypto_Cycles1',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tokenMint: 'CooKEDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpump', // replace with the real mint address</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Public RPC is rate-limited and often blocks browsers; use a Helius/QuickNode URL in production.</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rpcUrl: 'https://api.mainnet-beta.solana.com',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Counter has no backend: a base number plus local roasts plus a slow simulated tick.</p>
+<p class="p1"><span class="Apple-converted-space">    </span>roastsBase: 1284377,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>roastsPerBurn: 50000,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const $ = (id) =&gt; document.getElementById(id);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const refreshIcons = () =&gt; window.lucide &amp;&amp; lucide.createIcons();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function toast(msg) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const t = $('toast');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>t.textContent = msg;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>t.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearTimeout(toast._t);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast._t = setTimeout(() =&gt; t.classList.add('hidden'), 2600);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const store = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Deterministic randomness so the same handle always gets the same card.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function hashString(str) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let h1 = 0xdeadbeef, h2 = 0x41c6ce57;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; str.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const c = str.charCodeAt(i);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>h1 = Math.imul(h1 ^ c, 2654435761);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>h2 = Math.imul(h2 ^ c, 1597334677);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 = Math.imul(h1 ^ (h1 &gt;&gt;&gt; 16), 2246822507) ^ Math.imul(h2 ^ (h2 &gt;&gt;&gt; 13), 3266489909);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return h1 &gt;&gt;&gt; 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function seededRandom(seed) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>seed |= 0; seed = (seed + 0x6d2b79f5) | 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let t = Math.imul(seed ^ (seed &gt;&gt;&gt; 15), 1 | seed);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>t = (t + Math.imul(t ^ (t &gt;&gt;&gt; 7), 61 | t)) ^ t;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return ((t ^ (t &gt;&gt;&gt; 14)) &gt;&gt;&gt; 0) / 4294967296;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// WEB3 — PHANTOM WALLET</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let walletPubkey = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function getProvider() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const p = window.phantom?.solana || window.solana;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return p &amp;&amp; p.isPhantom ? p : null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const shortAddr = (a) =&gt; a.slice(0, 4) + '…' + a.slice(-4);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function setWalletUI() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const label = $('connectLabel');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const btn = $('connectBtn');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (walletPubkey) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>label.textContent = shortAddr(walletPubkey);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.remove('bg-neon', 'text-ink');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.add('bg-panel', 'text-neon', 'border', 'border-neon');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.title = 'Click to disconnect';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('roastWalletBtn').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>label.textContent = 'Connect Phantom';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.add('bg-neon', 'text-ink');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.remove('bg-panel', 'text-neon', 'border', 'border-neon');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.title = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('roastWalletBtn').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>async function connectWallet() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const provider = getProvider();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!provider) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>// On mobile, open the site inside Phantom's in-app browser.</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const url = encodeURIComponent(location.href);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>location.href = `https://phantom.app/ul/browse/${url}?ref=${encodeURIComponent(location.origin)}`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.open('https://phantom.app/download', '_blank', 'noopener');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>toast('Phantom not found — install it first');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const res = await provider.connect();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>walletPubkey = res.publicKey.toString();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setWalletUI();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>toast('Wallet connected 🔥');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>toast('Connection rejected');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>async function disconnectWallet() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const provider = getProvider();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try { await provider?.disconnect(); } catch {}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>walletPubkey = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setWalletUI();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast('Wallet disconnected');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function initWallet() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const provider = getProvider();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('connectBtn').addEventListener('click', () =&gt; (walletPubkey ? disconnectWallet() : connectWallet()));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!provider) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>provider.on?.('connect', (pk) =&gt; { walletPubkey = pk.toString(); setWalletUI(); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>provider.on?.('disconnect', () =&gt; { walletPubkey = null; setWalletUI(); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>provider.on?.('accountChanged', (pk) =&gt; { walletPubkey = pk ? pk.toString() : null; setWalletUI(); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Silent reconnect if the user already trusted the site.</p>
+<p class="p1"><span class="Apple-converted-space">    </span>provider.connect({ onlyIfTrusted: true }).then((r) =&gt; { walletPubkey = r.publicKey.toString(); setWalletUI(); }).catch(() =&gt; {});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function isSolanaAddress(v) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(v)) return false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try { new solanaWeb3.PublicKey(v); return true; } catch { return false; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>async function fetchSolBalance(address) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const conn = new solanaWeb3.Connection(CONFIG.rpcUrl, 'confirmed');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const lamports = await Promise.race([</p>
+<p class="p1"><span class="Apple-converted-space">        </span>conn.getBalance(new solanaWeb3.PublicKey(address)),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>new Promise((_, rej) =&gt; setTimeout(() =&gt; rej(new Error('timeout')), 3500)),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>]);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return lamports / solanaWeb3.LAMPORTS_PER_SOL;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch { return null; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// ROAST TEXT GENERATOR</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Template engine: a roast is stitched from an opener, a line about the handle itself,</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// a generic jab, a jab at the card's metrics and a closer. Thousands of combinations.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const OPENERS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Ah, {name}.", "Scanning {name}… oh no.", "{name}, sit down.", "Okay {name}, deep breath.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"We looked into {name}. We regret it.", "Bless your heart, {name}.", "{name}? Oh, sweetie.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Alright {name}, this is an intervention.", "Loading {name}… the AI asked for a break.",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ROASTS_X = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Tweets 'we're so back' every 6 hours. You were never here.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your timeline is 50% 'GM' and 50% screenshots of trades you definitely didn't take.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Bio says 'building'. The only thing you've built is a very consistent bag of regret.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"You quote-tweet Vitalik like he's gonna reply. He's not gonna reply.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Got ratio'd by a bot with 3 followers. The bot had the better take.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Every dip is a 'generational entry' for you. You've had 47 generations this year.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your growth strategy is replying 'this 👆' under whales. Bold. Useless. Bold.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your threads start with '🧵 1/27'. No human has ever seen 2/27.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"You write 'NFA' on every tweet. Correct: it has never been advice, or financial.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Hosts Spaces with TED talk confidence and voicemail-level audience.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Laser eyes since 2021. The lasers never showed up. Neither did the gains.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your notifications are just Telegram scam bots calling you 'sir'.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Calls yourself an 'early adopter'. Early to the top, specifically.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Posts charts with lines so random they qualify as modern art.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your 'alpha group' is you, two alts and a guy named Kevin who's down 92%.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Tweets 'I called it' after every pump. Funny how the receipts are always deleted.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Engagement-farms so hard the algorithm filed a restraining order.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your pinned tweet is a 2021 prediction. It aged like milk on a radiator.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Follows 4,812 accounts and every single one is smarter than your portfolio.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Writes 'probably nothing' under everything. Usually right: it's nothing.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"You have a 'cycle theory'. The cycle is: buy top, cope, repeat.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your DMs are 80% 'ser pls check' and 20% you begging influencers for a follow back.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Tweets like a fund manager. Trades like a raccoon in a dumpster.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Says 'zoom out' because zooming in physically hurts.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your calls have the hit rate of a weather app on Mars.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Ring light, podcast mic, 14 listeners. All bots. One of them is us.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Joins every giveaway. Only prize ever won: being someone's exit liquidity.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Posts 'patience' while refreshing the chart every 40 seconds.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your tweets have the half-life of a pump.fun launch.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Has been early to so many rugs you should get loyalty points.",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ROASTS_WALLET = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"This wallet has more rugs than a Persian carpet shop.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Every token in here is down 90%. The other 10% is dust and delusion.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Signs transactions without reading them. Drainers send you birthday cards.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your on-chain history reads like a true-crime podcast where the victim keeps going back.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Paid more in priority fees than your bags are worth. Validators salute your service.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Aped 14 dog coins in one afternoon. The dogs ate the portfolio.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Buys the ATH so consistently it counts as a strategy. A bad one, but consistent.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Diamond hands on tokens with $40 of liquidity. Unshakeable. Also unsellable.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Holds 3 airdrops nobody can sell and an NFT nobody wants to look at.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Devs put this wallet in the roadmap under 'exit liquidity: secured'.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"SOL → meme → SOL → meme until only the fees were left. Circle of life.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Living proof that 'one last trade' is a lifestyle, not a sentence.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"This PnL is a horror movie and you keep buying tickets.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Your token accounts are a graveyard. Every tombstone says 'next 100x'.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Bought a coin because the logo was a frog in a hat. The frog is doing better than you.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"You've funded more dev Lambos than a car dealership.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Insiders copy-trade this wallet. In reverse.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Bubblemaps would label this wallet 'victim cluster'.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"This wallet has seen more dumps than a city sewer.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Average hold time: shorter than a TikTok.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"You don't trade memecoins. Memecoins trade you.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"The seed phrase is the only thing in here that's ever been secure.",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Lines triggered by words found in the X handle.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const HANDLE_KEYWORDS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /crypto|coin|token/i, lines: ["'Crypto' in the handle, so people know. Your portfolio was never going to tell them.", "Put crypto in your name and still somehow lost money in a bull market."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /sol|solana/i, lines: ["Solana in the handle, Solana in the bags, Solana-speed losses.", "So Solana-pilled you'd ape a token during a network outage."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /eth|vitalik/i, lines: ["ETH in the handle in 2026? Respect the commitment to paying gas for nothing."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /btc|bitcoin|sats|saylor|maxi/i, lines: ["Bitcoin maxi energy: zero memes, all lectures, and yet here you are.", "Says 'stack sats' like it's a personality. It is the whole personality."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /nft|jpeg|punk|art/i, lines: ["NFT guy detected. Your JPEGs are now worth exactly their file size."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /alpha|signal|call|insider/i, lines: ["'Alpha' in the handle. Statistically the beta-est account on the timeline."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /whale|rich|million/i, lines: ["Calls yourself a whale. Bank statement says sardine."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /degen|ape|gamble|casino/i, lines: ["Self-proclaimed degen. At least you're honest about the financial crimes."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /trade|trader|chart|ta_|_ta/i, lines: ["'Trader' in the handle. Your only consistent trade is time for losses."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /capital|fund|ventures|vc|labs|dao/i, lines: ["'Capital' in the handle. Assets under management: one Phantom wallet and vibes."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /ai|gpt|agent|bot/i, lines: ["AI in the handle. Even the AI unfollowed you."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /moon|pump|100x|gem|lambo/i, lines: ["Handle says moon. Chart says crater."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /cycle/i, lines: ["Named after cycles and still buying the wrong part of every single one.", "Studies market cycles religiously. Still manages to buy the top of each."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ re: /meme|pepe|doge|frog|cat|dog/i, lines: ["Meme in the handle, meme in the portfolio, meme in the bank account."] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Lines triggered by the shape of the handle.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const HANDLE_PATTERNS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; /\d+$/.test(h), lines: ["The numbers at the end mean someone took the clean handle first. Same with every entry you've made.", "Number at the end of the handle, like an alt account. Your main personality isn't working either."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; h.includes('_'), lines: ["Underscores in the handle: even your username needed a ladder to get anywhere."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; h.length &gt;= 13, lines: ["A handle this long and still nothing to say."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; h.length &lt;= 5, lines: ["Short handle flex. Got it in 2009 by accident, haven't won anything since."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; /^[A-Z0-9_]+$/.test(h) &amp;&amp; /[A-Z]/.test(h), lines: ["ALL CAPS HANDLE. WE HEAR YOU. WE'RE JUST NOT LISTENING."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (h) =&gt; /real|official|the_?/i.test(h), lines: ["'Real/official' in the handle. Nobody was confusing you with anyone."] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const METRIC_JABS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (r) =&gt; r.fomo &gt;= 85, lines: ["FOMO {fomo}/100: you'd ape a token called $SCAM if it had one green candle.", "FOMO {fomo}/100. You buy before reading the ticker."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (r) =&gt; r.fomo &lt;= 45, lines: ["FOMO only {fomo}/100. That's not discipline, you're just broke."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (r) =&gt; r.paperScore &gt;= 80, lines: ["Paper hands rating: {paper}. Sells the first red candle, rebuys the last green one."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (r) =&gt; r.degenLevel &gt;= 85, lines: ["Degen level {degen}. Your bank has a dedicated team for your card declines."] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ test: (r) =&gt; r.degenLevel &lt;= 20, lines: ["Degen level {degen}. Goes to the casino to use the bathroom."] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const CLOSERS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Fully seasoned. Lightly charred. Zero gains.", "Stay humble. You have no choice.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"This roast is NFA. Unlike your trades, it's accurate.", "We'd say WAGMI but we checked the data.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Log off. Touch grass. Grass doesn't rug.", "Your mom still thinks you 'do something with computers'.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Rest in PnL.", "Cope responsibly.", "Even the burn address has a better portfolio.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Next time just send it straight to the dev.", "Not financial advice. Just emotional damage.",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"Cooked. Plated. Served.", "Uninstall Phantom. For your family.",</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const BALANCE_ROASTS = {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>broke: ["Balance: {bal} SOL. Can't even afford the gas to rug yourself.", "{bal} SOL. The wallet is on a diet nobody asked for."],</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mid: ["Balance: {bal} SOL. Enough to ape, not enough to recover.", "{bal} SOL left. That's one bad Telegram call away from zero."],</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rich: ["Balance: {bal} SOL. Rich enough to know better. Doesn't.", "{bal} SOL and still asks CT what to buy. Embarrassing."],</p>
+<p class="p1"><span class="Apple-converted-space">  </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const VERDICTS = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ min: 0,<span class="Apple-converted-space">  </span>label: 'MEDIUM RARE', color: '#39ff88' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ min: 45, label: 'WELL DONE', <span class="Apple-converted-space">  </span>color: '#ffd23f' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ min: 65, label: 'FULLY COOKED', color: '#ff7a1a' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ min: 82, label: 'CHARCOAL', <span class="Apple-converted-space">    </span>color: '#ff3d3d' },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const PAPER_HANDS = ['Tissue Paper', 'Wet Napkin', 'Receipt Paper', 'Post-it Note', 'Cardboard', 'Sandpaper'];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const DEGEN_TITLES = ['Exit Liquidity', 'Bag Holder', 'Chart Astrologer', 'Pump.fun Intern', 'Rug Survivor', 'Leverage Goblin', 'Memecoin Monk', 'CT Philosopher'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const MAX_ROAST_CHARS = 250;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rerolls = {}; // same handle → same metrics, but a fresh roast text on each try</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function buildRoast(input, type, balance) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const key = type + ':' + input.toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rand = seededRandom(hashString(key));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const name = type === 'x' ? '@' + input : shortAddr(input);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Metrics are stable per account</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const fomo = 35 + Math.floor(rand() * 65);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const paperIdx = Math.floor(rand() * PAPER_HANDS.length);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const paperScore = Math.round(((PAPER_HANDS.length - paperIdx) / PAPER_HANDS.length) * 100);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const degenLevel = 1 + Math.floor(rand() * 99);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const title = DEGEN_TITLES[Math.floor(rand() * DEGEN_TITLES.length)];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const r = { fomo, paperScore, degenLevel, paperHands: PAPER_HANDS[paperIdx] };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Text changes on every re-roast</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rerolls[key] = (rerolls[key] || 0) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const trand = seededRandom(hashString(key + '#' + rerolls[key]));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pick = (arr) =&gt; arr[Math.floor(trand() * arr.length)];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const personal = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (type === 'x') {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>HANDLE_KEYWORDS.forEach((k) =&gt; k.re.test(input) &amp;&amp; personal.push(...k.lines));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>HANDLE_PATTERNS.forEach((p) =&gt; p.test(input) &amp;&amp; personal.push(...p.lines));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else if (balance !== null &amp;&amp; balance !== undefined) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const tier = balance &lt; 0.1 ? 'broke' : balance &lt; 25 ? 'mid' : 'rich';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>personal.push(...BALANCE_ROASTS[tier].map((l) =&gt; l.replace('{bal}', balance.toFixed(2))));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const bodies = (type === 'x' ? ROASTS_X : ROASTS_WALLET).slice();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const takeBody = () =&gt; bodies.splice(Math.floor(trand() * bodies.length), 1)[0];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const jabs = METRIC_JABS.filter((j) =&gt; j.test(r)).flatMap((j) =&gt; j.lines);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parts = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (trand() &lt; 0.55) parts.push(pick(OPENERS));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>parts.push(personal.length &amp;&amp; trand() &lt; 0.85 ? pick(personal) : takeBody());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>parts.push(jabs.length &amp;&amp; trand() &lt; 0.5 ? pick(jabs) : takeBody());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>parts.push(pick(CLOSERS));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let text = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const p of parts) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const next = text ? text + ' ' + p : p;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (next.length &lt;= MAX_ROAST_CHARS) text = next;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>text = text</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.replaceAll('{name}', name).replaceAll('{fomo}', fomo)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.replaceAll('{paper}', r.paperHands).replaceAll('{degen}', degenLevel);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const heat = Math.round((fomo + paperScore + degenLevel) / 3);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const verdict = [...VERDICTS].reverse().find((v) =&gt; heat &gt;= v.min);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>return {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>name, type, text, heat, verdict, title, ...r,</p>
+<p class="p1"><span class="Apple-converted-space">      </span>id: '#' + String(hashString(input) % 1000000).padStart(6, '0'),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// CANVAS — DEGEN ID CARD</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const canvas = $('roastCanvas');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const W = canvas.width, H = canvas.height;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let lastRoast = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function rr(x, y, w, h, r) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.moveTo(x + r, y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.arcTo(x + w, y, x + w, y + h, r);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.arcTo(x + w, y + h, x, y + h, r);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.arcTo(x, y + h, x, y, r);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.arcTo(x, y, x + w, y, r);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.closePath();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function countLines(text, maxW) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let line = '', n = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const w of text.split(' ')) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const test = line ? line + ' ' + w : w;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ctx.measureText(test).width &gt; maxW &amp;&amp; line) { n++; line = w; } else line = test;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return n;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function wrapText(text, x, y, maxW, lineH, maxLines) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const words = text.split(' ');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let line = '', lines = [];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const w of words) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const test = line ? line + ' ' + w : w;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ctx.measureText(test).width &gt; maxW &amp;&amp; line) { lines.push(line); line = w; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>else line = test;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (line) lines.push(line);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (lines.length &gt; maxLines) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>lines = lines.slice(0, maxLines);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>lines[maxLines - 1] = lines[maxLines - 1].replace(/\s+\S*$/, '') + '…';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>lines.forEach((l, i) =&gt; ctx.fillText(l, x, y + i * lineH));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function drawBackground() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const g = ctx.createLinearGradient(0, 0, W, H);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>g.addColorStop(0, '#0b1222');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>g.addColorStop(1, '#05070c');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = g;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillRect(0, 0, W, H);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = 'rgba(57,255,136,0.06)';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; W; i += 40) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let j = 0; j &lt; H; j += 40) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(W, j); ctx.stroke(); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const glow = ctx.createRadialGradient(W * 0.85, H * 0.1, 0, W * 0.85, H * 0.1, 600);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>glow.addColorStop(0, 'rgba(255,122,26,0.28)');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>glow.addColorStop(1, 'rgba(255,122,26,0)');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = glow;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillRect(0, 0, W, H);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.shadowColor = '#39ff88';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.shadowBlur = 24;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = '#39ff88';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 4;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(30, 30, W - 60, H - 60, 36);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function drawPlaceholderCard() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawBackground();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#39ff88';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 34px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('DEGEN ID CARD', W / 2, 150);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '220px serif';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('🔥', W / 2, 640);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#e2e8f0';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 72px "Space Grotesk"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('Your roast goes here', W / 2, 820);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#8a93a8';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '400 36px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('Enter a handle or wallet ↑', W / 2, 890);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawWatermark();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function drawWatermark() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = 'rgba(57,255,136,0.12)';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillRect(30, H - 120, W - 60, 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#39ff88';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 30px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(CONFIG.watermark, W / 2, H - 66);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Generated avatar for wallets / when the X avatar can't be loaded.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function drawGeneratedAvatar(cx, cy, r, seedStr, c = ctx) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rand = seededRandom(hashString(seedStr));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const hue = Math.floor(rand() * 360);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.clip();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.fillStyle = `hsl(${hue},70%,18%)`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.fillRect(cx - r, cy - r, r * 2, r * 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const cells = 5, size = (r * 2) / cells;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.fillStyle = `hsl(${hue},90%,58%)`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let y = 0; y &lt; cells; y++) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>for (let x = 0; x &lt; Math.ceil(cells / 2); x++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (rand() &gt; 0.5) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>c.fillRect(cx - r + x * size, cy - r + y * size, size + 1, size + 1);</p>
+<p class="p1"><span class="Apple-converted-space">          </span>c.fillRect(cx - r + (cells - 1 - x) * size, cy - r + y * size, size + 1, size + 1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.restore();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function loadImage(src, timeout = 4000) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return new Promise((resolve) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const img = new Image();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>img.crossOrigin = 'anonymous';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const timer = setTimeout(() =&gt; resolve(null), timeout);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>img.onload = () =&gt; { clearTimeout(timer); resolve(img); };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>img.onerror = () =&gt; { clearTimeout(timer); resolve(null); };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>img.src = src;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function drawMetric(label, valueText, pct, x, y, w, color) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#8a93a8';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '400 28px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(label.toUpperCase(), x, y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#f1f5f9';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 34px "Space Grotesk"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'right';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(valueText, x + w, y);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#1c2436';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(x, y + 18, w, 18, 9); ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = color;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(x, y + 18, Math.max(18, w * pct / 100), 18, 9); ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>async function drawRoastCard(roast, avatarImg) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawBackground();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pad = 90;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Header</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#39ff88';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 30px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('DEGEN ID CARD', pad, 130);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'right';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#8a93a8';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.id, W - pad, 130);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Avatar</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ax = pad + 120, ay = 330, ar = 120;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.shadowColor = roast.verdict.color; ctx.shadowBlur = 30;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath(); ctx.arc(ax, ay, ar + 8, 0, Math.PI * 2);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = roast.verdict.color; ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (avatarImg) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ctx.beginPath(); ctx.arc(ax, ay, ar, 0, Math.PI * 2); ctx.clip();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ctx.drawImage(avatarImg, ax - ar, ay - ar, ar * 2, ar * 2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>drawGeneratedAvatar(ax, ay, ar, roast.name);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Name + title</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tx = ax + ar + 50;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#f8fafc';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let fontSize = 64;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = `700 ${fontSize}px "Space Grotesk"`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>while (ctx.measureText(roast.name).width &gt; W - tx - pad &amp;&amp; fontSize &gt; 36) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>fontSize -= 4; ctx.font = `700 ${fontSize}px "Space Grotesk"`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.name, tx, 300);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#ff7a1a';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 32px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.title.toUpperCase(), tx, 352);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#8a93a8';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '400 26px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.type === 'x' ? 'X / TWITTER ACCOUNT' : 'SOLANA WALLET', tx, 398);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Metrics</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mx = pad, mw = W - pad * 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawMetric('FOMO Score', roast.fomo + '/100', roast.fomo, mx, 560, mw, '#ff7a1a');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawMetric('Paper Hands Rating', roast.paperHands, roast.paperScore, mx, 660, mw, '#ffd23f');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawMetric('Degen Level', 'LVL ' + roast.degenLevel, roast.degenLevel, mx, 760, mw, '#39ff88');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Roast text box</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const by = 840, bh = 290;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = 'rgba(255,122,26,0.08)';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(pad, by, mw, bh, 24); ctx.fill();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = 'rgba(255,122,26,0.45)'; ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(pad, by, mw, bh, 24); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#ff7a1a';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 26px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('// AI ROAST 😈', pad + 34, by + 54);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#f1f5f9';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Shrink the font until the whole roast fits in the box</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const quote = '"' + roast.text + '"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let size = 40;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>while (size &gt; 26) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ctx.font = `500 ${size}px "Space Grotesk"`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (countLines(quote, mw - 68) * size * 1.3 &lt;= bh - 120) break;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>size -= 2;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>wrapText(quote, pad + 34, by + 100 + size * 0.4, mw - 68, size * 1.3, 6);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Creator handle</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = '#8a93a8';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '400 26px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText('Follow ' + CONFIG.xHandle + ' on X', W / 2, H - 150);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Verdict stamp</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.translate(W - pad - 170, 470);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.rotate(-0.12);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = roast.verdict.color;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = roast.verdict.color;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 5;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 44px "Space Grotesk"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const vw = ctx.measureText(roast.verdict.label).width + 50;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>rr(-vw / 2, -40, vw, 76, 12); ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.verdict.label, 0, 14);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = '700 22px "JetBrains Mono"';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillText(roast.heat + '% COOKED', 0, 66);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.restore();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = 'left';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawWatermark();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// ROAST FLOW</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function parseInput(raw) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const v = raw.trim().replace(/^https?:\/\/(www\.)?(x|twitter)\.com\//i, '').replace(/\/.*$/, '');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (isSolanaAddress(v)) return { type: 'wallet', value: v };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const handle = v.replace(/^@/, '');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (/^[A-Za-z0-9_]{1,15}$/.test(handle)) return { type: 'x', value: handle };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>async function runRoast(raw) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const err = $('inputError');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const parsed = parseInput(raw);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!parsed) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>err.textContent = 'Enter a valid X handle (max 15 chars) or a Solana address.';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>err.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>err.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('roastBtn').disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('canvasLoading').classList.remove('hidden');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const [avatar, balance] = await Promise.all([</p>
+<p class="p1"><span class="Apple-converted-space">      </span>parsed.type === 'x' ? loadImage(`https://unavatar.io/x/${parsed.value}?fallback=false`) : Promise.resolve(null),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>parsed.type === 'wallet' ? fetchSolBalance(parsed.value) : Promise.resolve(null),</p>
+<p class="p1"><span class="Apple-converted-space">      </span>new Promise((r) =&gt; setTimeout(r, 700)), // a beat of suspense</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>lastRoast = buildRoast(parsed.value, parsed.type, balance);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>await document.fonts.ready;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>await drawRoastCard(lastRoast, avatar);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('canvasLoading').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('roastBtn').disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('downloadBtn').disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('shareBtn').disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>bumpRoastCount();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (window.innerWidth &lt; 1024) canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function downloadCard() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!lastRoast) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const a = document.createElement('a');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>a.download = `cooked-${lastRoast.name.replace(/[^a-z0-9]/gi, '')}.png`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>a.href = canvas.toDataURL('image/png');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>a.click();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>} catch {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>toast('Could not export image');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// TWITTER WEB INTENT</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function shareOnX() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!lastRoast) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const text =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`I just got roasted by AI 🔥\n\n` +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`${lastRoast.name} is ${lastRoast.heat}% COOKED — "${lastRoast.verdict.label}"\n` +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`FOMO ${lastRoast.fomo}/100 · Degen LVL ${lastRoast.degenLevel}\n\n` +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`Are you cooked? 👇 (via ${CONFIG.xHandle})\n`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const url = 'https://twitter.com/intent/tweet?' + new URLSearchParams({</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text, url: CONFIG.siteUrl, hashtags: 'COOKED,Solana',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>window.open(url, '_blank', 'noopener,width=600,height=520');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// COUNTERS (simulated — no backend)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const START_TIME = Date.UTC(2026, 0, 1);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function totalRoasts() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ticks = Math.floor((Date.now() - START_TIME) / 9000); // ~1 roast every 9s from "everyone else"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return CONFIG.roastsBase + ticks + store.get('cooked_local_roasts', 0);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let shownRoasts = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderCounters(animate = true) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const target = totalRoasts();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const from = shownRoasts || target - 200;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const start = performance.now();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const step = (now) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const p = animate ? Math.min(1, (now - start) / 900) : 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>shownRoasts = Math.round(from + (target - from) * p);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('totalRoasts').textContent = shownRoasts.toLocaleString('en-US');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (p &lt; 1) requestAnimationFrame(step);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>requestAnimationFrame(step);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const into = target % CONFIG.roastsPerBurn;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pct = (into / CONFIG.roastsPerBurn) * 100;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('burnBar').style.width = pct.toFixed(1) + '%';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('burnPct').textContent = pct.toFixed(1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('burnLeft').textContent = (CONFIG.roastsPerBurn - into).toLocaleString('en-US');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function bumpRoastCount() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>store.set('cooked_local_roasts', store.get('cooked_local_roasts', 0) + 1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderCounters();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// MEME BATTLE</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Classic meme templates hosted by Imgflip, with crypto captions drawn on top.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const IMG = (id) =&gt; 'https://i.imgflip.com/' + id;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const MEMES = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'This Is Fine', img: IMG('wxica.jpg'), top: 'My bags down 87%', bottom: "This is fine, I'm long term" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Hide the Pain Harold', img: IMG('gk5el.jpg'), top: 'When they ask how your memecoins are doing', bottom: '"Great, just accumulating"' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Waiting Skeleton', img: IMG('2fm6x.jpg'), top: 'Me waiting for the dev', bottom: 'to come back from "vacation"' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Disaster Girl', img: IMG('23ls.jpg'), top: 'Dev after pulling the LP', bottom: '"It was a CTO anyway"' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Roll Safe', img: IMG('1h7in3.jpg'), top: "Can't realize losses", bottom: 'if you never sell' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'One Does Not Simply', img: IMG('1bij.jpg'), top: 'One does not simply', bottom: 'take profit on a memecoin' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "Y'all Got Any More", img: IMG('21uy0f.jpg'), top: "Y'all got any more of them", bottom: '100x dog coins' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Change My Mind', img: IMG('24y43o.jpg'), top: '', bottom: 'Buying the top is a strategy' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Is This A Pigeon', img: IMG('1o00in.jpg'), top: 'Token launched 3 min ago', bottom: 'Is this a gem?' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Sad Pablo Escobar', img: IMG('1c1uej.jpg'), top: 'Me waiting for', bottom: 'the altseason that never comes' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Monkey Puppet', img: IMG('2gnnjh.jpg'), top: 'Influencer: "I\'m not selling"', bottom: 'His wallet on Solscan:' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Squidward Window', img: IMG('145qvv.jpg'), top: 'Me with 0.02 SOL', bottom: 'watching everyone 100x' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Always Has Been', img: IMG('46e43q.png'), top: 'Wait, I was exit liquidity?', bottom: 'Always has been' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Ancient Aliens', img: IMG('26am.jpg'), top: 'Who dumped on my entry?', bottom: 'Insiders' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Megamind Peeking', img: IMG('64sz4u.png'), top: 'No profits?', bottom: '' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Batman Slapping Robin', img: IMG('9ehk.jpg'), top: 'Should we take prof—', bottom: '100x or nothing' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Woman Yelling At Cat', img: IMG('345v97.jpg'), top: 'CT screaming "IT\'S A RUG"', bottom: 'Me, still holding' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Drake', img: IMG('30b1gx.jpg'), top: 'Taking profit', bottom: 'Riding it to zero' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Distracted Boyfriend', img: IMG('1ur9b0.jpg'), top: 'Me ignoring my bags', bottom: 'for a token launched 2 min ago' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Two Buttons', img: IMG('1g8my4.jpg'), top: 'Sell at -50% or average down?', bottom: '*sweats in degen*' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Bernie Asking', img: IMG('3oevdk.jpg'), top: 'I am once again asking', bottom: 'for your exit liquidity' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'UNO Draw 25', img: IMG('3lmzyx.jpg'), top: 'Take profit or draw 25', bottom: '*draws 25*' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Trade Offer', img: IMG('54hjww.jpg'), top: 'I receive: your SOL', bottom: 'You receive: a dog with a hat' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Mocking Spongebob', img: IMG('1otk96.jpg'), top: '"wE\'rE sO eArLy"', bottom: '' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Marked Safe From', img: IMG('2odckz.jpg'), top: 'Marked safe from', bottom: 'taking profit' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Epic Handshake', img: IMG('28j0te.jpg'), top: 'Devs &amp; KOLs', bottom: 'agreeing to dump on you' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "They Don't Know", img: IMG('4pn1an.png'), top: "They don't know", bottom: "I'm down 94% on a cat coin" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Clown Makeup', img: IMG('38el31.jpg'), top: 'Buying the top again', bottom: '"this time is different"' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Evil Kermit', img: IMG('1e7ql7.jpg'), top: "Me: don't ape", bottom: 'Also me: ape it all' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Tuxedo Pooh', img: IMG('2ybua0.png'), top: 'Losing money', bottom: 'Experiencing a liquidity event' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Expanding Brain', img: IMG('1jwhww.jpg'), top: 'Buy high, sell low', bottom: 'but with 50x leverage' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Oprah You Get A', img: IMG('gtj5t.jpg'), top: 'You get rugged!', bottom: 'Everybody gets rugged!' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Pawn Stars', img: IMG('19vcz0.jpg'), top: 'Best I can do for your NFT', bottom: '0.001 SOL' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Absolute Cinema', img: IMG('8d317n.png'), top: 'Dev renounces, LP burns, 100x', bottom: 'Absolute cinema' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "Where I'd Put My Trophy", img: IMG('1wz1x.jpg'), top: "This is where I'd put my profits", bottom: 'if I had any' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Imagination Spongebob', img: IMG('3i7p.jpg'), top: 'My profits', bottom: 'Imagination' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Friendship Ended', img: IMG('29v4rt.jpg'), top: 'Friendship ended with ETH', bottom: 'Now SOL is my best friend' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Bad Luck Brian', img: IMG('1bip.jpg'), top: 'Buys his first memecoin', bottom: "Dev's wifi goes down forever" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Sleeping Shaq', img: IMG('1nck6k.jpg'), top: 'Taking profit', bottom: 'New ticker in the Telegram' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Laughing Leo', img: IMG('4acd7j.png'), top: 'When your friend says', bottom: '"it can\'t go lower"' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Surprised Pikachu', img: IMG('2kbn1e.jpg'), top: 'Apes anon dev with "trust me" in bio', bottom: '*gets rugged*' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Futurama Fry', img: IMG('1bgw.jpg'), top: 'Not sure if the dip', bottom: 'or the start of -99%' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Spider-Man Pointing', img: IMG('1tkjq9.jpg'), top: 'Dev wallet', bottom: '"Random" whale wallet' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "I'm The Captain Now", img: IMG('hlmst.jpg'), top: 'Look at me', bottom: "I'm the CTO now" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Leonardo Cheers', img: IMG('39t1o.jpg'), top: "Cheers to everyone who", bottom: 'bought the top with me' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Skeptical Kid', img: IMG('265k.jpg'), top: "So you're telling me", bottom: 'the dev "lost the keys"?' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Grandma Finds The Internet', img: IMG('1bhw.jpg'), top: 'Grandma finds', bottom: 'pump.fun' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Yoda', img: IMG('8k0sa.jpg'), top: 'Rugged you will be', bottom: 'if anon the dev is' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "None Of My Business", img: IMG('9sw43.jpg'), top: 'Holds 40 coins with zero liquidity', bottom: "but that's none of my business" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Gus Fring', img: IMG('5o32tt.png'), top: 'You buy the dip. I buy the dip that dips.', bottom: 'We are not the same' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Whisper and Goosebumps', img: IMG('1op9wy.jpg'), top: '*whispers* "probably nothing"', bottom: '*goosebumps*' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Two Guys On A Bus', img: IMG('5v6gwj.jpg'), top: 'Took profit', bottom: 'Still holding' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: "C'mon Do Something", img: IMG('bwu6w.jpg'), top: 'Me staring at the chart', bottom: "C'mon, do something" },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Yo Dawg', img: IMG('26hg.jpg'), top: 'Yo dawg, heard you like memecoins', bottom: 'so we launched a memecoin about memecoins' },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ name: 'Charlie Conspiracy', img: IMG('1itoun.jpg'), top: 'The dev, the KOL, the "random" whale', bottom: "It's all the same guy" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Placeholder fighters (fictional, not linked). Replace with real community submissions.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const FIGHTER_HANDLES = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>'PaperHandPaul', 'RugSurvivor_420', 'BagHolderBen', 'DegenDiana', 'ExitLiquidityEd', 'ChartAstrologer',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>'SolMaxiSam', 'ApeFirstAskLater', 'GasFeeGary', 'TopBuyerTina', 'WenLamboWill', 'CopiumDealer',</p>
+<p class="p1"><span class="Apple-converted-space">    </span>'DiamondHandDan', 'PumpFunPriya', 'LiquidatedLeo', 'MoonOrBust_99', 'FOMOFrank', 'NGMIChad',</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const escapeHTML = (s) =&gt; s.replace(/[&amp;&lt;&gt;"]/g, (c) =&gt; ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;' }[c]));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function makeFighter(rand) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (rand() &lt; 0.5) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const h = FIGHTER_HANDLES[Math.floor(rand() * FIGHTER_HANDLES.length)];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return { kind: 'X', label: '@' + h, seed: h };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let addr = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; 44; i++) addr += BASE58[Math.floor(rand() * BASE58.length)];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return { kind: 'SOL', label: shortAddr(addr), seed: addr };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function avatarURL(seed) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const c = document.createElement('canvas');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>c.width = c.height = 64;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawGeneratedAvatar(32, 32, 32, seed, c.getContext('2d'));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return c.toDataURL();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function todayKey() { return new Date().toISOString().slice(0, 10); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Each day has unlimited rounds; every round is a fixed pair of memes and fighters.</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function getBattle() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const day = todayKey();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let saved = store.get('cooked_battle', null);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!saved || saved.day !== day || !saved.rounds) saved = { day, round: 0, rounds: {} };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const round = saved.round;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rand = seededRandom(hashString('battle:' + day + ':' + round));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const i = Math.floor(rand() * MEMES.length);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let j = Math.floor(rand() * (MEMES.length - 1));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (j &gt;= i) j++;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let fighterA = makeFighter(rand), fighterB = makeFighter(rand);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>while (fighterB.label === fighterA.label) fighterB = makeFighter(rand);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const base = { a: 400 + Math.floor(rand() * 900), b: 400 + Math.floor(rand() * 900) };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const state = saved.rounds[round] || { a: 0, b: 0, voted: null };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return { saved, round, memeA: MEMES[i], memeB: MEMES[j], fighterA, fighterB, base, state };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function memeCardHTML(meme, fighter, side) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const color = side === 'a' ? 'neon' : 'flame';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const badge = fighter.kind === 'X'</p>
+<p class="p1"><span class="Apple-converted-space">      </span>? '&lt;span class="px-1.5 py-0.5 rounded bg-slate-100 text-ink text-[10px] font-bold"&gt;X&lt;/span&gt;'</p>
+<p class="p1"><span class="Apple-converted-space">      </span>: '&lt;span class="px-1.5 py-0.5 rounded bg-gradient-to-r from-violet-500 to-emerald-400 text-ink text-[10px] font-bold"&gt;SOL&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="flex items-center gap-3 mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="${avatarURL(fighter.seed)}" alt="" class="w-10 h-10 rounded-full ring-2 ring-${color}" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="min-w-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="font-mono font-bold text-sm text-slate-100 truncate"&gt;${escapeHTML(fighter.label)}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="flex items-center gap-1.5 text-xs text-ash"&gt;${badge} Fighter ${side.toUpperCase()}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;figure class="meme-frame relative aspect-[4/3] rounded-xl overflow-hidden bg-black border border-line select-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="${meme.img}" alt="${escapeHTML(meme.name)} meme: ${escapeHTML(meme.top + ' ' + meme.bottom)}" referrerpolicy="no-referrer" class="w-full h-full object-contain" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${meme.top ? `&lt;figcaption class="meme-text top-2"&gt;${escapeHTML(meme.top)}&lt;/figcaption&gt;` : ''}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>${meme.bottom ? `&lt;figcaption class="meme-text bottom-2"&gt;${escapeHTML(meme.bottom)}&lt;/figcaption&gt;` : ''}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/figure&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="mt-3 font-mono text-xs text-ash flex-1"&gt;${escapeHTML(meme.name)}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button data-side="${side}" class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;i data-lucide="flame" class="w-4 h-4"&gt;&lt;/i&gt; &lt;span&gt;Vote ${escapeHTML(fighter.label)}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/button&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function renderBattle() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = getBattle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('memeA').innerHTML = memeCardHTML(b.memeA, b.fighterA, 'a');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('memeB').innerHTML = memeCardHTML(b.memeB, b.fighterB, 'b');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('battleRound').textContent = b.round + 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>updateBattleBars(b);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.vote-btn').forEach((btn) =&gt; btn.addEventListener('click', () =&gt; vote(btn.dataset.side)));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>refreshIcons();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function updateBattleBars(b) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = b.base.a + b.state.a, bb = b.base.b + b.state.b, total = a + bb;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pa = Math.round((a / total) * 100);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('barA').style.width = pa + '%';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('barB').style.width = 100 - pa + '%';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('pctA').textContent = `${b.fighterA.label} · ${pa}%`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('pctB').textContent = `${100 - pa}% · ${b.fighterB.label}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('totalVotes').textContent = total.toLocaleString('en-US') + ' votes';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('nextBattleBtn').classList.toggle('hidden', !b.state.voted);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.vote-btn').forEach((btn) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!b.state.voted) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.classList.add('pointer-events-none');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>btn.querySelector('span').textContent = btn.dataset.side === b.state.voted ? 'Your pick ✓' : 'Voted';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (btn.dataset.side !== b.state.voted) btn.classList.add('opacity-40');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function vote(side) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = getBattle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (b.state.voted) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.state[side] += 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.state.voted = side;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.saved.rounds[b.round] = b.state;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>store.set('cooked_battle', b.saved);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>updateBattleBars(b);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast('Vote locked in 🔥');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function nextBattle() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = getBattle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>b.saved.round += 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>store.set('cooked_battle', b.saved);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderBattle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('battle').scrollIntoView({ behavior: 'smooth' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function tickBattleTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const now = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const end = new Date(now); end.setUTCHours(24, 0, 0, 0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = Math.max(0, Math.floor((end - now) / 1000));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const hh = String(Math.floor(s / 3600)).padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ss = String(s % 60).padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('battleTimer').textContent = `${hh}:${mm}:${ss}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (s === 0) renderBattle();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// INIT</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// =====================================================</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.addEventListener('DOMContentLoaded', async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>refreshIcons();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('year').textContent = new Date().getFullYear();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Nav</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const menuBtn = $('menuBtn'), mobileNav = $('mobileNav');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>menuBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const open = mobileNav.classList.toggle('hidden') === false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>menuBtn.setAttribute('aria-expanded', String(open));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>mobileNav.querySelectorAll('a').forEach((a) =&gt; a.addEventListener('click', () =&gt; mobileNav.classList.add('hidden')));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Wallet</p>
+<p class="p1"><span class="Apple-converted-space">    </span>initWallet();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('roastWalletBtn').addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!walletPubkey) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('roastInput').value = walletPubkey;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>runRoast(walletPubkey);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Roaster</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('roastForm').addEventListener('submit', (e) =&gt; { e.preventDefault(); runRoast($('roastInput').value); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.try-chip').forEach((c) =&gt; c.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>$('roastInput').value = c.dataset.v;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>runRoast(c.dataset.v);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('downloadBtn').addEventListener('click', downloadCard);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('shareBtn').addEventListener('click', shareOnX);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>await document.fonts.ready;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drawPlaceholderCard();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Battle</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderBattle();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('nextBattleBtn').addEventListener('click', nextBattle);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>tickBattleTimer();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setInterval(tickBattleTimer, 1000);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Counters</p>
+<p class="p1"><span class="Apple-converted-space">    </span>renderCounters(false);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>setInterval(() =&gt; renderCounters(), 9000);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Buy</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('caText').textContent = CONFIG.tokenMint;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('jupLink').href = `https://jup.ag/swap/SOL-${CONFIG.tokenMint}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('dexLink').href = `https://dexscreener.com/solana/${CONFIG.tokenMint}`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$('copyCaBtn').addEventListener('click', async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>try { await navigator.clipboard.writeText(CONFIG.tokenMint); toast('Contract address copied'); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>catch { toast('Copy failed — select it manually'); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
