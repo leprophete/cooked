@@ -354,8 +354,10 @@
     tokenMint: 'CooKEDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpump', // replace with the real mint address
     // Public RPC is rate-limited and often blocks browsers; use a Helius/QuickNode URL in production.
     rpcUrl: 'https://api.mainnet-beta.solana.com',
-    // Counter has no backend: a base number plus local roasts plus a slow simulated tick.
-    roastsBase: 1284377,
+    // Shared counters & votes. The publishable key is meant to be public: the database
+    // only accepts the 4 RPC functions (rate-limited, one vote per visitor).
+    supabaseUrl: 'https://xwzssdpnuamdfksopthc.supabase.co',
+    supabaseKey: 'sb_publishable_ufHIQzmHfY4_CiD6sbb9LQ_AoRBzt1r',
     roastsPerBurn: 50000,
   };
 
@@ -943,7 +945,7 @@
     $('roastBtn').disabled = false;
     $('downloadBtn').disabled = false;
     $('shareBtn').disabled = false;
-    bumpRoastCount();
+    bumpRoastCount(parsed);
     if (window.innerWidth < 1024) canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
@@ -976,25 +978,36 @@
   }
 
   // =====================================================
-  // COUNTERS (simulated — no backend)
+  // COUNTERS (shared, stored in Supabase)
   // =====================================================
-  const START_TIME = Date.UTC(2026, 0, 1);
-  function totalRoasts() {
-    const ticks = Math.floor((Date.now() - START_TIME) / 9000); // ~1 roast every 9s from "everyone else"
-    return CONFIG.roastsBase + ticks + store.get('cooked_local_roasts', 0);
+  async function rpc(fn, args = {}) {
+    const res = await fetch(`${CONFIG.supabaseUrl}/rest/v1/rpc/${fn}`, {
+      method: 'POST',
+      headers: { apikey: CONFIG.supabaseKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify(args),
+    });
+    if (!res.ok) throw new Error(`${fn} failed: ${res.status}`);
+    return res.json();
   }
-  let shownRoasts = 0;
-  function renderCounters(animate = true) {
-    const target = totalRoasts();
-    const from = shownRoasts || target - 200;
+
+  let shownRoasts = null;
+  async function loadStats() {
+    try { renderCounters((await rpc('get_stats')).roasts, shownRoasts !== null); }
+    catch { if (shownRoasts === null) $('totalRoasts').textContent = '—'; }
+  }
+  function renderCounters(target, animate = true) {
+    // rAF is paused in background tabs, so only animate when visible and draw the first frame now.
+    animate = animate && shownRoasts !== null && document.visibilityState === 'visible';
+    const from = animate ? shownRoasts : target;
     const start = performance.now();
     const step = (now) => {
       const p = animate ? Math.min(1, (now - start) / 900) : 1;
       shownRoasts = Math.round(from + (target - from) * p);
       $('totalRoasts').textContent = shownRoasts.toLocaleString('en-US');
       if (p < 1) requestAnimationFrame(step);
+      else shownRoasts = target;
     };
-    requestAnimationFrame(step);
+    step(start);
 
     const into = target % CONFIG.roastsPerBurn;
     const pct = (into / CONFIG.roastsPerBurn) * 100;
@@ -1002,9 +1015,12 @@
     $('burnPct').textContent = pct.toFixed(1);
     $('burnLeft').textContent = (CONFIG.roastsPerBurn - into).toLocaleString('en-US');
   }
-  function bumpRoastCount() {
-    store.set('cooked_local_roasts', store.get('cooked_local_roasts', 0) + 1);
-    renderCounters();
+  async function bumpRoastCount(parsed) {
+    try {
+      const kind = parsed.type === 'x' ? 'x' : 'sol';
+      renderCounters((await rpc('increment_roasts', { p_kind: kind, p_handle: parsed.value })).roasts);
+      if (!fighters) renderBattle(); // this roast may be the one that opens the arena
+    } catch {}
   }
 
   // =====================================================
@@ -1069,23 +1085,16 @@
     { name: 'Yo Dawg', img: IMG('26hg.jpg'), top: 'Yo dawg, heard you like memecoins', bottom: 'so we launched a memecoin about memecoins' },
     { name: 'Charlie Conspiracy', img: IMG('1itoun.jpg'), top: 'The dev, the KOL, the "random" whale', bottom: "It's all the same guy" },
   ];
-  // Placeholder fighters (fictional, not linked). Replace with real community submissions.
-  const FIGHTER_HANDLES = [
-    'PaperHandPaul', 'RugSurvivor_420', 'BagHolderBen', 'DegenDiana', 'ExitLiquidityEd', 'ChartAstrologer',
-    'SolMaxiSam', 'ApeFirstAskLater', 'GasFeeGary', 'TopBuyerTina', 'WenLamboWill', 'CopiumDealer',
-    'DiamondHandDan', 'PumpFunPriya', 'LiquidatedLeo', 'MoonOrBust_99', 'FOMOFrank', 'NGMIChad',
-  ];
-  const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  // Fighters are real accounts roasted on the site, paired server-side (same pair for every visitor).
   const escapeHTML = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let fighters = null; // { a, b } for the round on screen, or null while the arena is empty
 
-  function makeFighter(rand) {
-    if (rand() < 0.5) {
-      const h = FIGHTER_HANDLES[Math.floor(rand() * FIGHTER_HANDLES.length)];
-      return { kind: 'X', label: '@' + h, seed: h };
-    }
-    let addr = '';
-    for (let i = 0; i < 44; i++) addr += BASE58[Math.floor(rand() * BASE58.length)];
-    return { kind: 'SOL', label: shortAddr(addr), seed: addr };
+  function toFighter(f) {
+    return f.kind === 'x'
+      ? { kind: 'X', label: '@' + f.handle, seed: f.handle, url: 'https://x.com/' + f.handle,
+          avatar: `https://unavatar.io/x/${f.handle}?fallback=false` }
+      : { kind: 'SOL', label: shortAddr(f.handle), seed: f.handle, url: 'https://solscan.io/account/' + f.handle,
+          avatar: avatarURL(f.handle) };
   }
 
   function avatarURL(seed) {
@@ -1097,84 +1106,119 @@
 
   function todayKey() { return new Date().toISOString().slice(0, 10); }
 
-  // Each day has unlimited rounds; every round is a fixed pair of memes and fighters.
+  // Each day has unlimited rounds; the memes of a round are picked from the day + round number.
   function getBattle() {
     const day = todayKey();
     let saved = store.get('cooked_battle', null);
-    if (!saved || saved.day !== day || !saved.rounds) saved = { day, round: 0, rounds: {} };
+    if (!saved || saved.day !== day) saved = { day, round: 0 };
     const round = saved.round;
     const rand = seededRandom(hashString('battle:' + day + ':' + round));
     const i = Math.floor(rand() * MEMES.length);
     let j = Math.floor(rand() * (MEMES.length - 1));
     if (j >= i) j++;
-    let fighterA = makeFighter(rand), fighterB = makeFighter(rand);
-    while (fighterB.label === fighterA.label) fighterB = makeFighter(rand);
-    const base = { a: 400 + Math.floor(rand() * 900), b: 400 + Math.floor(rand() * 900) };
-    const state = saved.rounds[round] || { a: 0, b: 0, voted: null };
-    return { saved, round, memeA: MEMES[i], memeB: MEMES[j], fighterA, fighterB, base, state };
+    return { day, saved, round, memeA: MEMES[i], memeB: MEMES[j] };
   }
 
-  function memeCardHTML(meme, fighter, side) {
+  async function loadVotes(b = getBattle()) {
+    if (!fighters) return;
+    try { updateBattleBars(await rpc('get_votes', { p_day: b.day, p_round: b.round })); } catch {}
+  }
+
+  function fighterHeaderHTML(fighter, side) {
     const color = side === 'a' ? 'neon' : 'flame';
+    if (!fighter) {
+      return `
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full border-2 border-dashed border-${color} flex items-center justify-center text-${color} font-bold">?</div>
+        <div class="min-w-0">
+          <p class="font-mono font-bold text-sm text-slate-400">Open slot</p>
+          <p class="text-xs text-ash">Roast an account to send it here</p>
+        </div>
+      </div>`;
+    }
     const badge = fighter.kind === 'X'
       ? '<span class="px-1.5 py-0.5 rounded bg-slate-100 text-ink text-[10px] font-bold">X</span>'
       : '<span class="px-1.5 py-0.5 rounded bg-gradient-to-r from-violet-500 to-emerald-400 text-ink text-[10px] font-bold">SOL</span>';
     return `
-      <div class="flex items-center gap-3 mb-4">
-        <img src="${avatarURL(fighter.seed)}" alt="" class="w-10 h-10 rounded-full ring-2 ring-${color}" />
+      <a href="${fighter.url}" target="_blank" rel="noopener nofollow" class="flex items-center gap-3 mb-4 group">
+        <img src="${fighter.avatar}" data-fallback="${avatarURL(fighter.seed)}" alt="" referrerpolicy="no-referrer"
+          class="fighter-avatar w-10 h-10 rounded-full object-cover bg-line ring-2 ring-${color}" />
         <div class="min-w-0">
-          <p class="font-mono font-bold text-sm text-slate-100 truncate">${escapeHTML(fighter.label)}</p>
-          <p class="flex items-center gap-1.5 text-xs text-ash">${badge} Fighter ${side.toUpperCase()}</p>
+          <p class="font-mono font-bold text-sm text-slate-100 truncate group-hover:text-${color}">${escapeHTML(fighter.label)}</p>
+          <p class="flex items-center gap-1.5 text-xs text-ash">${badge} Roasted on $COOKED</p>
         </div>
-      </div>
+      </a>`;
+  }
+
+  function memeCardHTML(meme, fighter, side) {
+    const color = side === 'a' ? 'neon' : 'flame';
+    return `
+      ${fighterHeaderHTML(fighter, side)}
       <figure class="meme-frame relative aspect-[4/3] rounded-xl overflow-hidden bg-black border border-line select-none">
         <img src="${meme.img}" alt="${escapeHTML(meme.name)} meme: ${escapeHTML(meme.top + ' ' + meme.bottom)}" referrerpolicy="no-referrer" class="w-full h-full object-contain" />
         ${meme.top ? `<figcaption class="meme-text top-2">${escapeHTML(meme.top)}</figcaption>` : ''}
         ${meme.bottom ? `<figcaption class="meme-text bottom-2">${escapeHTML(meme.bottom)}</figcaption>` : ''}
       </figure>
       <p class="mt-3 font-mono text-xs text-ash flex-1">${escapeHTML(meme.name)}</p>
-      <button data-side="${side}" class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition">
-        <i data-lucide="flame" class="w-4 h-4"></i> <span>Vote ${escapeHTML(fighter.label)}</span>
+      <button data-side="${side}" ${fighter ? '' : 'disabled'} class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
+        <i data-lucide="flame" class="w-4 h-4"></i> <span>${fighter ? 'Vote ' + escapeHTML(fighter.label) : 'Waiting for a fighter'}</span>
       </button>`;
   }
 
-  function renderBattle() {
+  async function renderBattle() {
     const b = getBattle();
-    $('memeA').innerHTML = memeCardHTML(b.memeA, b.fighterA, 'a');
-    $('memeB').innerHTML = memeCardHTML(b.memeB, b.fighterB, 'b');
     $('battleRound').textContent = b.round + 1;
-    updateBattleBars(b);
+    let data = null;
+    try { data = await rpc('get_battle', { p_day: b.day, p_round: b.round }); } catch {}
+    fighters = data && data.a ? { a: toFighter(data.a), b: toFighter(data.b) } : null;
+
+    $('memeA').innerHTML = memeCardHTML(b.memeA, fighters && fighters.a, 'a');
+    $('memeB').innerHTML = memeCardHTML(b.memeB, fighters && fighters.b, 'b');
+    document.querySelectorAll('.fighter-avatar').forEach((img) =>
+      img.addEventListener('error', () => { img.src = img.dataset.fallback; }, { once: true }));
     document.querySelectorAll('.vote-btn').forEach((btn) => btn.addEventListener('click', () => vote(btn.dataset.side)));
     refreshIcons();
+
+    if (fighters) {
+      updateBattleBars(data.votes);
+    } else {
+      updateBattleBars({ a: 0, b: 0, voted: null });
+      $('totalVotes').textContent = data
+        ? `The arena needs ${2 - data.pool} more roasted account${data.pool === 1 ? '' : 's'}. Roast someone ↑`
+        : 'Arena offline, try again later';
+    }
   }
 
-  function updateBattleBars(b) {
-    const a = b.base.a + b.state.a, bb = b.base.b + b.state.b, total = a + bb;
-    const pa = Math.round((a / total) * 100);
+  function updateBattleBars(v) {
+    const total = v.a + v.b;
+    const pa = total ? Math.round((v.a / total) * 100) : 50;
     $('barA').style.width = pa + '%';
     $('barB').style.width = 100 - pa + '%';
-    $('pctA').textContent = `${b.fighterA.label} · ${pa}%`;
-    $('pctB').textContent = `${100 - pa}% · ${b.fighterB.label}`;
-    $('totalVotes').textContent = total.toLocaleString('en-US') + ' votes';
-    $('nextBattleBtn').classList.toggle('hidden', !b.state.voted);
+    $('pctA').textContent = fighters ? `${fighters.a.label} · ${pa}%` : '';
+    $('pctB').textContent = fighters ? `${100 - pa}% · ${fighters.b.label}` : '';
+    $('totalVotes').textContent = total
+      ? total.toLocaleString('en-US') + (total === 1 ? ' vote' : ' votes')
+      : 'No votes yet, be the first';
+    $('nextBattleBtn').classList.toggle('hidden', !v.voted);
     document.querySelectorAll('.vote-btn').forEach((btn) => {
-      if (!b.state.voted) return;
+      if (!v.voted) return;
       btn.disabled = true;
       btn.classList.add('pointer-events-none');
-      btn.querySelector('span').textContent = btn.dataset.side === b.state.voted ? 'Your pick ✓' : 'Voted';
-      if (btn.dataset.side !== b.state.voted) btn.classList.add('opacity-40');
+      btn.querySelector('span').textContent = btn.dataset.side === v.voted ? 'Your pick ✓' : 'Voted';
+      if (btn.dataset.side !== v.voted) btn.classList.add('opacity-40');
     });
   }
 
-  function vote(side) {
+  async function vote(side) {
     const b = getBattle();
-    if (b.state.voted) return;
-    b.state[side] += 1;
-    b.state.voted = side;
-    b.saved.rounds[b.round] = b.state;
-    store.set('cooked_battle', b.saved);
-    updateBattleBars(b);
-    toast('Vote locked in 🔥');
+    document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = true));
+    try {
+      updateBattleBars(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side }));
+      toast('Vote locked in 🔥');
+    } catch {
+      document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = false));
+      toast('Vote failed, try again');
+    }
   }
 
   function nextBattle() {
@@ -1233,12 +1277,13 @@
     // Battle
     renderBattle();
     $('nextBattleBtn').addEventListener('click', nextBattle);
+    setInterval(() => loadVotes(), 15000);
     tickBattleTimer();
     setInterval(tickBattleTimer, 1000);
 
     // Counters
-    renderCounters(false);
-    setInterval(() => renderCounters(), 9000);
+    loadStats();
+    setInterval(loadStats, 15000);
 
     // Buy
     $('caText').textContent = CONFIG.tokenMint;
