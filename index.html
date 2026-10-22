@@ -14,6 +14,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -69,9 +70,50 @@
     .live-dot { animation: flicker 1.4s ease-in-out infinite; }
     @keyframes sizzle { 0% { transform: translateY(0) } 50% { transform: translateY(-3px) } 100% { transform: translateY(0) } }
     .sizzle { animation: sizzle 2.4s ease-in-out infinite; }
+    /* Neon glow on hover */
+    .glow-hover-flame, .glow-hover-neon { transition: box-shadow .25s ease, transform .15s ease, filter .2s ease; }
+    .glow-hover-flame:hover, .glow-hover-flame:focus-visible {
+      box-shadow: 0 0 0 1px rgba(255,122,26,.9), 0 0 18px rgba(255,122,26,.65), 0 0 48px rgba(255,61,61,.4);
+    }
+    .glow-hover-neon:hover, .glow-hover-neon:focus-visible {
+      box-shadow: 0 0 0 1px rgba(57,255,136,.9), 0 0 18px rgba(57,255,136,.6), 0 0 44px rgba(57,255,136,.3);
+    }
+
+    /* Live ticker */
+    .ticker-track { display: inline-flex; animation: ticker var(--dur, 40s) linear infinite; will-change: transform; }
+    .ticker:hover .ticker-track { animation-play-state: paused; }
+    @keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+    /* 3D card flip + holo shine */
+    .flip-scene { perspective: 1800px; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.2,.9,.25,1.15); }
+    .flip-inner.is-flipped { transform: rotateY(180deg); }
+    .flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .flip-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+    .holo { position: relative; }
+    .holo::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+      background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 45%, rgba(57,255,136,.25) 50%, rgba(255,122,26,.25) 55%, transparent 70%);
+      background-size: 250% 100%; mix-blend-mode: screen;
+    }
+    .holo.shine::after { animation: holo 1.1s ease-out .35s 1; }
+    @keyframes holo { 0% { opacity: 1; background-position: 120% 0 } 100% { opacity: 0; background-position: -60% 0 } }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .spin-ring { animation: spin 1.1s linear infinite; }
+
+    /* Toggle switch */
+    .switch { width: 36px; height: 20px; border-radius: 999px; background: #1c2436; position: relative; transition: background .2s; flex-shrink: 0; }
+    .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #8a93a8; transition: transform .2s, background .2s; }
+    .peer:checked + .switch { background: rgba(255,122,26,.35); }
+    .peer:checked + .switch::after { transform: translateX(16px); background: #ff7a1a; }
+    .peer:focus-visible + .switch { outline: 2px solid #39ff88; outline-offset: 2px; }
+
     @media (prefers-reduced-motion: reduce) {
-      .live-dot, .sizzle { animation: none; }
-      .bar-fill { transition: none; }
+      .live-dot, .sizzle, .spin-ring { animation: none; }
+      .bar-fill, .flip-inner { transition: none; }
+      .holo.shine::after { animation: none; }
+      .ticker-track { animation: none; }
+      .ticker-viewport { overflow-x: auto; }
       html { scroll-behavior: auto; }
     }
   </style>
@@ -81,6 +123,15 @@
 
   <!-- ========== 2. HEADER & NAVIGATION ========== -->
   <header class="sticky top-0 z-40 border-b border-line bg-ink/85 backdrop-blur">
+    <!-- Live feed of real roasts (from Supabase) -->
+    <div class="ticker flex items-center h-8 border-b border-line bg-black/70 overflow-hidden" aria-label="Latest roasts">
+      <span class="shrink-0 h-full px-3 flex items-center gap-1.5 bg-flame text-ink font-mono text-[11px] font-bold">
+        <span class="w-1.5 h-1.5 rounded-full bg-ink live-dot"></span> LIVE
+      </span>
+      <div class="ticker-viewport flex-1 overflow-hidden">
+        <div id="tickerTrack" class="ticker-track font-mono text-xs text-slate-300 whitespace-nowrap"></div>
+      </div>
+    </div>
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
       <a href="#roaster" class="flex items-center gap-2 shrink-0">
         <span class="text-2xl sizzle">🔥</span>
@@ -90,18 +141,22 @@
       <nav class="hidden md:flex items-center gap-7 text-sm text-ash">
         <a href="#roaster" class="hover:text-neon transition-colors">Roaster</a>
         <a href="#battle" class="hover:text-neon transition-colors">Meme Battle</a>
+        <a href="#shame" class="hover:text-neon transition-colors">Hall of Shame</a>
         <a href="#tokenomics" class="hover:text-neon transition-colors">Tokenomics</a>
-        <a href="#buy" class="hover:text-flame transition-colors">Buy Token</a>
+        <a href="#buy" class="buy-link hover:text-flame transition-colors">Buy Token</a>
       </nav>
 
       <div class="flex items-center gap-2">
+        <button id="soundBtn" class="p-2 rounded-lg border border-line text-slate-200 hover:border-neon hover:text-neon transition" aria-label="Mute sounds" aria-pressed="false">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
         <a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" aria-label="Follow @Crypto_Cycles1 on X"
-          class="p-2 rounded-lg border border-line text-slate-200 hover:border-neon hover:text-neon transition">
+          class="hidden sm:inline-flex p-2 rounded-lg border border-line text-slate-200 hover:border-neon hover:text-neon transition">
           <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
-        <button id="connectBtn" class="flex items-center gap-2 rounded-lg bg-neon text-ink font-bold text-sm px-3 sm:px-4 py-2 hover:brightness-110 active:scale-95 transition">
+        <button id="connectBtn" class="glow-hover-neon flex items-center gap-2 rounded-lg bg-neon text-ink font-bold text-sm px-3 sm:px-4 py-2 hover:brightness-110 active:scale-95">
           <i data-lucide="wallet" class="w-4 h-4"></i>
-          <span id="connectLabel">Connect Phantom</span>
+          <span id="connectLabel" class="whitespace-nowrap">Connect<span class="hidden sm:inline"> Phantom</span></span>
         </button>
         <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-line text-ash" aria-label="Open menu" aria-expanded="false">
           <i data-lucide="menu" class="w-5 h-5"></i>
@@ -113,15 +168,17 @@
       <div class="px-4 py-3 flex flex-col text-base">
         <a href="#roaster" class="py-3 border-b border-line/60">Roaster</a>
         <a href="#battle" class="py-3 border-b border-line/60">Meme Battle</a>
+        <a href="#shame" class="py-3 border-b border-line/60">Hall of Shame</a>
         <a href="#tokenomics" class="py-3 border-b border-line/60">Tokenomics</a>
-        <a href="#buy" class="py-3 text-flame">Buy Token</a>
+        <a href="#buy" class="buy-link py-3 border-b border-line/60 text-flame">Buy Token</a>
+        <a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" class="py-3 text-neon">Follow @Crypto_Cycles1 on X</a>
       </div>
     </nav>
   </header>
 
   <main>
     <!-- ========== 3. HERO : AI ROASTER ========== -->
-    <section id="roaster" class="max-w-6xl mx-auto px-4 pt-10 sm:pt-16 pb-16 scroll-mt-20">
+    <section id="roaster" class="max-w-6xl mx-auto px-4 pt-10 sm:pt-16 pb-16 scroll-mt-28">
       <div class="grid lg:grid-cols-2 gap-10 items-start">
 
         <div>
@@ -150,10 +207,15 @@
                   class="w-full bg-panel border border-line rounded-xl pl-9 pr-3 py-4 font-mono text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-neon focus:ring-2 focus:ring-neon/30" />
               </div>
               <button id="roastBtn" type="submit"
-                class="rounded-xl bg-flame text-ink font-bold px-6 py-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition glow-flame disabled:opacity-60">
-                <i data-lucide="flame" class="w-5 h-5"></i> Roast Me!
+                class="glow-hover-flame rounded-xl bg-flame text-ink font-bold px-6 py-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 glow-flame disabled:opacity-60">
+                <i data-lucide="flame" class="w-5 h-5"></i> <span id="roastBtnLabel">Roast Me!</span>
               </button>
             </div>
+            <label class="mt-3 inline-flex items-center gap-3 cursor-pointer select-none text-sm text-slate-300">
+              <input id="friendMode" type="checkbox" class="peer sr-only" />
+              <span class="switch" aria-hidden="true"></span>
+              <span>🎯 Roast a friend <span class="hidden sm:inline text-ash text-xs">(we'll tag them when you share)</span></span>
+            </label>
             <p id="inputError" class="hidden mt-2 text-sm text-red-400 font-mono"></p>
           </form>
 
@@ -171,11 +233,22 @@
 
         <!-- Canvas card -->
         <div>
-          <div class="relative rounded-2xl overflow-hidden border border-line bg-panel glow-neon">
-            <canvas id="roastCanvas" width="1080" height="1350" class="w-full h-auto block"></canvas>
-            <div id="canvasLoading" class="hidden absolute inset-0 bg-ink/80 flex flex-col items-center justify-center gap-3">
-              <span class="text-5xl sizzle">🍳</span>
-              <p class="font-mono text-sm text-neon">Cooking your roast…</p>
+          <div class="flip-scene">
+            <div id="flipInner" class="flip-inner">
+              <div id="cardFront" class="flip-face holo rounded-2xl overflow-hidden border border-line bg-panel glow-neon">
+                <canvas id="roastCanvas" width="1080" height="1350" class="w-full h-auto block"></canvas>
+              </div>
+              <!-- Card back, shown while the roast is cooking -->
+              <div class="flip-face flip-back rounded-2xl overflow-hidden border border-flame/60 glow-flame bg-[radial-gradient(circle_at_50%_40%,#3a1405,#0b0d14_70%)] flex flex-col items-center justify-center gap-5" aria-hidden="true">
+                <div class="absolute inset-4 rounded-xl border-2 border-flame/40"></div>
+                <div class="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(45deg,#ff7a1a_0_2px,transparent_2px_18px)]"></div>
+                <div class="relative w-36 h-36 sm:w-44 sm:h-44 flex items-center justify-center">
+                  <div class="spin-ring absolute inset-0 rounded-full border-4 border-flame/20 border-t-flame"></div>
+                  <span class="text-7xl sm:text-8xl sizzle">🔥</span>
+                </div>
+                <p class="relative font-mono font-bold text-2xl tracking-tight"><span class="text-neon text-glow">$</span>COOKED</p>
+                <p class="relative font-mono text-sm text-flame">Cooking your roast…</p>
+              </div>
             </div>
           </div>
           <div class="mt-4 grid grid-cols-2 gap-3">
@@ -195,7 +268,7 @@
     </section>
 
     <!-- ========== 4. MEME BATTLES ========== -->
-    <section id="battle" class="border-t border-line bg-panel/40 scroll-mt-16">
+    <section id="battle" class="border-t border-line bg-panel/40 scroll-mt-28">
       <div class="max-w-6xl mx-auto px-4 py-16">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
@@ -230,8 +303,18 @@
       </div>
     </section>
 
+    <!-- ========== HALL OF SHAME (real roasts) ========== -->
+    <section id="shame" class="border-t border-line scroll-mt-28">
+      <div class="max-w-6xl mx-auto px-4 py-16">
+        <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">Hall of Shame</p>
+        <h2 class="text-3xl sm:text-4xl font-bold">Top 3 Most Cooked Degens</h2>
+        <p class="mt-2 text-ash max-w-xl">Ranked from every real roast on the site. Highest Cooked %, worst paper hands first.</p>
+        <div id="podium" class="mt-10 grid sm:grid-cols-3 gap-4 sm:items-end"></div>
+      </div>
+    </section>
+
     <!-- ========== 5. TOKENOMICS & AD-BURN ========== -->
-    <section id="tokenomics" class="border-t border-line scroll-mt-16">
+    <section id="tokenomics" class="border-t border-line scroll-mt-28">
       <div class="max-w-6xl mx-auto px-4 py-16">
         <p class="font-mono text-xs text-neon tracking-widest uppercase mb-2">For the investors</p>
         <h2 class="text-3xl sm:text-4xl font-bold mb-8">Tokenomics &amp; Ad-Burn</h2>
@@ -303,7 +386,7 @@
     </section>
 
     <!-- BUY -->
-    <section id="buy" class="border-t border-line bg-panel/40 scroll-mt-16">
+    <section id="buy" class="border-t border-line bg-panel/40 scroll-mt-28">
       <div class="max-w-3xl mx-auto px-4 py-16 text-center">
         <h2 class="text-3xl sm:text-5xl font-bold">Get <span class="flame-text">$COOKED</span></h2>
         <p class="mt-3 text-ash">Before you get cooked.</p>
@@ -317,7 +400,7 @@
         </div>
 
         <div class="mt-4 grid sm:grid-cols-2 gap-3">
-          <a id="jupLink" target="_blank" rel="noopener" class="rounded-xl bg-neon text-ink font-bold py-4 flex items-center justify-center gap-2 hover:brightness-110 transition">
+          <a id="jupLink" target="_blank" rel="noopener" class="buy-link glow-hover-neon rounded-xl bg-neon text-ink font-bold py-4 flex items-center justify-center gap-2 hover:brightness-110 transition">
             <i data-lucide="zap" class="w-5 h-5"></i> Buy on Jupiter
           </a>
           <a id="dexLink" target="_blank" rel="noopener" class="rounded-xl border border-line py-4 font-bold flex items-center justify-center gap-2 hover:border-flame hover:text-flame transition">
@@ -418,7 +501,7 @@
       btn.title = 'Click to disconnect';
       $('roastWalletBtn').classList.remove('hidden');
     } else {
-      label.textContent = 'Connect Phantom';
+      label.innerHTML = 'Connect<span class="hidden sm:inline"> Phantom</span>';
       btn.classList.add('bg-neon', 'text-ink');
       btn.classList.remove('bg-panel', 'text-neon', 'border', 'border-neon');
       btn.title = '';
@@ -608,18 +691,24 @@
   const MAX_ROAST_CHARS = 250;
   const rerolls = {}; // same handle → same metrics, but a fresh roast text on each try
 
-  function buildRoast(input, type, balance) {
-    const key = type + ':' + input.toLowerCase();
-    const rand = seededRandom(hashString(key));
-    const name = type === 'x' ? '@' + input : shortAddr(input);
-
-    // Metrics are stable per account
+  // Metrics are stable per account, so anyone (ticker, Hall of Shame) can recompute them from the handle.
+  function getMetrics(input, type) {
+    const rand = seededRandom(hashString(type + ':' + input.toLowerCase()));
     const fomo = 35 + Math.floor(rand() * 65);
     const paperIdx = Math.floor(rand() * PAPER_HANDS.length);
     const paperScore = Math.round(((PAPER_HANDS.length - paperIdx) / PAPER_HANDS.length) * 100);
     const degenLevel = 1 + Math.floor(rand() * 99);
     const title = DEGEN_TITLES[Math.floor(rand() * DEGEN_TITLES.length)];
-    const r = { fomo, paperScore, degenLevel, paperHands: PAPER_HANDS[paperIdx] };
+    const heat = Math.round((fomo + paperScore + degenLevel) / 3);
+    const verdict = [...VERDICTS].reverse().find((v) => heat >= v.min);
+    return { fomo, paperScore, degenLevel, paperHands: PAPER_HANDS[paperIdx], title, heat, verdict };
+  }
+
+  function buildRoast(input, type, balance) {
+    const key = type + ':' + input.toLowerCase();
+    const name = type === 'x' ? '@' + input : shortAddr(input);
+    const r = getMetrics(input, type);
+    const { fomo, degenLevel } = r;
 
     // Text changes on every re-roast
     rerolls[key] = (rerolls[key] || 0) + 1;
@@ -653,11 +742,8 @@
       .replaceAll('{name}', name).replaceAll('{fomo}', fomo)
       .replaceAll('{paper}', r.paperHands).replaceAll('{degen}', degenLevel);
 
-    const heat = Math.round((fomo + paperScore + degenLevel) / 3);
-    const verdict = [...VERDICTS].reverse().find((v) => heat >= v.min);
-
     return {
-      name, type, text, heat, verdict, title, ...r,
+      name, type, text, ...r,
       id: '#' + String(hashString(input) % 1000000).padStart(6, '0'),
     };
   }
@@ -929,24 +1015,56 @@
     }
     err.classList.add('hidden');
     $('roastBtn').disabled = true;
-    $('canvasLoading').classList.remove('hidden');
+    if (window.innerWidth < 1024) $('flipInner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Flip to the card back while cooking
+    $('flipInner').classList.add('is-flipped');
+    sound.sizzle();
 
     const [avatar, balance] = await Promise.all([
       parsed.type === 'x' ? loadImage(`https://unavatar.io/x/${parsed.value}?fallback=false`) : Promise.resolve(null),
       parsed.type === 'wallet' ? fetchSolBalance(parsed.value) : Promise.resolve(null),
-      new Promise((r) => setTimeout(r, 700)), // a beat of suspense
+      new Promise((r) => setTimeout(r, 1300)), // a beat of suspense while it sizzles
     ]);
 
     lastRoast = buildRoast(parsed.value, parsed.type, balance);
+    lastRoast.friend = $('friendMode').checked && parsed.type === 'x';
     await document.fonts.ready;
     await drawRoastCard(lastRoast, avatar);
 
-    $('canvasLoading').classList.add('hidden');
+    revealCard();
     $('roastBtn').disabled = false;
     $('downloadBtn').disabled = false;
     $('shareBtn').disabled = false;
     bumpRoastCount(parsed);
-    if (window.innerWidth < 1024) canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Flip back to the freshly drawn front, with holo shine + fire confetti as it lands.
+  function revealCard() {
+    const front = $('cardFront');
+    $('flipInner').classList.remove('is-flipped');
+    front.classList.remove('shine');
+    void front.offsetWidth; // restart the shine animation
+    front.classList.add('shine');
+    setTimeout(fireConfetti, 380);
+  }
+
+  function fireConfetti() {
+    if (typeof confetti !== 'function') return;
+    const rect = $('flipInner').getBoundingClientRect();
+    const origin = {
+      x: (rect.left + rect.width / 2) / window.innerWidth,
+      y: Math.min(0.9, (rect.top + rect.height * 0.45) / window.innerHeight),
+    };
+    const colors = ['#ff7a1a', '#ff3d3d', '#ffd23f', '#ffb347', '#39ff88'];
+    const small = window.innerWidth < 640;
+    const base = { colors, origin, disableForReducedMotion: true, ticks: 220, gravity: 0.9, scalar: small ? 0.8 : 1 };
+    confetti({ ...base, particleCount: small ? 70 : 130, spread: 80, startVelocity: 45 });
+    confetti({ ...base, particleCount: small ? 30 : 60, spread: 120, startVelocity: 30, shapes: ['circle'], scalar: 0.6 });
+    setTimeout(() => {
+      confetti({ ...base, particleCount: small ? 25 : 50, angle: 60, spread: 55, origin: { x: 0, y: 0.75 } });
+      confetti({ ...base, particleCount: small ? 25 : 50, angle: 120, spread: 55, origin: { x: 1, y: 0.75 } });
+    }, 220);
   }
 
   function downloadCard() {
@@ -966,11 +1084,14 @@
   // =====================================================
   function shareOnX() {
     if (!lastRoast) return;
-    const text =
-      `I just got roasted by AI 🔥\n\n` +
-      `${lastRoast.name} is ${lastRoast.heat}% COOKED — "${lastRoast.verdict.label}"\n` +
-      `FOMO ${lastRoast.fomo}/100 · Degen LVL ${lastRoast.degenLevel}\n\n` +
-      `Are you cooked? 👇 (via ${CONFIG.xHandle})\n`;
+    const text = lastRoast.friend
+      ? `Hey ${lastRoast.name}, look how cooked you are on $COOKED AI! 😈\n\n` +
+        `${lastRoast.heat}% COOKED — "${lastRoast.verdict.label}" · Paper Hands: ${lastRoast.paperHands}\n\n` +
+        `Check your score here (via ${CONFIG.xHandle}):\n`
+      : `I just got roasted by AI 🔥\n\n` +
+        `${lastRoast.name} is ${lastRoast.heat}% COOKED — "${lastRoast.verdict.label}"\n` +
+        `FOMO ${lastRoast.fomo}/100 · Degen LVL ${lastRoast.degenLevel}\n\n` +
+        `Are you cooked? 👇 (via ${CONFIG.xHandle})\n`;
     const url = 'https://twitter.com/intent/tweet?' + new URLSearchParams({
       text, url: CONFIG.siteUrl, hashtags: 'COOKED,Solana',
     });
@@ -1020,6 +1141,7 @@
       const kind = parsed.type === 'x' ? 'x' : 'sol';
       renderCounters((await rpc('increment_roasts', { p_kind: kind, p_handle: parsed.value })).roasts);
       if (!fighters) renderBattle(); // this roast may be the one that opens the arena
+      loadFeed();
     } catch {}
   }
 
@@ -1241,6 +1363,166 @@
   }
 
   // =====================================================
+  // SOUND FX (synthesized with Web Audio, no files)
+  // =====================================================
+  const sound = {
+    on: store.get('cooked_sound', true),
+    ctx: null,
+    audio() {
+      if (!this.on) return null;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      if (!this.ctx) this.ctx = new AC();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      return this.ctx;
+    },
+    // Grill sizzle: hissing filtered noise + random fat crackles
+    sizzle(duration = 1.5) {
+      const ac = this.audio(); if (!ac) return;
+      const len = Math.floor(ac.sampleRate * duration);
+      const buf = ac.createBuffer(1, len, ac.sampleRate);
+      const data = buf.getChannelData(0);
+      let pop = 0;
+      for (let i = 0; i < len; i++) {
+        if (Math.random() < 0.0009) pop = 0.6 + Math.random() * 0.4;
+        pop *= 0.992;
+        data[i] = (Math.random() * 2 - 1) * (0.18 + pop);
+      }
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1800;
+      const bp = ac.createBiquadFilter(); bp.type = 'peaking'; bp.frequency.value = 5200; bp.gain.value = 6;
+      const g = ac.createGain(); const t = ac.currentTime;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.08);
+      g.gain.setValueAtTime(0.35, t + duration - 0.35);
+      g.gain.linearRampToValueAtTime(0, t + duration);
+      src.connect(hp).connect(bp).connect(g).connect(ac.destination);
+      src.start(t);
+    },
+    // Cash register: "cha" (noise burst) + "ching" (two bell dings)
+    chaching() {
+      const ac = this.audio(); if (!ac) return;
+      const t = ac.currentTime;
+      const len = Math.floor(ac.sampleRate * 0.09);
+      const buf = ac.createBuffer(1, len, ac.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      const n = ac.createBufferSource(); n.buffer = buf;
+      const hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3000;
+      const ng = ac.createGain(); ng.gain.value = 0.3;
+      n.connect(hp).connect(ng).connect(ac.destination); n.start(t);
+      [[0.1, [1568, 2349, 3136]], [0.22, [2093, 3136, 4186]]].forEach(([at, freqs]) => {
+        freqs.forEach((f, k) => {
+          const o = ac.createOscillator(); o.type = k ? 'sine' : 'triangle'; o.frequency.value = f;
+          const g = ac.createGain();
+          g.gain.setValueAtTime(0, t + at);
+          g.gain.linearRampToValueAtTime(0.18 / (k + 1), t + at + 0.005);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + at + 0.9);
+          o.connect(g).connect(ac.destination); o.start(t + at); o.stop(t + at + 1);
+        });
+      });
+    },
+  };
+
+  function renderSoundBtn() {
+    const btn = $('soundBtn');
+    btn.innerHTML = `<i data-lucide="${sound.on ? 'volume-2' : 'volume-x'}" class="w-4 h-4"></i>`;
+    btn.setAttribute('aria-label', sound.on ? 'Mute sounds' : 'Unmute sounds');
+    btn.setAttribute('aria-pressed', String(!sound.on));
+    refreshIcons();
+  }
+
+  // =====================================================
+  // LIVE FEED (ticker) + HALL OF SHAME — real roasts from Supabase
+  // =====================================================
+  function feedEntry(row) {
+    const type = row.kind === 'x' ? 'x' : 'wallet';
+    return { row, m: getMetrics(row.handle, type), label: row.kind === 'x' ? '@' + row.handle : shortAddr(row.handle) };
+  }
+
+  function renderTicker(entries) {
+    const formats = [
+      (e) => `<b class="text-neon">${escapeHTML(e.label)}</b> just got roasted! Rating: <b class="text-flame">${e.m.heat}% Cooked</b> 🔥`,
+      (e) => `<b class="text-neon">${escapeHTML(e.label)}</b>: Paper Hands <b class="text-flame">${e.m.paperScore}%</b> 🧻`,
+      (e) => `<b class="text-neon">${escapeHTML(e.label)}</b>: <b class="text-flame">${e.m.verdict.label}</b> · Degen LVL ${e.m.degenLevel} 🗿`,
+      (e) => `<b class="text-neon">${escapeHTML(e.label)}</b>: FOMO <b class="text-flame">${e.m.fomo}/100</b> 🚀`,
+    ];
+    const items = entries.length
+      ? entries.map((e, i) => formats[i % formats.length](e))
+      : ['The grill is hot 🔥 Be the first to get roasted', 'Every roast feeds the $COOKED burn 🔥', `Built by ${CONFIG.xHandle}`];
+    // Repeat until the strip is long enough, then duplicate it for a seamless loop
+    let strip = items;
+    while (strip.length < 8) strip = strip.concat(items);
+    const html = strip.map((t) => `<span class="px-5">${t}</span><span class="text-flame/50">◆</span>`).join('');
+    const track = $('tickerTrack');
+    track.innerHTML = html + html;
+    track.style.setProperty('--dur', strip.length * 5 + 's');
+  }
+
+  function renderPodium(entries) {
+    const podium = $('podium');
+    const top = [...entries]
+      .sort((a, b) => b.m.heat - a.m.heat || b.m.paperScore - a.m.paperScore || b.row.roasts - a.row.roasts)
+      .slice(0, 3);
+    if (!top.length) {
+      podium.innerHTML = `
+        <div class="sm:col-span-3 rounded-2xl border border-dashed border-line p-10 text-center">
+          <p class="text-5xl">🏆</p>
+          <p class="mt-3 font-bold">The Hall of Shame is empty… for now.</p>
+          <p class="mt-1 text-sm text-ash">Roast someone and they might take the throne.</p>
+        </div>`;
+      return;
+    }
+    const medals = ['🥇', '🥈', '🥉'];
+    // Desktop order: 2nd, 1st, 3rd
+    const order = ['sm:order-2', 'sm:order-1', 'sm:order-3'];
+    podium.innerHTML = top.map((e, i) => {
+      const f = toFighter(e.row);
+      const first = i === 0;
+      return `
+      <article class="${order[i]} relative rounded-2xl border ${first ? 'border-flame/70 glow-flame bg-gradient-to-b from-flame/15 to-ink sm:pb-10 sm:pt-8' : 'border-line bg-panel'} p-5 text-center">
+        ${first ? '<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-4xl sizzle" aria-hidden="true">👑</span>' : ''}
+        <p class="text-3xl">${medals[i]}</p>
+        <a href="${f.url}" target="_blank" rel="noopener nofollow" class="mt-3 inline-flex flex-col items-center gap-2 group">
+          <img src="${f.avatar}" data-fallback="${avatarURL(f.seed)}" alt="" referrerpolicy="no-referrer"
+            class="podium-avatar ${first ? 'w-20 h-20' : 'w-16 h-16'} rounded-full object-cover bg-line ring-4" style="--tw-ring-color:${e.m.verdict.color}" />
+          <span class="font-mono font-bold text-slate-100 group-hover:text-neon truncate max-w-[14rem]">${escapeHTML(f.label)}</span>
+        </a>
+        <p class="mt-1 text-xs font-mono text-ash">${escapeHTML(e.m.title)} · roasted ${e.row.roasts}×</p>
+        <p class="mt-4 font-mono font-bold ${first ? 'text-5xl' : 'text-4xl'}" style="color:${e.m.verdict.color}">${e.m.heat}%</p>
+        <p class="font-bold tracking-wide" style="color:${e.m.verdict.color}">${e.m.verdict.label}</p>
+        <dl class="mt-4 grid grid-cols-3 gap-2 text-xs">
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">Paper</dt><dd class="font-bold">${e.m.paperScore}%</dd></div>
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">FOMO</dt><dd class="font-bold">${e.m.fomo}</dd></div>
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">LVL</dt><dd class="font-bold">${e.m.degenLevel}</dd></div>
+        </dl>
+        <button data-handle="${escapeHTML(e.row.handle)}" class="reroast-btn mt-4 w-full rounded-xl border border-line py-2 text-sm font-bold hover:border-flame hover:text-flame transition">
+          🔥 Roast again
+        </button>
+      </article>`;
+    }).join('');
+    podium.querySelectorAll('.podium-avatar').forEach((img) =>
+      img.addEventListener('error', () => { img.src = img.dataset.fallback; }, { once: true }));
+    podium.querySelectorAll('.reroast-btn').forEach((btn) => btn.addEventListener('click', () => {
+      $('roastInput').value = btn.dataset.handle;
+      $('roaster').scrollIntoView({ behavior: 'smooth' });
+      runRoast(btn.dataset.handle);
+    }));
+  }
+
+  async function loadFeed() {
+    try {
+      const rows = await rpc('get_recent_roasts', { p_limit: 500 });
+      const entries = rows.map(feedEntry);
+      renderTicker(entries.slice(0, 20));
+      renderPodium(entries);
+    } catch {
+      if (!$('tickerTrack').innerHTML) renderTicker([]);
+      if (!$('podium').innerHTML) renderPodium([]);
+    }
+  }
+
+  // =====================================================
   // INIT
   // =====================================================
   document.addEventListener('DOMContentLoaded', async () => {
@@ -1284,6 +1566,27 @@
     // Counters
     loadStats();
     setInterval(loadStats, 15000);
+
+    // Live feed + Hall of Shame
+    loadFeed();
+    setInterval(loadFeed, 30000);
+
+    // Sound
+    renderSoundBtn();
+    $('soundBtn').addEventListener('click', () => {
+      sound.on = !sound.on;
+      store.set('cooked_sound', sound.on);
+      renderSoundBtn();
+      if (sound.on) sound.chaching();
+    });
+    document.querySelectorAll('.buy-link').forEach((a) => a.addEventListener('click', () => sound.chaching()));
+
+    // Roast a friend
+    $('friendMode').addEventListener('change', (e) => {
+      const on = e.target.checked;
+      $('roastBtnLabel').textContent = on ? 'Roast them!' : 'Roast Me!';
+      $('roastInput').placeholder = on ? "your friend's X handle" : 'elonmusk or 7xKX…wallet';
+    });
 
     // Buy
     $('caText').textContent = CONFIG.tokenMint;
