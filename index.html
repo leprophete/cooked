@@ -108,7 +108,87 @@
     .peer:checked + .switch::after { transform: translateX(16px); background: #ff7a1a; }
     .peer:focus-visible + .switch { outline: 2px solid #39ff88; outline-offset: 2px; }
 
+    /* Casino arena: spell cards */
+    .buff-card {
+      position: relative; overflow: hidden; text-align: left;
+      display: flex; flex-direction: column; gap: 4px; padding: 14px;
+      border-radius: 16px; border: 1px solid #1c2436;
+      background: linear-gradient(160deg, #111827, #07090f);
+      transition: transform .15s ease, border-color .2s, box-shadow .2s;
+    }
+    .buff-card:not(:disabled):hover { transform: translateY(-3px) rotate(-1deg); border-color: #ff7a1a; box-shadow: 0 10px 30px -10px rgba(255,122,26,.6); }
+    .buff-card:not(:disabled):active { transform: scale(.97); }
+    .buff-card:disabled { opacity: .45; cursor: not-allowed; }
+    .buff-emoji { font-size: 30px; line-height: 1; }
+    .buff-name { font-weight: 700; color: #f1f5f9; }
+    .buff-desc { font-size: 12px; color: #8a93a8; line-height: 1.35; }
+    .buff-cd {
+      position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(7,9,15,.78); font: 700 22px "JetBrains Mono", monospace; color: #ff7a1a;
+    }
+    .buff-card.cooling .buff-cd { display: flex; }
+    .buff-card.cooling { opacity: 1; }
+
+    /* Dice */
+    .die {
+      width: 60px; height: 60px; border-radius: 14px; background: #f8fafc; color: #07090f;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 54px; line-height: 1;
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,.15), 0 8px 20px -6px rgba(57,255,136,.6);
+    }
+    .die.rolling { animation: dieRoll .9s cubic-bezier(.3,1.5,.5,1); }
+    @keyframes dieRoll {
+      0% { transform: translateY(-40px) rotate(0) scale(.6); }
+      40% { transform: translateY(6px) rotate(400deg) scale(1.1); }
+      70% { transform: translateY(-8px) rotate(620deg); }
+      100% { transform: translateY(0) rotate(720deg) scale(1); }
+    }
+
+    /* Effects layered on the fighter cards */
+    .fx-layer { position: absolute; inset: 0; pointer-events: none; border-radius: 16px; z-index: 5; }
+    .shield-fx {
+      border: 2px solid #22d3ee; opacity: 0; transition: opacity .3s;
+      box-shadow: inset 0 0 30px rgba(34,211,238,.35), 0 0 24px rgba(34,211,238,.5);
+      background: radial-gradient(circle at 50% 0%, rgba(34,211,238,.18), transparent 60%),
+        repeating-linear-gradient(60deg, rgba(34,211,238,.07) 0 2px, transparent 2px 22px),
+        repeating-linear-gradient(-60deg, rgba(34,211,238,.07) 0 2px, transparent 2px 22px);
+    }
+    .shield-on .shield-fx { opacity: 1; animation: shieldPulse 2s ease-in-out infinite; }
+    @keyframes shieldPulse { 50% { box-shadow: inset 0 0 44px rgba(34,211,238,.5), 0 0 36px rgba(34,211,238,.75); } }
+    .shield-flash .shield-fx { animation: shieldFlash .6s ease-out; opacity: 1; }
+    @keyframes shieldFlash { 0% { background-color: rgba(34,211,238,.55); } 100% { background-color: transparent; } }
+    .pump-fx { overflow: hidden; display: none; }
+    .pump-on .pump-fx { display: block; }
+    .pump-fx span { position: absolute; bottom: -40px; font-size: 26px; animation: rocket 1.6s linear infinite; }
+    @keyframes rocket { from { transform: translateY(0) rotate(-45deg); opacity: 1; } to { transform: translateY(-520px) rotate(-45deg); opacity: 0; } }
+    .boom {
+      position: absolute; left: 50%; top: 45%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%;
+      background: radial-gradient(circle, #fff 0%, #ffd23f 18%, #ff7a1a 40%, rgba(255,61,61,.7) 60%, transparent 72%);
+      animation: boom .75s ease-out forwards; z-index: 6; pointer-events: none;
+    }
+    @keyframes boom { 0% { transform: scale(.1); opacity: 1; } 70% { opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
+    .shake { animation: shake .5s ease-in-out; }
+    @keyframes shake { 0%,100% { transform: translate(0) } 20% { transform: translate(-7px, 3px) } 40% { transform: translate(6px,-4px) } 60% { transform: translate(-5px,2px) } 80% { transform: translate(4px,-2px) } }
+    .float-up {
+      position: absolute; left: 50%; top: 40%; transform: translateX(-50%); z-index: 7; pointer-events: none;
+      font: 700 28px "JetBrains Mono", monospace; text-shadow: 0 2px 0 #000, 0 0 16px currentColor;
+      animation: floatUp 1.3s ease-out forwards;
+    }
+    @keyframes floatUp { from { opacity: 0; transform: translate(-50%, 20px) scale(.8); } 15% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -90px) scale(1.15); } }
+    .fx-badge { font: 700 11px "JetBrains Mono", monospace; padding: 2px 8px; border-radius: 999px; }
+
+    /* Floating Buy button */
+    .float-buy { animation: buyPulse 2s ease-in-out infinite; }
+    @keyframes buyPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,122,26,.7), 0 0 18px rgba(255,122,26,.5); }
+      50% { box-shadow: 0 0 0 12px rgba(255,122,26,0), 0 0 34px rgba(255,61,61,.7); }
+    }
+
+    /* Modal */
+    .roast-modal::backdrop { background: rgba(3,5,10,.82); backdrop-filter: blur(4px); }
+
     @media (prefers-reduced-motion: reduce) {
+      .die.rolling, .pump-fx span, .boom, .shake, .float-up, .float-buy, .shield-on .shield-fx { animation: none; }
+      .boom { display: none; }
       .live-dot, .sizzle, .spin-ring { animation: none; }
       .bar-fill, .flip-inner { transition: none; }
       .holo.shine::after { animation: none; }
@@ -140,8 +220,8 @@
 
       <nav class="hidden md:flex items-center gap-7 text-sm text-ash">
         <a href="#roaster" class="hover:text-neon transition-colors">Roaster</a>
-        <a href="#battle" class="hover:text-neon transition-colors">Meme Battle</a>
         <a href="#shame" class="hover:text-neon transition-colors">Hall of Shame</a>
+        <a href="#battle" class="hover:text-neon transition-colors">Battle Arena</a>
         <a href="#tokenomics" class="hover:text-neon transition-colors">Tokenomics</a>
         <a href="#buy" class="buy-link hover:text-flame transition-colors">Buy Token</a>
       </nav>
@@ -167,8 +247,8 @@
     <nav id="mobileNav" class="md:hidden hidden border-t border-line bg-ink">
       <div class="px-4 py-3 flex flex-col text-base">
         <a href="#roaster" class="py-3 border-b border-line/60">Roaster</a>
-        <a href="#battle" class="py-3 border-b border-line/60">Meme Battle</a>
         <a href="#shame" class="py-3 border-b border-line/60">Hall of Shame</a>
+        <a href="#battle" class="py-3 border-b border-line/60">Battle Arena</a>
         <a href="#tokenomics" class="py-3 border-b border-line/60">Tokenomics</a>
         <a href="#buy" class="buy-link py-3 border-b border-line/60 text-flame">Buy Token</a>
         <a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" class="py-3 text-neon">Follow @Crypto_Cycles1 on X</a>
@@ -262,30 +342,60 @@
               Share on X
             </button>
           </div>
+          <button id="joinArenaBtn" disabled
+            class="glow-hover-flame mt-3 w-full rounded-xl border-2 border-flame text-flame font-bold py-3 flex items-center justify-center gap-2 hover:bg-flame hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
+            ⚔️ <span id="joinArenaLabel">Join the Battle Arena</span>
+          </button>
           <p class="mt-3 text-xs text-ash text-center font-mono">Tip: download the card, then attach it to your post for max engagement.</p>
         </div>
       </div>
     </section>
 
-    <!-- ========== 4. MEME BATTLES ========== -->
+    <!-- ========== HALL OF SHAME (real roasts) ========== -->
+    <section id="shame" class="border-t border-line scroll-mt-28">
+      <div class="max-w-6xl mx-auto px-4 py-16">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">Degen Hall of Shame</p>
+            <h2 class="text-3xl sm:text-4xl font-bold">The Most Cooked Wallets &amp; Accounts</h2>
+            <p class="mt-2 text-ash max-w-xl">Picked from every real roast on the site. Each one earns a badge nobody wants.</p>
+          </div>
+          <p class="font-mono text-xs text-ash flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-neon live-dot"></span> Updates live</p>
+        </div>
+        <div id="shameGrid" class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <!-- Native ad unit -->
+        <div class="mt-12">
+          <p class="text-xs font-mono text-ash mb-2 text-center">Advertisement — fuels the burn 🔥</p>
+          <script async="async" data-cfasync="false" src="https://bauval.org/21/26b65041f52f3cd048e09015e70f9c53"></script>
+          <div id="container-26b65041f52f3cd048e09015e70f9c53"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4. MEME BATTLE CASINO ARENA ========== -->
     <section id="battle" class="border-t border-line bg-panel/40 scroll-mt-28">
       <div class="max-w-6xl mx-auto px-4 py-16">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
-            <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">The Daily Arena</p>
+            <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">🎰 Casino Arena · Bribes &amp; Buffs</p>
             <h2 class="text-3xl sm:text-4xl font-bold">Meme Battle <span class="font-mono text-lg text-ash align-middle">#<span id="battleRound">1</span></span></h2>
           </div>
-          <p class="font-mono text-sm text-ash">New arena in <span id="battleTimer" class="text-slate-100">--:--:--</span></p>
+          <div class="font-mono text-sm text-ash sm:text-right">
+            <p>New arena in <span id="battleTimer" class="text-slate-100">--:--:--</span></p>
+            <p class="text-xs mt-1"><span id="queueCount">0</span> cards waiting in the queue ⚔️</p>
+          </div>
         </div>
 
         <div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
-          <article id="memeA" class="meme-card rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
+          <article id="memeA" class="meme-card relative overflow-hidden rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
           <div class="flex items-center justify-center">
             <span class="font-mono font-bold text-2xl text-flame">VS</span>
           </div>
-          <article id="memeB" class="meme-card rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
+          <article id="memeB" class="meme-card relative overflow-hidden rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
         </div>
 
+        <!-- Score bar (points) -->
         <div class="mt-8">
           <div class="flex justify-between gap-2 font-mono text-xs sm:text-sm mb-2">
             <span class="text-neon truncate" id="pctA">50%</span>
@@ -297,26 +407,47 @@
           </div>
           <p class="mt-2 text-center font-mono text-xs text-ash" id="totalVotes">0 votes</p>
         </div>
+
+        <!-- Buff deck -->
+        <div class="mt-10">
+          <div class="flex items-baseline justify-between gap-3 mb-3">
+            <h3 class="font-bold text-lg">Your spell deck</h3>
+            <p id="deckHint" class="font-mono text-xs text-ash text-right">Pick a side to unlock your spells</p>
+          </div>
+          <div id="buffDeck" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <button class="buff-card" data-buff="dice" disabled>
+              <span class="buff-emoji">🎲</span><span class="buff-name">Roll the Dice</span>
+              <span class="buff-desc">2 dice, +2 to +12 pts for your team</span><span class="buff-cd"></span>
+            </button>
+            <button class="buff-card" data-buff="shield" disabled>
+              <span class="buff-emoji">🛡️</span><span class="buff-name">Shield Boost</span>
+              <span class="buff-desc">Blocks every Rug Bomb for 2 min</span><span class="buff-cd"></span>
+            </button>
+            <button class="buff-card" data-buff="bomb" disabled>
+              <span class="buff-emoji">💣</span><span class="buff-name">FUD Rug Bomb</span>
+              <span class="buff-desc">-5% on the enemy score (unless shielded)</span><span class="buff-cd"></span>
+            </button>
+            <button class="buff-card" data-buff="pump" disabled>
+              <span class="buff-emoji">🚀</span><span class="buff-name">FOMO Pump</span>
+              <span class="buff-desc">x2 on all your team's actions for 30s</span><span class="buff-cd"></span>
+            </button>
+          </div>
+          <!-- Dice tray -->
+          <div id="diceTray" class="hidden mt-4 rounded-2xl border border-line bg-ink p-4 flex items-center justify-center gap-4">
+            <span class="die" id="die1">⚀</span><span class="die" id="die2">⚀</span>
+            <span id="diceResult" class="font-mono font-bold text-xl text-neon"></span>
+          </div>
+        </div>
+
+        <!-- Live action log -->
+        <div class="mt-8 rounded-2xl border border-line bg-ink p-4">
+          <p class="font-mono text-xs text-ash mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-flame live-dot"></span> LIVE ARENA LOG</p>
+          <ol id="actionLog" class="space-y-1.5 font-mono text-xs sm:text-sm max-h-56 overflow-y-auto"></ol>
+        </div>
+
         <button id="nextBattleBtn" class="hidden mt-6 mx-auto rounded-xl bg-flame text-ink font-bold px-6 py-3 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition">
           Next battle <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
-      </div>
-    </section>
-
-    <!-- ========== HALL OF SHAME (real roasts) ========== -->
-    <section id="shame" class="border-t border-line scroll-mt-28">
-      <div class="max-w-6xl mx-auto px-4 py-16">
-        <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">Hall of Shame</p>
-        <h2 class="text-3xl sm:text-4xl font-bold">Top 3 Most Cooked Degens</h2>
-        <p class="mt-2 text-ash max-w-xl">Ranked from every real roast on the site. Highest Cooked %, worst paper hands first.</p>
-        <div id="podium" class="mt-10 grid sm:grid-cols-3 gap-4 sm:items-end"></div>
-
-        <!-- Native ad unit -->
-        <div class="mt-12">
-          <p class="text-xs font-mono text-ash mb-2 text-center">Advertisement — fuels the burn 🔥</p>
-          <script async="async" data-cfasync="false" src="https://bauval.org/21/26b65041f52f3cd048e09015e70f9c53"></script>
-          <div id="container-26b65041f52f3cd048e09015e70f9c53"></div>
-        </div>
       </div>
     </section>
 
@@ -415,7 +546,10 @@
           </button>
         </div>
 
-        <div class="mt-4 grid sm:grid-cols-2 gap-3">
+        <div class="mt-4 grid sm:grid-cols-3 gap-3">
+          <a id="pumpLink" target="_blank" rel="noopener" class="buy-link glow-hover-flame rounded-xl bg-flame text-ink font-bold py-4 flex items-center justify-center gap-2 hover:brightness-110 transition">
+            <i data-lucide="flame" class="w-5 h-5"></i> Buy on Pump.fun
+          </a>
           <a id="jupLink" target="_blank" rel="noopener" class="buy-link glow-hover-neon rounded-xl bg-neon text-ink font-bold py-4 flex items-center justify-center gap-2 hover:brightness-110 transition">
             <i data-lucide="zap" class="w-5 h-5"></i> Buy on Jupiter
           </a>
@@ -430,17 +564,62 @@
         </a>
       </div>
     </section>
+
+    <!-- LIVE CHART (DexScreener embed once the CA is set in CONFIG) -->
+    <section id="chart" class="border-t border-line scroll-mt-28">
+      <div class="max-w-6xl mx-auto px-4 py-16">
+        <div class="flex items-end justify-between gap-3 mb-6">
+          <div>
+            <p class="font-mono text-xs text-neon tracking-widest uppercase mb-2">Live chart</p>
+            <h2 class="text-3xl sm:text-4xl font-bold">$COOKED / SOL</h2>
+          </div>
+          <a id="chartOpenLink" target="_blank" rel="noopener" class="hidden font-mono text-sm text-ash hover:text-neon">Open on DexScreener ↗</a>
+        </div>
+        <div id="chartWrap" class="relative w-full rounded-2xl border border-line bg-ink overflow-hidden h-[460px] sm:h-[560px]"></div>
+      </div>
+    </section>
   </main>
 
   <footer class="border-t border-line">
-    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row justify-between gap-3 text-xs font-mono text-ash">
+    <div class="max-w-6xl mx-auto px-4 pt-8 pb-24 sm:pb-8 flex flex-col sm:flex-row justify-between gap-3 text-xs font-mono text-ash">
       <p>© <span id="year"></span> $COOKED. Memecoin with no intrinsic value. Roasts are jokes, not financial advice.</p>
       <p>Built on Solana ◎ by <a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" class="text-neon hover:underline">@Crypto_Cycles1</a></p>
     </div>
   </footer>
 
   <!-- Toast -->
-  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden rounded-lg bg-slate-100 text-ink font-bold text-sm px-4 py-3 shadow-lg"></div>
+  <div id="toast" class="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden rounded-lg bg-slate-100 text-ink font-bold text-sm px-4 py-3 shadow-lg max-w-[90vw] text-center"></div>
+
+  <!-- Floating Buy button -->
+  <a id="floatBuy" target="_blank" rel="noopener"
+    class="buy-link float-buy fixed z-40 right-4 bottom-4 sm:right-6 sm:bottom-6 rounded-full bg-flame text-ink font-bold text-sm sm:text-base pl-3.5 pr-4 sm:pl-4 sm:pr-5 py-2.5 sm:py-3 flex items-center gap-2 shadow-lg hover:brightness-110 active:scale-95"
+    style="margin-bottom: env(safe-area-inset-bottom)">
+    <span class="text-lg sizzle" aria-hidden="true">🔥</span>
+    <span>Buy $COOKED</span>
+    <span class="flex items-center gap-1 rounded-full bg-ink/20 px-2 py-0.5 text-[10px] font-mono"><span class="w-1.5 h-1.5 rounded-full bg-ink live-dot"></span><span id="floatBuyTag">LIVE</span></span>
+  </a>
+
+  <!-- View Roast modal -->
+  <dialog id="roastModal" class="roast-modal bg-transparent p-0 m-auto max-w-[min(92vw,520px)] w-full">
+    <div class="rounded-2xl border border-line bg-panel p-3 sm:p-4">
+      <div class="flex items-center justify-between mb-3">
+        <p id="modalTitle" class="font-mono text-sm text-flame font-bold truncate"></p>
+        <button id="modalClose" class="p-2 rounded-lg border border-line text-ash hover:text-neon hover:border-neon" aria-label="Close">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <canvas id="modalCanvas" width="1080" height="1350" class="block w-auto h-auto max-w-full max-h-[68vh] mx-auto rounded-xl"></canvas>
+      <div class="mt-3 grid grid-cols-2 gap-3">
+        <button id="modalDownload" class="rounded-xl border border-line bg-ink py-3 font-bold flex items-center justify-center gap-2 hover:border-neon hover:text-neon transition">
+          <i data-lucide="download" class="w-4 h-4"></i> Download
+        </button>
+        <button id="modalShare" class="rounded-xl bg-slate-100 text-ink py-3 font-bold flex items-center justify-center gap-2 hover:bg-white transition">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Share on X
+        </button>
+      </div>
+    </div>
+  </dialog>
 
   <!-- ========== 6. JAVASCRIPT ========== -->
   <script>
@@ -450,7 +629,8 @@
     watermark: 'Generated on Cooked.io • Powered by $COOKED',
     xHandle: '@Crypto_Cycles1',
     xUrl: 'https://x.com/Crypto_Cycles1',
-    tokenMint: 'CooKEDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxpump', // replace with the real mint address
+    // Paste the token CA (mint address) here at launch: it switches on the Buy buttons and the live chart.
+    tokenMint: '',
     // Public RPC is rate-limited and often blocks browsers; use a Helius/QuickNode URL in production.
     rpcUrl: 'https://api.mainnet-beta.solana.com',
     // Shared counters & votes. The publishable key is meant to be public: the database
@@ -768,7 +948,7 @@
   // CANVAS — DEGEN ID CARD
   // =====================================================
   const canvas = $('roastCanvas');
-  const ctx = canvas.getContext('2d');
+  let ctx = canvas.getContext('2d'); // swapped temporarily by drawCardOn()
   const W = canvas.width, H = canvas.height;
   let lastRoast = null;
 
@@ -1021,6 +1201,26 @@
     return null;
   }
 
+  let lastParsed = null, lastBump = null;
+
+  // Put the last roasted account in line for the next duels
+  async function joinArena() {
+    if (!lastParsed) return;
+    const btn = $('joinArenaBtn');
+    btn.disabled = true;
+    try {
+      await lastBump;
+      const q = await rpc('join_queue', { p_kind: lastParsed.type === 'x' ? 'x' : 'sol', p_handle: lastParsed.value });
+      $('joinArenaLabel').textContent = `In the queue: #${q.position} of ${q.length}`;
+      $('queueCount').textContent = q.length;
+      toast(`${lastRoast.name} is #${q.position} in line for the arena ⚔️`);
+      sound.shield();
+    } catch {
+      btn.disabled = false;
+      toast('Could not join the queue, try again in a minute');
+    }
+  }
+
   async function runRoast(raw) {
     const err = $('inputError');
     const parsed = parseInput(raw);
@@ -1031,6 +1231,7 @@
     }
     err.classList.add('hidden');
     $('roastBtn').disabled = true;
+    $('joinArenaBtn').disabled = true;
     if (window.innerWidth < 1024) $('flipInner').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     // Flip to the card back while cooking
@@ -1045,6 +1246,8 @@
 
     lastRoast = buildRoast(parsed.value, parsed.type, balance);
     lastRoast.friend = $('friendMode').checked && parsed.type === 'x';
+    lastParsed = parsed;
+    $('joinArenaLabel').textContent = 'Join the Battle Arena';
     await document.fonts.ready;
     await drawRoastCard(lastRoast, avatar);
 
@@ -1052,7 +1255,8 @@
     $('roastBtn').disabled = false;
     $('downloadBtn').disabled = false;
     $('shareBtn').disabled = false;
-    bumpRoastCount(parsed);
+    lastBump = bumpRoastCount(parsed);
+    lastBump.then(() => { $('joinArenaBtn').disabled = false; });
   }
 
   // Flip back to the freshly drawn front, with holo shine + fire confetti as it lands.
@@ -1224,8 +1428,18 @@
     { name: 'Charlie Conspiracy', img: IMG('1itoun.jpg'), top: 'The dev, the KOL, the "random" whale', bottom: "It's all the same guy" },
   ];
   // Fighters are real accounts roasted on the site, paired server-side (same pair for every visitor).
-  const escapeHTML = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  let fighters = null; // { a, b } for the round on screen, or null while the arena is empty
+  // Points, shields, pumps, cooldowns and the action log all live in Supabase (see use_buff).
+  const escapeHTML = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let fighters = null;   // { a, b } for the round on screen, or null while the arena is empty
+  let arena = null;      // last server state + the local time it arrived
+  let lastActionId = null;
+  const DIE_FACES = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+  const BUFF_INFO = {
+    dice: { emoji: '🎲', name: 'Roll the Dice' },
+    shield: { emoji: '🛡️', name: 'Shield Boost' },
+    bomb: { emoji: '💣', name: 'Rug Bomb' },
+    pump: { emoji: '🚀', name: 'FOMO Pump' },
+  };
 
   function toFighter(f) {
     return f.kind === 'x'
@@ -1257,11 +1471,6 @@
     return { day, saved, round, memeA: MEMES[i], memeB: MEMES[j] };
   }
 
-  async function loadVotes(b = getBattle()) {
-    if (!fighters) return;
-    try { updateBattleBars(await rpc('get_votes', { p_day: b.day, p_round: b.round })); } catch {}
-  }
-
   function fighterHeaderHTML(fighter, side) {
     const color = side === 'a' ? 'neon' : 'flame';
     if (!fighter) {
@@ -1278,19 +1487,29 @@
       ? '<span class="px-1.5 py-0.5 rounded bg-slate-100 text-ink text-[10px] font-bold">X</span>'
       : '<span class="px-1.5 py-0.5 rounded bg-gradient-to-r from-violet-500 to-emerald-400 text-ink text-[10px] font-bold">SOL</span>';
     return `
-      <a href="${fighter.url}" target="_blank" rel="noopener nofollow" class="flex items-center gap-3 mb-4 group">
-        <img src="${fighter.avatar}" data-fallback="${avatarURL(fighter.seed)}" alt="" referrerpolicy="no-referrer"
-          class="fighter-avatar w-10 h-10 rounded-full object-cover bg-line ring-2 ring-${color}" />
-        <div class="min-w-0">
-          <p class="font-mono font-bold text-sm text-slate-100 truncate group-hover:text-${color}">${escapeHTML(fighter.label)}</p>
-          <p class="flex items-center gap-1.5 text-xs text-ash">${badge} Roasted on $COOKED</p>
+      <div class="flex items-center justify-between gap-2 mb-4">
+        <a href="${fighter.url}" target="_blank" rel="noopener nofollow" class="flex items-center gap-3 min-w-0 group">
+          <img src="${fighter.avatar}" data-fallback="${avatarURL(fighter.seed)}" alt="" referrerpolicy="no-referrer"
+            class="fighter-avatar w-10 h-10 rounded-full object-cover bg-line ring-2 ring-${color}" />
+          <div class="min-w-0">
+            <p class="font-mono font-bold text-sm text-slate-100 truncate group-hover:text-${color}">${escapeHTML(fighter.label)}</p>
+            <p class="flex items-center gap-1.5 text-xs text-ash">${badge} Team ${side.toUpperCase()}</p>
+          </div>
+        </a>
+        <div class="text-right shrink-0">
+          <p class="font-mono font-bold text-xl text-${color}"><span data-points="${side}">0</span></p>
+          <p class="font-mono text-[10px] text-ash -mt-1">PTS</p>
         </div>
-      </a>`;
+      </div>
+      <div class="flex flex-wrap gap-1.5 mb-3 min-h-[20px]" data-badges="${side}"></div>`;
   }
 
   function memeCardHTML(meme, fighter, side) {
     const color = side === 'a' ? 'neon' : 'flame';
+    const rockets = [8, 26, 44, 62, 80].map((x, k) => `<span style="left:${x}%;animation-delay:${k * 0.3}s">🚀</span>`).join('');
     return `
+      <div class="fx-layer shield-fx"></div>
+      <div class="fx-layer pump-fx">${rockets}</div>
       ${fighterHeaderHTML(fighter, side)}
       <figure class="meme-frame relative aspect-[4/3] rounded-xl overflow-hidden bg-black border border-line select-none">
         <img src="${meme.img}" alt="${escapeHTML(meme.name)} meme: ${escapeHTML(meme.top + ' ' + meme.bottom)}" referrerpolicy="no-referrer" class="w-full h-full object-contain" />
@@ -1299,7 +1518,7 @@
       </figure>
       <p class="mt-3 font-mono text-xs text-ash flex-1">${escapeHTML(meme.name)}</p>
       <button data-side="${side}" ${fighter ? '' : 'disabled'} class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
-        <i data-lucide="flame" class="w-4 h-4"></i> <span>${fighter ? 'Vote ' + escapeHTML(fighter.label) : 'Waiting for a fighter'}</span>
+        <i data-lucide="swords" class="w-4 h-4"></i> <span>${fighter ? 'Join team ' + escapeHTML(fighter.label) : 'Waiting for a fighter'}</span>
       </button>`;
   }
 
@@ -1309,6 +1528,7 @@
     let data = null;
     try { data = await rpc('get_battle', { p_day: b.day, p_round: b.round }); } catch {}
     fighters = data && data.a ? { a: toFighter(data.a), b: toFighter(data.b) } : null;
+    lastActionId = null;
 
     $('memeA').innerHTML = memeCardHTML(b.memeA, fighters && fighters.a, 'a');
     $('memeB').innerHTML = memeCardHTML(b.memeB, fighters && fighters.b, 'b');
@@ -1318,51 +1538,216 @@
     refreshIcons();
 
     if (fighters) {
-      updateBattleBars(data.votes);
+      applyArena(data);
     } else {
-      updateBattleBars({ a: 0, b: 0, voted: null });
+      arena = null;
+      updateBattleBars();
       $('totalVotes').textContent = data
         ? `The arena needs ${2 - data.pool} more roasted account${data.pool === 1 ? '' : 's'}. Roast someone ↑`
         : 'Arena offline, try again later';
+      renderDeck();
+      $('actionLog').innerHTML = '<li class="text-ash">The arena opens as soon as 2 accounts get roasted.</li>';
     }
   }
 
-  function updateBattleBars(v) {
-    const total = v.a + v.b;
-    const pa = total ? Math.round((v.a / total) * 100) : 50;
+  // Store a fresh server state, replay other people's new actions, redraw everything.
+  function applyArena(state, { replay = true } = {}) {
+    const newest = state.actions[0] ? state.actions[0].id : 0;
+    if (replay && lastActionId !== null) {
+      state.actions.filter((a) => a.id > lastActionId).slice(0, 3).reverse().forEach(playActionFx);
+    }
+    lastActionId = Math.max(lastActionId || 0, newest);
+    arena = { state, at: Date.now() };
+    if (state.queue !== undefined) $('queueCount').textContent = state.queue;
+    updateBattleBars();
+    renderLog();
+    renderDeck();
+  }
+
+  const remaining = (secs) => (arena ? Math.max(0, secs - Math.floor((Date.now() - arena.at) / 1000)) : 0);
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+  function updateBattleBars() {
+    const st = arena && arena.state;
+    const pa0 = st ? st.a.points : 0, pb0 = st ? st.b.points : 0, total = pa0 + pb0;
+    const pa = total ? Math.round((pa0 / total) * 100) : 50;
     $('barA').style.width = pa + '%';
     $('barB').style.width = 100 - pa + '%';
     $('pctA').textContent = fighters ? `${fighters.a.label} · ${pa}%` : '';
     $('pctB').textContent = fighters ? `${100 - pa}% · ${fighters.b.label}` : '';
-    $('totalVotes').textContent = total
-      ? total.toLocaleString('en-US') + (total === 1 ? ' vote' : ' votes')
-      : 'No votes yet, be the first';
-    $('nextBattleBtn').classList.toggle('hidden', !v.voted);
+    if (!st) return;
+
+    const votes = st.votes.a + st.votes.b;
+    $('totalVotes').textContent = votes
+      ? `${votes.toLocaleString('en-US')} ${votes === 1 ? 'degen' : 'degens'} in the arena · ${total.toLocaleString('en-US')} pts at stake`
+      : 'No one picked a side yet, be the first';
+    document.querySelectorAll('[data-points]').forEach((el) => (el.textContent = st[el.dataset.points].points.toLocaleString('en-US')));
+
+    // Shield / pump effects with live countdowns
+    ['a', 'b'].forEach((side) => {
+      const card = $(side === 'a' ? 'memeA' : 'memeB');
+      const shield = remaining(st[side].shield), pump = remaining(st[side].pump);
+      card.classList.toggle('shield-on', shield > 0);
+      card.classList.toggle('pump-on', pump > 0);
+      const badges = card.querySelector(`[data-badges="${side}"]`);
+      if (badges) {
+        badges.innerHTML =
+          (shield ? `<span class="fx-badge bg-cyan-400/15 text-cyan-300 border border-cyan-400/40">🛡️ ${mmss(shield)}</span>` : '') +
+          (pump ? `<span class="fx-badge bg-flame/15 text-flame border border-flame/40">🚀 x2 ${mmss(pump)}</span>` : '');
+      }
+    });
+
+    $('nextBattleBtn').classList.toggle('hidden', !st.votes.voted);
     document.querySelectorAll('.vote-btn').forEach((btn) => {
-      if (!v.voted) return;
+      if (!st.votes.voted) return;
       btn.disabled = true;
       btn.classList.add('pointer-events-none');
-      btn.querySelector('span').textContent = btn.dataset.side === v.voted ? 'Your pick ✓' : 'Voted';
-      if (btn.dataset.side !== v.voted) btn.classList.add('opacity-40');
+      btn.querySelector('span').textContent = btn.dataset.side === st.votes.voted ? 'Your team ✓' : 'Enemy team';
+      if (btn.dataset.side !== st.votes.voted) btn.classList.add('opacity-40');
     });
+  }
+
+  function renderDeck() {
+    const st = arena && arena.state;
+    const voted = st && st.votes.voted;
+    $('deckHint').textContent = !fighters ? 'The arena is waiting for fighters'
+      : voted ? `Playing for team ${fighters[voted].label}` : 'Pick a side to unlock your spells';
+    document.querySelectorAll('.buff-card').forEach((card) => {
+      const cd = voted ? remaining((st.cooldowns || {})[card.dataset.buff] || 0) : 0;
+      card.disabled = !voted || cd > 0 || card.dataset.busy === '1';
+      card.classList.toggle('cooling', cd > 0);
+      card.querySelector('.buff-cd').textContent = cd > 0 ? mmss(cd) : '';
+    });
+  }
+
+  function describeAction(a) {
+    const team = fighters ? escapeHTML(fighters[a.side].label) : 'Team ' + a.side.toUpperCase();
+    const color = a.side === 'a' ? 'text-neon' : 'text-flame';
+    const who = `<span class="text-slate-400">${escapeHTML(a.actor)}</span>`;
+    switch (a.action) {
+      case 'vote': return `${who} joined <b class="${color}">${team}</b> ⚔️ +${a.value} pts`;
+      case 'dice': return `${who} rolled 🎲 for <b class="${color}">${team}</b>: <b>+${a.value} pts</b>`;
+      case 'shield': return `${who} raised a 🛡️ Shield on <b class="${color}">${team}</b> (2 min)`;
+      case 'pump': return `${who} fired a 🚀 FOMO Pump: <b class="${color}">${team}</b> x2 for 30s`;
+      case 'bomb': return a.value
+        ? `${who} dropped a 💣 Rug Bomb on <b class="${color}">${team}</b>: <b class="text-red-400">-${a.value} pts</b>`
+        : `${who} dropped a 💣 Rug Bomb on <b class="${color}">${team}</b>… nothing left to rug 🤷`;
+      case 'blocked': return `${who}'s 💣 Rug Bomb bounced off <b class="${color}">${team}</b>'s 🛡️ Shield`;
+      default: return `${who} did something shady`;
+    }
+  }
+
+  function renderLog() {
+    const actions = arena ? arena.state.actions : [];
+    $('actionLog').innerHTML = actions.length
+      ? actions.map((a) => {
+          const t = new Date(a.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `<li class="flex gap-2"><span class="text-ash shrink-0">${t}</span><span>${describeAction(a)}</span></li>`;
+        }).join('')
+      : '<li class="text-ash">No action yet. Pick a side and throw the first spell.</li>';
+  }
+
+  // Visual + sound feedback for an action (yours, or someone else's seen on the next poll)
+  function playActionFx(a, mine = false) {
+    const card = $(a.side === 'a' ? 'memeA' : 'memeB');
+    const floatText = (text, color) => {
+      const el = document.createElement('div');
+      el.className = 'float-up'; el.style.color = color; el.textContent = text;
+      card.appendChild(el); setTimeout(() => el.remove(), 1400);
+    };
+    if (a.action === 'bomb') {
+      const boom = document.createElement('div'); boom.className = 'boom';
+      card.appendChild(boom); setTimeout(() => boom.remove(), 800);
+      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+      floatText(a.value ? `-${a.value} 💥` : 'NOTHING TO RUG', '#ff3d3d');
+      sound.boom();
+      if (mine && typeof confetti === 'function') {
+        const r = card.getBoundingClientRect();
+        confetti({ particleCount: 60, spread: 360, startVelocity: 28, ticks: 120, scalar: 0.8, disableForReducedMotion: true,
+          colors: ['#ff3d3d', '#ff7a1a', '#ffd23f', '#1f2937'],
+          origin: { x: (r.left + r.width / 2) / innerWidth, y: (r.top + r.height * 0.45) / innerHeight } });
+      }
+    } else if (a.action === 'blocked') {
+      card.classList.remove('shield-flash'); void card.offsetWidth; card.classList.add('shield-flash');
+      floatText('BLOCKED 🛡️', '#22d3ee');
+      sound.shield();
+    } else if (a.action === 'shield') {
+      floatText('🛡️ SHIELD UP', '#22d3ee');
+      sound.shield();
+    } else if (a.action === 'pump') {
+      floatText('🚀 x2 PUMP', '#ff7a1a');
+      sound.whoosh();
+    } else if (a.action === 'dice' || a.action === 'vote') {
+      floatText(`+${a.value}`, a.side === 'a' ? '#39ff88' : '#ff7a1a');
+    }
   }
 
   async function vote(side) {
     const b = getBattle();
     document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = true));
     try {
-      updateBattleBars(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side }));
-      toast('Vote locked in 🔥');
+      applyArena(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side }), { replay: false });
+      playActionFx({ side, action: 'vote', value: 10 }, true);
+      toast('You joined the battle ⚔️ Your spells are unlocked');
     } catch {
       document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = false));
       toast('Vote failed, try again');
     }
   }
 
+  async function rollDiceAnimation(final) {
+    const tray = $('diceTray'), d1 = $('die1'), d2 = $('die2');
+    tray.classList.remove('hidden');
+    $('diceResult').textContent = '';
+    [d1, d2].forEach((d) => { d.classList.remove('rolling'); void d.offsetWidth; d.classList.add('rolling'); });
+    sound.dice();
+    const spin = setInterval(() => {
+      d1.textContent = DIE_FACES[Math.floor(Math.random() * 6)];
+      d2.textContent = DIE_FACES[Math.floor(Math.random() * 6)];
+    }, 70);
+    await new Promise((r) => setTimeout(r, 850));
+    clearInterval(spin);
+    if (final) { d1.textContent = DIE_FACES[final[0] - 1]; d2.textContent = DIE_FACES[final[1] - 1]; }
+  }
+
+  async function useBuff(action, card) {
+    const b = getBattle();
+    card.dataset.busy = '1'; renderDeck();
+    const roll = action === 'dice' ? rollDiceAnimation(null) : null;
+    try {
+      const res = await rpc('use_buff', { p_day: b.day, p_round: b.round, p_action: action });
+      const r = res.result;
+      if (roll) { await roll; await rollDiceAnimation(r.dice); }
+      const my = res.state.votes.voted, opp = my === 'a' ? 'b' : 'a';
+      applyArena(res.state, { replay: false });
+      if (action === 'dice') {
+        $('diceResult').textContent = `${r.dice[0]} + ${r.dice[1]}${r.mult > 1 ? ' x2' : ''} = +${r.value} pts`;
+        playActionFx({ side: my, action: 'dice', value: r.value }, true);
+      } else if (action === 'bomb') {
+        playActionFx({ side: opp, action: r.blocked ? 'blocked' : 'bomb', value: r.value }, true);
+        toast(r.blocked ? 'Blocked by their Shield 🛡️' : r.value ? `Rug Bomb hit: -${r.value} pts 💣` : 'Boom… but they had 0 pts to lose 🤷');
+      } else {
+        playActionFx({ side: my, action }, true);
+      }
+    } catch (e) {
+      if (roll) await roll;
+      toast(String(e.message).includes('400') ? 'Not so fast, degen. That spell is cooling down' : 'Spell failed, try again');
+    } finally {
+      delete card.dataset.busy; renderDeck();
+    }
+  }
+
+  async function pollArena() {
+    if (!fighters || document.visibilityState !== 'visible') return;
+    const b = getBattle();
+    try { applyArena(await rpc('get_battle', { p_day: b.day, p_round: b.round })); } catch {}
+  }
+
   function nextBattle() {
     const b = getBattle();
     b.saved.round += 1;
     store.set('cooked_battle', b.saved);
+    $('diceTray').classList.add('hidden');
     renderBattle();
     $('battle').scrollIntoView({ behavior: 'smooth' });
   }
@@ -1415,6 +1800,35 @@
       src.connect(hp).connect(bp).connect(g).connect(ac.destination);
       src.start(t);
     },
+    // Short helper: one oscillator with an envelope
+    tone(type, f0, f1, at, dur, vol) {
+      const ac = this.audio(); if (!ac) return;
+      const t = ac.currentTime + at;
+      const o = ac.createOscillator(); o.type = type;
+      o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t + dur + 0.05);
+    },
+    noise(at, dur, vol, filterType, freq) {
+      const ac = this.audio(); if (!ac) return;
+      const t = ac.currentTime + at, len = Math.floor(ac.sampleRate * dur);
+      const buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const f = ac.createBiquadFilter(); f.type = filterType; f.frequency.value = freq;
+      const g = ac.createGain(); g.gain.value = vol;
+      src.connect(f).connect(g).connect(ac.destination); src.start(t);
+    },
+    // Dice rattling on a table
+    dice() { for (let k = 0; k < 7; k++) this.noise(k * 0.11 + Math.random() * 0.03, 0.05, 0.5, 'bandpass', 2500 + Math.random() * 2000); },
+    // Low boom + debris
+    boom() { this.tone('sine', 140, 38, 0, 0.7, 0.6); this.noise(0, 0.6, 0.7, 'lowpass', 900); this.noise(0.05, 0.35, 0.25, 'highpass', 3000); },
+    // Rising force-field hum
+    shield() { this.tone('sine', 300, 900, 0, 0.45, 0.18); this.tone('triangle', 600, 1800, 0.05, 0.4, 0.08); },
+    // Rocket whoosh
+    whoosh() { this.noise(0, 0.8, 0.45, 'bandpass', 1200); this.tone('sawtooth', 120, 600, 0, 0.7, 0.05); },
     // Cash register: "cha" (noise burst) + "ching" (two bell dings)
     chaching() {
       const ac = this.audio(); if (!ac) return;
@@ -1475,55 +1889,113 @@
     track.style.setProperty('--dur', strip.length * 5 + 's');
   }
 
-  function renderPodium(entries) {
-    const podium = $('podium');
-    const top = [...entries]
-      .sort((a, b) => b.m.heat - a.m.heat || b.m.paperScore - a.m.paperScore || b.row.roasts - a.row.roasts)
-      .slice(0, 3);
-    if (!top.length) {
-      podium.innerHTML = `
-        <div class="sm:col-span-3 rounded-2xl border border-dashed border-line p-10 text-center">
-          <p class="text-5xl">🏆</p>
+  // Hall of Shame: 6 real accounts, each crowned with a different badge.
+  const SHAME_BADGES = [
+    { label: 'Most Cooked of the Day 💀', cls: 'bg-red-500/15 text-red-300 border-red-500/40',
+      pick: (pool) => { const t = todayKey(); const today = pool.filter((e) => String(e.row.last_at).slice(0, 10) === t);
+        return (today.length ? today : pool).sort((x, y) => y.m.heat - x.m.heat)[0]; } },
+    { label: 'Worst Paper Hands 🧻', cls: 'bg-yellow-400/15 text-yellow-200 border-yellow-400/40',
+      pick: (pool) => pool.sort((x, y) => y.m.paperScore - x.m.paperScore || y.m.heat - x.m.heat)[0] },
+    { label: 'Ultra Jeet 🤡', cls: 'bg-pink-500/15 text-pink-300 border-pink-500/40',
+      pick: (pool) => pool.sort((x, y) => y.m.fomo - x.m.fomo)[0] },
+    { label: 'GigaChad Status 🗿', cls: 'bg-slate-200/10 text-slate-100 border-slate-300/40',
+      pick: (pool) => pool.sort((x, y) => y.m.degenLevel - x.m.degenLevel)[0] },
+    { label: 'Most Roasted 🔁', cls: 'bg-neon/10 text-neon border-neon/40',
+      pick: (pool) => pool.sort((x, y) => y.row.roasts - x.row.roasts)[0] },
+    { label: 'Fresh off the Grill 🔥', cls: 'bg-flame/15 text-flame border-flame/40',
+      pick: (pool) => pool.sort((x, y) => String(y.row.last_at).localeCompare(String(x.row.last_at)))[0] },
+  ];
+  const shameRoasts = new Map(); // handle -> roast, so card texts don't change on every refresh
+  let shameCards = [];
+
+  function roastFor(entry) {
+    const key = entry.row.kind + ':' + entry.row.handle;
+    if (!shameRoasts.has(key)) shameRoasts.set(key, buildRoast(entry.row.handle, entry.row.kind === 'x' ? 'x' : 'wallet', null));
+    return shameRoasts.get(key);
+  }
+
+  function renderShame(entries) {
+    const grid = $('shameGrid');
+    const pool = [...entries];
+    shameCards = [];
+    for (const badge of SHAME_BADGES) {
+      if (!pool.length) break;
+      const e = badge.pick(pool);
+      pool.splice(pool.indexOf(e), 1);
+      shameCards.push({ entry: e, badge, roast: roastFor(e), fighter: toFighter(e.row) });
+    }
+    if (!shameCards.length) {
+      grid.innerHTML = `
+        <div class="sm:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-line p-10 text-center">
+          <p class="text-5xl">💀</p>
           <p class="mt-3 font-bold">The Hall of Shame is empty… for now.</p>
-          <p class="mt-1 text-sm text-ash">Roast someone and they might take the throne.</p>
+          <p class="mt-1 text-sm text-ash">Roast someone above and they might earn the first badge.</p>
         </div>`;
       return;
     }
-    const medals = ['🥇', '🥈', '🥉'];
-    // Desktop order: 2nd, 1st, 3rd
-    const order = ['sm:order-2', 'sm:order-1', 'sm:order-3'];
-    podium.innerHTML = top.map((e, i) => {
-      const f = toFighter(e.row);
-      const first = i === 0;
+    grid.innerHTML = shameCards.map((c, i) => {
+      const { m, row } = c.entry;
+      const teaser = c.roast.text.length > 120 ? c.roast.text.slice(0, 117).replace(/\s+\S*$/, '') + '…' : c.roast.text;
       return `
-      <article class="${order[i]} relative rounded-2xl border ${first ? 'border-flame/70 glow-flame bg-gradient-to-b from-flame/15 to-ink sm:pb-10 sm:pt-8' : 'border-line bg-panel'} p-5 text-center">
-        ${first ? '<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-4xl sizzle" aria-hidden="true">👑</span>' : ''}
-        <p class="text-3xl">${medals[i]}</p>
-        <a href="${f.url}" target="_blank" rel="noopener nofollow" class="mt-3 inline-flex flex-col items-center gap-2 group">
-          <img src="${f.avatar}" data-fallback="${avatarURL(f.seed)}" alt="" referrerpolicy="no-referrer"
-            class="podium-avatar ${first ? 'w-20 h-20' : 'w-16 h-16'} rounded-full object-cover bg-line ring-4" style="--tw-ring-color:${e.m.verdict.color}" />
-          <span class="font-mono font-bold text-slate-100 group-hover:text-neon truncate max-w-[14rem]">${escapeHTML(f.label)}</span>
-        </a>
-        <p class="mt-1 text-xs font-mono text-ash">${escapeHTML(e.m.title)} · roasted ${e.row.roasts}×</p>
-        <p class="mt-4 font-mono font-bold ${first ? 'text-5xl' : 'text-4xl'}" style="color:${e.m.verdict.color}">${e.m.heat}%</p>
-        <p class="font-bold tracking-wide" style="color:${e.m.verdict.color}">${e.m.verdict.label}</p>
-        <dl class="mt-4 grid grid-cols-3 gap-2 text-xs">
-          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">Paper</dt><dd class="font-bold">${e.m.paperScore}%</dd></div>
-          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">FOMO</dt><dd class="font-bold">${e.m.fomo}</dd></div>
-          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">LVL</dt><dd class="font-bold">${e.m.degenLevel}</dd></div>
+      <article class="rounded-2xl border border-line bg-panel p-5 flex flex-col hover:border-flame/60 transition">
+        <span class="self-start fx-badge border ${c.badge.cls}">${c.badge.label}</span>
+        <div class="mt-4 flex items-center gap-3">
+          <img src="${c.fighter.avatar}" data-fallback="${avatarURL(c.fighter.seed)}" alt="" referrerpolicy="no-referrer"
+            class="shame-avatar w-14 h-14 rounded-full object-cover bg-line ring-2" style="--tw-ring-color:${m.verdict.color}" />
+          <div class="min-w-0 flex-1">
+            <a href="${c.fighter.url}" target="_blank" rel="noopener nofollow" class="block font-mono font-bold text-slate-100 hover:text-neon truncate">${escapeHTML(c.fighter.label)}</a>
+            <p class="text-xs font-mono text-ash truncate">${escapeHTML(m.title)} · roasted ${row.roasts}×</p>
+          </div>
+          <div class="text-right">
+            <p class="font-mono font-bold text-2xl" style="color:${m.verdict.color}">${m.heat}%</p>
+            <p class="text-[10px] font-bold tracking-wide" style="color:${m.verdict.color}">${m.verdict.label}</p>
+          </div>
+        </div>
+        <p class="mt-4 text-sm text-slate-300 leading-snug flex-1">"${escapeHTML(teaser)}"</p>
+        <dl class="mt-4 grid grid-cols-3 gap-2 text-xs text-center">
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">Paper</dt><dd class="font-bold">${m.paperScore}%</dd></div>
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">FOMO</dt><dd class="font-bold">${m.fomo}</dd></div>
+          <div class="rounded-lg bg-ink/70 border border-line p-2"><dt class="text-ash">LVL</dt><dd class="font-bold">${m.degenLevel}</dd></div>
         </dl>
-        <button data-handle="${escapeHTML(e.row.handle)}" class="reroast-btn mt-4 w-full rounded-xl border border-line py-2 text-sm font-bold hover:border-flame hover:text-flame transition">
-          🔥 Roast again
-        </button>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <button data-view="${i}" class="rounded-xl border border-line py-2.5 text-sm font-bold hover:border-neon hover:text-neon transition">👁️ View Roast</button>
+          <button data-share="${i}" class="rounded-xl bg-slate-100 text-ink py-2.5 text-sm font-bold hover:bg-white transition">Share on X</button>
+        </div>
       </article>`;
     }).join('');
-    podium.querySelectorAll('.podium-avatar').forEach((img) =>
+    grid.querySelectorAll('.shame-avatar').forEach((img) =>
       img.addEventListener('error', () => { img.src = img.dataset.fallback; }, { once: true }));
-    podium.querySelectorAll('.reroast-btn').forEach((btn) => btn.addEventListener('click', () => {
-      $('roastInput').value = btn.dataset.handle;
-      $('roaster').scrollIntoView({ behavior: 'smooth' });
-      runRoast(btn.dataset.handle);
-    }));
+    grid.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () => openRoastModal(shameCards[b.dataset.view])));
+    grid.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', () => shareShame(shameCards[b.dataset.share])));
+  }
+
+  function shareShame(card) {
+    const r = card.roast;
+    const text =
+      `${r.name} just got crowned "${card.badge.label}" in the $COOKED Degen Hall of Shame 💀\n\n` +
+      `${r.heat}% COOKED — "${r.verdict.label}" · Paper Hands: ${r.paperHands}\n\n` +
+      `Think you're less cooked? (via ${CONFIG.xHandle})\n`;
+    window.open('https://twitter.com/intent/tweet?' + new URLSearchParams({ text, url: CONFIG.siteUrl, hashtags: 'COOKED,Solana' }),
+      '_blank', 'noopener,width=600,height=520');
+  }
+
+  // Draw a roast card on another canvas by pointing the drawing helpers at it for one (synchronous) draw.
+  function drawCardOn(target, roast, avatar) {
+    const prev = ctx;
+    ctx = target.getContext('2d');
+    try { drawRoastCard(roast, avatar); } finally { ctx = prev; }
+  }
+
+  let modalCard = null;
+  async function openRoastModal(card) {
+    modalCard = card;
+    $('modalTitle').textContent = card.badge.label;
+    drawCardOn($('modalCanvas'), card.roast, null);
+    $('roastModal').showModal();
+    if (card.entry.row.kind === 'x') {
+      const img = await loadImage(`https://unavatar.io/x/${card.entry.row.handle}?fallback=false`);
+      if (img && modalCard === card) drawCardOn($('modalCanvas'), card.roast, img);
+    }
   }
 
   async function loadFeed() {
@@ -1531,11 +2003,62 @@
       const rows = await rpc('get_recent_roasts', { p_limit: 500 });
       const entries = rows.map(feedEntry);
       renderTicker(entries.slice(0, 20));
-      renderPodium(entries);
+      renderShame(entries);
     } catch {
       if (!$('tickerTrack').innerHTML) renderTicker([]);
-      if (!$('podium').innerHTML) renderPodium([]);
+      if (!$('shameGrid').innerHTML) renderShame([]);
     }
+  }
+
+  // =====================================================
+  // LAUNCH: Buy buttons + live chart switch on when CONFIG.tokenMint is set
+  // =====================================================
+  function setupLaunch() {
+    const mint = CONFIG.tokenMint.trim();
+    const links = {
+      pumpLink: `https://pump.fun/coin/${mint}`,
+      floatBuy: `https://pump.fun/coin/${mint}`,
+      jupLink: `https://jup.ag/swap/SOL-${mint}`,
+      dexLink: `https://dexscreener.com/solana/${mint}`,
+    };
+    if (mint) {
+      $('caText').textContent = mint;
+      Object.entries(links).forEach(([id, url]) => ($(id).href = url));
+      $('copyCaBtn').addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(mint); toast('Contract address copied'); }
+        catch { toast('Copy failed — select it manually'); }
+      });
+      $('chartWrap').innerHTML = `<iframe title="$COOKED live chart on DexScreener" class="absolute inset-0 w-full h-full border-0" loading="lazy"
+        src="https://dexscreener.com/solana/${encodeURIComponent(mint)}?embed=1&theme=dark&trades=0&info=0"></iframe>`;
+      $('chartOpenLink').href = links.dexLink;
+      $('chartOpenLink').classList.remove('hidden');
+      return;
+    }
+    // Not launched yet: honest placeholders, no fake chart or CA
+    $('floatBuyTag').textContent = 'SOON';
+    $('caText').textContent = `Not launched yet · CA drops on X ${CONFIG.xHandle}`;
+    $('copyCaBtn').disabled = true;
+    $('copyCaBtn').classList.add('opacity-40', 'pointer-events-none');
+    Object.keys(links).forEach((id) => {
+      const a = $(id);
+      a.removeAttribute('target');
+      a.href = '#buy';
+      a.addEventListener('click', () => toast(`$COOKED isn't live yet. The CA drops first on ${CONFIG.xHandle} 🔥`));
+    });
+    const bars = Array.from({ length: 28 }, (_, i) => {
+      const h = 20 + Math.round(40 * Math.abs(Math.sin(i * 0.7)) + i * 1.6);
+      const up = i % 3 !== 1;
+      return `<div class="flex-1 rounded-sm ${up ? 'bg-neon/30' : 'bg-flame/30'}" style="height:${Math.min(h, 92)}%"></div>`;
+    }).join('');
+    $('chartWrap').innerHTML = `
+      <div class="absolute inset-0 flex items-end gap-1 sm:gap-1.5 p-6 opacity-40 blur-[2px]" aria-hidden="true">${bars}</div>
+      <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/30"></div>
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+        <p class="text-5xl sizzle">📈</p>
+        <p class="mt-4 text-xl sm:text-2xl font-bold">The chart goes live the minute $COOKED launches</p>
+        <p class="mt-2 text-sm text-ash max-w-md">The DexScreener chart plugs in here automatically once the contract address is set.</p>
+        <a href="${CONFIG.xUrl}" target="_blank" rel="noopener" class="mt-5 rounded-xl bg-slate-100 text-ink font-bold px-5 py-3 hover:bg-white transition">Get the CA first on X →</a>
+      </div>`;
   }
 
   // =====================================================
@@ -1575,7 +2098,25 @@
     // Battle
     renderBattle();
     $('nextBattleBtn').addEventListener('click', nextBattle);
-    setInterval(() => loadVotes(), 15000);
+    setInterval(pollArena, 5000);
+    setInterval(() => { if (arena) { updateBattleBars(); renderDeck(); } }, 1000); // live countdowns
+    document.querySelectorAll('.buff-card').forEach((card) => card.addEventListener('click', () => useBuff(card.dataset.buff, card)));
+    $('joinArenaBtn').addEventListener('click', joinArena);
+
+    // View Roast modal
+    const modal = $('roastModal');
+    $('modalClose').addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.close(); });
+    $('modalShare').addEventListener('click', () => modalCard && shareShame(modalCard));
+    $('modalDownload').addEventListener('click', () => {
+      if (!modalCard) return;
+      try {
+        const a = document.createElement('a');
+        a.download = `cooked-${modalCard.roast.name.replace(/[^a-z0-9]/gi, '')}.png`;
+        a.href = $('modalCanvas').toDataURL('image/png');
+        a.click();
+      } catch { toast('Could not export image'); }
+    });
     tickBattleTimer();
     setInterval(tickBattleTimer, 1000);
 
@@ -1605,13 +2146,7 @@
     });
 
     // Buy
-    $('caText').textContent = CONFIG.tokenMint;
-    $('jupLink').href = `https://jup.ag/swap/SOL-${CONFIG.tokenMint}`;
-    $('dexLink').href = `https://dexscreener.com/solana/${CONFIG.tokenMint}`;
-    $('copyCaBtn').addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(CONFIG.tokenMint); toast('Contract address copied'); }
-      catch { toast('Copy failed — select it manually'); }
-    });
+    setupLaunch();
   });
   </script>
 </body>
