@@ -176,6 +176,10 @@
     @keyframes floatUp { from { opacity: 0; transform: translate(-50%, 20px) scale(.8); } 15% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -90px) scale(1.15); } }
     .fx-badge { font: 700 11px "JetBrains Mono", monospace; padding: 2px 8px; border-radius: 999px; }
 
+    /* Winner overlay */
+    .winner-pop { animation: winnerPop .7s cubic-bezier(.2,1.6,.4,1); }
+    @keyframes winnerPop { from { transform: scale(.4) rotate(-6deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+
     /* Floating Buy button */
     .float-buy { animation: buyPulse 2s ease-in-out infinite; }
     @keyframes buyPulse {
@@ -187,7 +191,7 @@
     .roast-modal::backdrop { background: rgba(3,5,10,.82); backdrop-filter: blur(4px); }
 
     @media (prefers-reduced-motion: reduce) {
-      .die.rolling, .pump-fx span, .boom, .shake, .float-up, .float-buy, .shield-on .shield-fx { animation: none; }
+      .winner-pop, .die.rolling, .pump-fx span, .boom, .shake, .float-up, .float-buy, .shield-on .shield-fx { animation: none; }
       .boom { display: none; }
       .live-dot, .sizzle, .spin-ring { animation: none; }
       .bar-fill, .flip-inner { transition: none; }
@@ -221,7 +225,7 @@
       <nav class="hidden md:flex items-center gap-7 text-sm text-ash">
         <a href="#roaster" class="hover:text-neon transition-colors">Roaster</a>
         <a href="#shame" class="hover:text-neon transition-colors">Hall of Shame</a>
-        <a href="#battle" class="hover:text-neon transition-colors">Battle Arena</a>
+        <a href="#battle" class="hover:text-neon transition-colors">Raid Arena</a>
         <a href="#tokenomics" class="hover:text-neon transition-colors">Tokenomics</a>
         <a href="#buy" class="buy-link hover:text-flame transition-colors">Buy Token</a>
       </nav>
@@ -248,7 +252,7 @@
       <div class="px-4 py-3 flex flex-col text-base">
         <a href="#roaster" class="py-3 border-b border-line/60">Roaster</a>
         <a href="#shame" class="py-3 border-b border-line/60">Hall of Shame</a>
-        <a href="#battle" class="py-3 border-b border-line/60">Battle Arena</a>
+        <a href="#battle" class="py-3 border-b border-line/60">Raid Arena</a>
         <a href="#tokenomics" class="py-3 border-b border-line/60">Tokenomics</a>
         <a href="#buy" class="buy-link py-3 border-b border-line/60 text-flame">Buy Token</a>
         <a href="https://x.com/Crypto_Cycles1" target="_blank" rel="noopener" class="py-3 text-neon">Follow @Crypto_Cycles1 on X</a>
@@ -344,7 +348,7 @@
           </div>
           <button id="joinArenaBtn" disabled
             class="glow-hover-flame mt-3 w-full rounded-xl border-2 border-flame text-flame font-bold py-3 flex items-center justify-center gap-2 hover:bg-flame hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
-            ⚔️ <span id="joinArenaLabel">Join the Battle Arena</span>
+            ⚔️ <span id="joinArenaLabel">Join the Raid Arena</span>
           </button>
           <p class="mt-3 text-xs text-ash text-center font-mono">Tip: download the card, then attach it to your post for max engagement.</p>
         </div>
@@ -378,14 +382,27 @@
       <div class="max-w-6xl mx-auto px-4 py-16">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
-            <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">🎰 Casino Arena · Bribes &amp; Buffs</p>
-            <h2 class="text-3xl sm:text-4xl font-bold">Meme Battle <span class="font-mono text-lg text-ash align-middle">#<span id="battleRound">1</span></span></h2>
+            <p class="font-mono text-xs text-flame tracking-widest uppercase mb-2">⚔️ New battle every hour</p>
+            <h2 class="text-3xl sm:text-4xl font-bold">Degen Raid Arena <span class="font-mono text-lg text-ash align-middle"><span id="battleRound">--:00</span> UTC</span></h2>
           </div>
           <div class="font-mono text-sm text-ash sm:text-right">
-            <p>New arena in <span id="battleTimer" class="text-slate-100">--:--:--</span></p>
+            <p>Battle ends in <span id="battleTimer" class="text-slate-100 font-bold text-lg">--:--</span></p>
             <p class="text-xs mt-1"><span id="queueCount">0</span> cards waiting in the queue ⚔️</p>
           </div>
         </div>
+
+        <div class="prize-banner relative overflow-hidden rounded-2xl border border-flame/60 glow-flame bg-gradient-to-r from-flame/20 via-ink to-neon/10 p-5 sm:p-6 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <span class="text-5xl sm:text-6xl sizzle" aria-hidden="true">🏆</span>
+            <div class="flex-1">
+              <p class="text-2xl sm:text-4xl font-bold leading-tight">Win <span class="flame-text">0.2 SOL</span> every hour</p>
+              <p class="mt-1 text-sm sm:text-base text-slate-300">The fighter with the most points when the timer hits <b>0:00</b> takes the prize. Pick a side, cast spells, raid X with your army.</p>
+              <p class="mt-2 text-xs font-mono text-ash">Prize sent by @Crypto_Cycles1 after each battle: straight to the wallet for SOL fighters, X fighters DM to claim.</p>
+            </div>
+          </div>
+          <p id="lastWinner" class="mt-4 font-mono text-xs sm:text-sm text-slate-300 border-t border-line pt-3 hidden"></p>
+        </div>
+        <p id="holderStatus" class="mb-4 font-mono text-xs text-ash"></p>
 
         <div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
           <article id="memeA" class="meme-card relative overflow-hidden rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
@@ -444,10 +461,13 @@
           <p class="font-mono text-xs text-ash mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-flame live-dot"></span> LIVE ARENA LOG</p>
           <ol id="actionLog" class="space-y-1.5 font-mono text-xs sm:text-sm max-h-56 overflow-y-auto"></ol>
         </div>
+        <div class="ticker mt-4 flex items-center h-9 rounded-xl border border-line bg-black/60 overflow-hidden" aria-label="Arena activity">
+          <span class="shrink-0 h-full px-3 flex items-center gap-1.5 bg-neon text-ink font-mono text-[11px] font-bold">⚔️ RAID FEED</span>
+          <div class="ticker-viewport flex-1 overflow-hidden">
+            <div id="arenaFeed" class="ticker-track font-mono text-xs text-slate-300 whitespace-nowrap"></div>
+          </div>
+        </div>
 
-        <button id="nextBattleBtn" class="hidden mt-6 mx-auto rounded-xl bg-flame text-ink font-bold px-6 py-3 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition">
-          Next battle <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
       </div>
     </section>
 
@@ -467,8 +487,8 @@
             <p class="mt-2 font-mono font-bold text-2xl">1,000,000,000</p>
           </div>
           <div class="rounded-2xl border border-line bg-panel p-5">
-            <p class="text-ash text-sm">Tax / Team alloc</p>
-            <p class="mt-2 font-mono font-bold text-2xl">0% / 0%</p>
+            <p class="text-ash text-sm">Buy / Sell tax</p>
+            <p class="mt-2 font-mono font-bold text-2xl">1.75%</p>
           </div>
         </div>
 
@@ -599,6 +619,23 @@
     <span class="flex items-center gap-1 rounded-full bg-ink/20 px-2 py-0.5 text-[10px] font-mono"><span class="w-1.5 h-1.5 rounded-full bg-ink live-dot"></span><span id="floatBuyTag">LIVE</span></span>
   </a>
 
+  <!-- Battle winner overlay -->
+  <div id="winnerOverlay" class="hidden fixed inset-0 z-[60] items-center justify-center p-4 bg-ink/85 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="winnerTitle">
+    <div class="winner-pop relative w-full max-w-md rounded-3xl border-2 border-flame glow-flame bg-gradient-to-b from-flame/25 via-panel to-ink p-6 text-center">
+      <button id="winnerClose" class="absolute top-3 right-3 p-2 rounded-lg border border-line text-ash hover:text-neon hover:border-neon" aria-label="Close">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+      <p class="font-mono text-xs text-flame tracking-widest uppercase" id="winnerHour"></p>
+      <p class="text-6xl mt-2 sizzle" aria-hidden="true">🏆</p>
+      <img id="winnerAvatar" alt="" referrerpolicy="no-referrer" class="mt-3 w-24 h-24 mx-auto rounded-full object-cover ring-4 ring-flame bg-line" />
+      <p id="winnerTitle" class="mt-3 text-2xl sm:text-3xl font-bold"></p>
+      <p class="mt-1 text-lg font-bold flame-text">wins 0.2 SOL</p>
+      <p id="winnerScore" class="mt-3 font-mono text-sm text-slate-300"></p>
+      <p class="mt-4 text-xs text-ash">Next battle is already live. Pick a side and go win the next one.</p>
+      <button id="winnerGo" class="mt-4 w-full rounded-xl bg-flame text-ink font-bold py-3 hover:brightness-110">⚔️ Enter the new battle</button>
+    </div>
+  </div>
+
   <!-- View Roast modal -->
   <dialog id="roastModal" class="roast-modal bg-transparent p-0 m-auto max-w-[min(92vw,520px)] w-full">
     <div class="rounded-2xl border border-line bg-panel p-3 sm:p-4">
@@ -703,6 +740,7 @@
       btn.title = '';
       $('roastWalletBtn').classList.add('hidden');
     }
+    checkHolder();
   }
 
   async function connectWallet() {
@@ -1247,7 +1285,7 @@
     lastRoast = buildRoast(parsed.value, parsed.type, balance);
     lastRoast.friend = $('friendMode').checked && parsed.type === 'x';
     lastParsed = parsed;
-    $('joinArenaLabel').textContent = 'Join the Battle Arena';
+    $('joinArenaLabel').textContent = 'Join the Raid Arena';
     await document.fonts.ready;
     await drawRoastCard(lastRoast, avatar);
 
@@ -1458,17 +1496,18 @@
 
   function todayKey() { return new Date().toISOString().slice(0, 10); }
 
-  // Each day has unlimited rounds; the memes of a round are picked from the day + round number.
+  // One battle per UTC hour: round = hour of the day. The memes are picked from the day + hour.
+  function roundAt(ms) {
+    const d = new Date(ms);
+    return { day: d.toISOString().slice(0, 10), round: d.getUTCHours() };
+  }
   function getBattle() {
-    const day = todayKey();
-    let saved = store.get('cooked_battle', null);
-    if (!saved || saved.day !== day) saved = { day, round: 0 };
-    const round = saved.round;
+    const { day, round } = roundAt(Date.now());
     const rand = seededRandom(hashString('battle:' + day + ':' + round));
     const i = Math.floor(rand() * MEMES.length);
     let j = Math.floor(rand() * (MEMES.length - 1));
     if (j >= i) j++;
-    return { day, saved, round, memeA: MEMES[i], memeB: MEMES[j] };
+    return { day, round, memeA: MEMES[i], memeB: MEMES[j] };
   }
 
   function fighterHeaderHTML(fighter, side) {
@@ -1517,14 +1556,19 @@
         ${meme.bottom ? `<figcaption class="meme-text bottom-2">${escapeHTML(meme.bottom)}</figcaption>` : ''}
       </figure>
       <p class="mt-3 font-mono text-xs text-ash flex-1">${escapeHTML(meme.name)}</p>
+      ${fighter ? `<p class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ash" data-supporters="${side}"></p>` : ''}
       <button data-side="${side}" ${fighter ? '' : 'disabled'} class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
         <i data-lucide="swords" class="w-4 h-4"></i> <span>${fighter ? 'Join team ' + escapeHTML(fighter.label) : 'Waiting for a fighter'}</span>
-      </button>`;
+      </button>
+      ${fighter ? `<button data-raid="${side}" class="raid-btn glow-hover-neon mt-2 w-full rounded-xl bg-slate-100 text-ink font-bold py-3 flex items-center justify-center gap-2 hover:bg-white">
+        📢 Call Your Army / Raid on X
+      </button>` : ''}`;
   }
 
   async function renderBattle() {
     const b = getBattle();
-    $('battleRound').textContent = b.round + 1;
+    $('battleRound').textContent = String(b.round).padStart(2, '0') + ':00';
+    currentRoundKey = b.day + ':' + b.round;
     let data = null;
     try { data = await rpc('get_battle', { p_day: b.day, p_round: b.round }); } catch {}
     fighters = data && data.a ? { a: toFighter(data.a), b: toFighter(data.b) } : null;
@@ -1535,6 +1579,7 @@
     document.querySelectorAll('.fighter-avatar').forEach((img) =>
       img.addEventListener('error', () => { img.src = img.dataset.fallback; }, { once: true }));
     document.querySelectorAll('.vote-btn').forEach((btn) => btn.addEventListener('click', () => vote(btn.dataset.side)));
+    document.querySelectorAll('.raid-btn').forEach((btn) => btn.addEventListener('click', () => raidOnX(btn.dataset.raid)));
     refreshIcons();
 
     if (fighters) {
@@ -1597,7 +1642,13 @@
       }
     });
 
-    $('nextBattleBtn').classList.toggle('hidden', !st.votes.voted);
+    ['a', 'b'].forEach((side) => {
+      const el = document.querySelector(`[data-supporters="${side}"]`);
+      if (!el) return;
+      const online = st.votes[side + '_online'] || 0, total = st.votes[side] || 0, holders = st.votes[side + '_holders'] || 0;
+      el.innerHTML = `<span class="flex items-center gap-1.5 text-slate-200"><span class="w-2 h-2 rounded-full bg-neon live-dot"></span><b>${online}</b> unique supporter${online === 1 ? '' : 's'} connected</span>`
+        + `<span>${total} in the army</span>` + (holders ? `<span class="text-neon">✅ ${holders} holder${holders === 1 ? '' : 's'}</span>` : '');
+    });
     document.querySelectorAll('.vote-btn').forEach((btn) => {
       if (!st.votes.voted) return;
       btn.disabled = true;
@@ -1623,7 +1674,7 @@
   function describeAction(a) {
     const team = fighters ? escapeHTML(fighters[a.side].label) : 'Team ' + a.side.toUpperCase();
     const color = a.side === 'a' ? 'text-neon' : 'text-flame';
-    const who = `<span class="text-slate-400">${escapeHTML(a.actor)}</span>`;
+    const who = `<span class="text-slate-400">${a.holder ? '✅ Holder' : 'A supporter'} (${escapeHTML(a.actor)})</span>`;
     switch (a.action) {
       case 'vote': return `${who} joined <b class="${color}">${team}</b> ⚔️ +${a.value} pts`;
       case 'dice': return `${who} rolled 🎲 for <b class="${color}">${team}</b>: <b>+${a.value} pts</b>`;
@@ -1645,6 +1696,21 @@
           return `<li class="flex gap-2"><span class="text-ash shrink-0">${t}</span><span>${describeAction(a)}</span></li>`;
         }).join('')
       : '<li class="text-ash">No action yet. Pick a side and throw the first spell.</li>';
+    renderArenaFeed(actions);
+  }
+
+  function renderArenaFeed(actions) {
+    const items = actions.length
+      ? actions.slice(0, 10).map(describeAction)
+      : ['🏆 0.2 SOL for the winner of every hourly battle', '📢 Call your army on X', '💣 Rug Bomb the enemy, 🛡️ shield your team'];
+    let strip = items;
+    while (strip.length < 6) strip = strip.concat(items);
+    const html = strip.map((t) => `<span class="px-5">${t}</span><span class="text-flame/50">◆</span>`).join('');
+    const track = $('arenaFeed');
+    if (track.dataset.html === html) return; // don't restart the scroll if nothing changed
+    track.dataset.html = html;
+    track.innerHTML = html + html;
+    track.style.setProperty('--dur', strip.length * 6 + 's');
   }
 
   // Visual + sound feedback for an action (yours, or someone else's seen on the next poll)
@@ -1686,12 +1752,12 @@
     const b = getBattle();
     document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = true));
     try {
-      applyArena(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side }), { replay: false });
+      applyArena(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side, p_holder: holderVerified }), { replay: false });
       playActionFx({ side, action: 'vote', value: 10 }, true);
-      toast('You joined the battle ⚔️ Your spells are unlocked');
-    } catch {
+      toast(holderVerified ? 'You joined as a ✅ Verified Holder ⚔️ Spells unlocked' : 'You joined the battle ⚔️ Your spells are unlocked');
+    } catch (e) {
       document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = false));
-      toast('Vote failed, try again');
+      toast(String(e.message).includes('400') ? 'This battle just ended, a new one is starting' : 'Vote failed, try again');
     }
   }
 
@@ -1743,24 +1809,114 @@
     try { applyArena(await rpc('get_battle', { p_day: b.day, p_round: b.round })); } catch {}
   }
 
-  function nextBattle() {
-    const b = getBattle();
-    b.saved.round += 1;
-    store.set('cooked_battle', b.saved);
-    $('diceTray').classList.add('hidden');
-    renderBattle();
-    $('battle').scrollIntoView({ behavior: 'smooth' });
+  // Raid on X: a ready-made tweet to bring a team's army to the site
+  function raidOnX(side) {
+    if (!fighters) return;
+    const f = fighters[side];
+    const text =
+      `I'm currently fighting in the $COOKED Degen Raid Arena! ⚔️ I need my army to launch a 💣 Rug Bomb or 🚀 FOMO Pump on my opponent so I can win the 0.2 SOL prize!\n\n` +
+      `Team ${f.label} 🔥 Vote here:\n`;
+    window.open('https://twitter.com/intent/tweet?' + new URLSearchParams({ text, url: CONFIG.siteUrl + '#battle', hashtags: 'COOKED,Solana' }),
+      '_blank', 'noopener,width=600,height=520');
   }
 
+  // ---------- Hourly rounds: timer, results, winner celebration ----------
+  let currentRoundKey = null;
+
   function tickBattleTimer() {
-    const now = new Date();
-    const end = new Date(now); end.setUTCHours(24, 0, 0, 0);
+    const now = Date.now();
+    const end = new Date(now); end.setUTCMinutes(60, 0, 0);
     const s = Math.max(0, Math.floor((end - now) / 1000));
-    const hh = String(Math.floor(s / 3600)).padStart(2, '0');
-    const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
-    const ss = String(s % 60).padStart(2, '0');
-    $('battleTimer').textContent = `${hh}:${mm}:${ss}`;
-    if (s === 0) renderBattle();
+    $('battleTimer').textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    const { day, round } = roundAt(now);
+    if (currentRoundKey && currentRoundKey !== day + ':' + round) {
+      const [pd, pr] = currentRoundKey.split(':');
+      currentRoundKey = day + ':' + round;
+      $('diceTray').classList.add('hidden');
+      renderBattle();
+      announceResult(pd, Number(pr), true);
+    }
+  }
+
+  async function fetchResult(day, round, tries = 1) {
+    for (let k = 0; k < tries; k++) {
+      try { const r = await rpc('get_battle_result', { p_day: day, p_round: round }); if (r) return r; } catch {}
+      if (k < tries - 1) await new Promise((res) => setTimeout(res, 4000));
+    }
+    return null;
+  }
+
+  // Show last hour's result in the banner, and the big celebration once per visitor.
+  async function announceResult(day, round, live = false) {
+    const r = await fetchResult(day, round, live ? 5 : 1);
+    const el = $('lastWinner');
+    const hour = String(round).padStart(2, '0') + ':00 UTC';
+    if (!r) { el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+    if (!r.winner) {
+      el.innerHTML = `Last battle (${hour}): draw, no winner this time 🤝`;
+      return;
+    }
+    const w = toFighter(r[r.winner]), l = toFighter(r[r.winner === 'a' ? 'b' : 'a']);
+    const wp = r[r.winner].points, lp = r[r.winner === 'a' ? 'b' : 'a'].points;
+    el.innerHTML = `Last battle (${hour}): 🏆 <b class="text-neon">${escapeHTML(w.label)}</b> beat ${escapeHTML(l.label)} ${wp}–${lp} and won <b class="text-flame">0.2 SOL</b>`;
+    const seenKey = 'cooked_win_seen';
+    const key = day + ':' + round;
+    const fresh = live || Date.now() - new Date(day + 'T00:00:00Z').getTime() - (round + 1) * 3600e3 < 5 * 60e3;
+    if (fresh && store.get(seenKey, '') !== key) {
+      store.set(seenKey, key);
+      showWinner(w, l, wp, lp, hour, r.supporters);
+    }
+  }
+
+  function showWinner(w, l, wp, lp, hour, supporters) {
+    $('winnerHour').textContent = `Battle of ${hour} · over`;
+    $('winnerTitle').textContent = w.label;
+    $('winnerScore').textContent = `${wp.toLocaleString('en-US')} pts vs ${lp.toLocaleString('en-US')} pts for ${l.label} · ${supporters} degens fought`;
+    const img = $('winnerAvatar');
+    img.onerror = () => { img.onerror = null; img.src = avatarURL(w.seed); };
+    img.src = w.avatar;
+    const overlay = $('winnerOverlay');
+    overlay.classList.remove('hidden'); overlay.classList.add('flex');
+    sound.chaching(); setTimeout(() => sound.whoosh(), 300);
+    if (typeof confetti === 'function') {
+      const colors = ['#ff7a1a', '#ffd23f', '#39ff88', '#ff3d3d', '#ffffff'];
+      const shot = (x) => confetti({ particleCount: 90, spread: 100, startVelocity: 50, origin: { x, y: 0.6 }, colors, disableForReducedMotion: true });
+      shot(0.5); setTimeout(() => { shot(0.2); shot(0.8); }, 350); setTimeout(() => shot(0.5), 900);
+    }
+    clearTimeout(showWinner._t);
+    showWinner._t = setTimeout(hideWinner, 12000);
+  }
+  function hideWinner() {
+    const overlay = $('winnerOverlay');
+    overlay.classList.add('hidden'); overlay.classList.remove('flex');
+  }
+
+  // ---------- Verified Holder (Phantom + on-chain $COOKED balance) ----------
+  let holderVerified = false;
+  async function checkHolder() {
+    const el = $('holderStatus');
+    holderVerified = false;
+    if (!walletPubkey) {
+      el.innerHTML = '🔓 Connect Phantom to fight as a <b class="text-neon">✅ Verified Holder</b>';
+      return;
+    }
+    if (!CONFIG.tokenMint) {
+      el.innerHTML = `Wallet ${escapeHTML(shortAddr(walletPubkey))} connected · the ✅ Holder check opens when $COOKED launches`;
+      return;
+    }
+    el.textContent = 'Checking your $COOKED balance…';
+    try {
+      const conn = new solanaWeb3.Connection(CONFIG.rpcUrl, 'confirmed');
+      const res = await conn.getParsedTokenAccountsByOwner(new solanaWeb3.PublicKey(walletPubkey), { mint: new solanaWeb3.PublicKey(CONFIG.tokenMint) });
+      const amount = res.value.reduce((t, a) => t + (a.account.data.parsed.info.tokenAmount.uiAmount || 0), 0);
+      holderVerified = amount > 0;
+      el.innerHTML = holderVerified
+        ? `<b class="text-neon">✅ Verified Holder</b> · ${amount.toLocaleString('en-US')} $COOKED · your votes carry the badge`
+        : `Wallet ${escapeHTML(shortAddr(walletPubkey))} holds no $COOKED yet · grab some to get the ✅ badge`;
+    } catch {
+      el.textContent = 'Could not check your balance right now (Solana RPC busy). Try again in a minute.';
+    }
   }
 
   // =====================================================
@@ -2097,7 +2253,11 @@
 
     // Battle
     renderBattle();
-    $('nextBattleBtn').addEventListener('click', nextBattle);
+    $('winnerClose').addEventListener('click', hideWinner);
+    $('winnerGo').addEventListener('click', () => { hideWinner(); $('battle').scrollIntoView({ behavior: 'smooth' }); });
+    $('winnerOverlay').addEventListener('click', (e) => { if (e.target.id === 'winnerOverlay') hideWinner(); });
+    { const prev = roundAt(Date.now() - 3600e3); announceResult(prev.day, prev.round); }
+    checkHolder();
     setInterval(pollArena, 5000);
     setInterval(() => { if (arena) { updateBattleBars(); renderDeck(); } }, 1000); // live countdowns
     document.querySelectorAll('.buff-card').forEach((card) => card.addEventListener('click', () => useBuff(card.dataset.buff, card)));
