@@ -180,58 +180,141 @@
     .peer:checked + .switch::after { transform: translateX(16px); background: #ff6b1a; }
     .peer:focus-visible + .switch { outline: 2px solid #e9b44c; outline-offset: 2px; }
 
-    /* Casino arena: spell cards */
-    .buff-card {
+    /* ===== Squad Roles arena ===== */
+    .role-card {
+      --rc: #e9b44c;
       position: relative; overflow: hidden; text-align: left;
-      display: flex; flex-direction: column; gap: 4px; padding: 14px;
-      border-radius: 16px; border: 1px solid #26262e;
-      background: linear-gradient(160deg, #111827, #0b0c10);
-      transition: transform .15s ease, border-color .2s, box-shadow .2s;
+      display: flex; flex-direction: column; gap: 10px; padding: 20px;
+      border-radius: 20px; border: 1px solid rgba(233,180,76,.22);
+      background: linear-gradient(160deg, rgba(26,26,32,.94), rgba(11,12,16,.94));
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 20px 40px -26px rgba(0,0,0,.9);
+      transition: transform .18s ease, border-color .2s, box-shadow .25s;
     }
-    .buff-card:not(:disabled):hover { transform: translateY(-3px) rotate(-1deg); border-color: #ff6b1a; box-shadow: 0 10px 30px -10px rgba(255,107,26,.6); }
-    .buff-card:not(:disabled):active { transform: scale(.97); }
-    .buff-card:disabled { opacity: .45; cursor: not-allowed; }
-    .buff-emoji { font-size: 30px; line-height: 1; }
-    .buff-name { font-weight: 700; color: #f1f5f9; }
-    .buff-desc { font-size: 12px; color: #8d8d98; line-height: 1.35; }
-    .buff-cd {
-      position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
-      background: rgba(7,9,15,.78); font: 700 22px "JetBrains Mono", monospace; color: #ff6b1a;
+    .role-card[data-role="sniper"] { --rc: #ff3d3d; }
+    .role-card[data-role="tank"] { --rc: #38bdf8; }
+    .role-card[data-role="buff"] { --rc: #e9b44c; }
+    .role-card::before {
+      content: ''; position: absolute; top: -90px; right: -70px; width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, var(--rc) 0%, transparent 65%); opacity: .16; pointer-events: none; transition: opacity .25s;
     }
-    .buff-card.cooling .buff-cd { display: flex; }
-    .buff-card.cooling { opacity: 1; }
+    button.role-card:not(:disabled) { cursor: pointer; }
+    button.role-card:not(:disabled):hover, button.role-card:not(:disabled):focus-visible {
+      transform: translateY(-4px); border-color: var(--rc); outline: none;
+      box-shadow: 0 0 0 1px var(--rc), 0 22px 60px -22px var(--rc);
+    }
+    button.role-card:not(:disabled):hover::before, button.role-card:focus-visible::before { opacity: .34; }
+    button.role-card:not(:disabled):active { transform: scale(.98); }
+    .role-icon {
+      width: 64px; height: 64px; border-radius: 18px; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 34px; line-height: 1;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.14), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 12px 30px -12px var(--rc);
+    }
+    .role-tag { font: 700 10px "JetBrains Mono", monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--rc); }
+    .role-name { font-weight: 800; font-size: 22px; color: #f8fafc; letter-spacing: -.02em; }
+    .role-power { font-size: 14px; color: #cbd5e1; line-height: 1.45; }
+    .role-rule { font: 500 11px "JetBrains Mono", monospace; color: #8d8d98; }
 
-    /* Dice */
-    .die {
-      width: 60px; height: 60px; border-radius: 14px; background: #f8fafc; color: #0b0c10;
-      display: inline-flex; align-items: center; justify-content: center; font-size: 54px; line-height: 1;
-      box-shadow: inset 0 -4px 0 rgba(0,0,0,.15), 0 8px 20px -6px rgba(233,180,76,.6);
+    /* The big "fire your power" button */
+    .role-fire {
+      --rc: #ff6b1a;
+      position: relative; overflow: hidden; width: 100%;
+      border-radius: 16px; padding: 18px 20px; font-weight: 800; font-size: 18px; letter-spacing: -.01em;
+      color: #160a04; display: flex; align-items: center; justify-content: center; gap: 10px;
+      background-image: linear-gradient(180deg, #ff8a3d 0%, #ff5a14 55%, #e8430a 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.25), 0 14px 34px -12px rgba(255,69,0,.8);
+      transition: transform .12s ease, filter .2s, box-shadow .2s;
     }
-    .die.rolling { animation: dieRoll .9s cubic-bezier(.3,1.5,.5,1); }
-    @keyframes dieRoll {
-      0% { transform: translateY(-40px) rotate(0) scale(.6); }
-      40% { transform: translateY(6px) rotate(400deg) scale(1.1); }
-      70% { transform: translateY(-8px) rotate(620deg); }
-      100% { transform: translateY(0) rotate(720deg) scale(1); }
+    .role-fire[data-role="tank"] { background-image: linear-gradient(180deg, #a5e3ff 0%, #38bdf8 50%, #0e7fb8 100%); color: #021019; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.2), 0 14px 34px -12px rgba(56,189,248,.8); }
+    .role-fire[data-role="buff"] { background-image: linear-gradient(180deg, #f6d38a 0%, #e9b44c 50%, #c8902c 100%); color: #1a1206; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.2), 0 14px 34px -12px rgba(233,180,76,.8); }
+    .role-fire:not(:disabled):hover { transform: translateY(-2px); filter: saturate(1.1) brightness(1.04); }
+    .role-fire:not(:disabled):active { transform: scale(.98); }
+    .role-fire:disabled { cursor: not-allowed; filter: grayscale(.85) brightness(.55); }
+    .role-fire.armed { animation: armedPulse .5s ease-in-out infinite alternate; }
+    @keyframes armedPulse { to { box-shadow: 0 0 0 3px rgba(255,61,61,.7), 0 0 40px rgba(255,61,61,.7); } }
+
+    .intel-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px;
+      font: 600 11px "JetBrains Mono", monospace; border: 1px solid #26262e; background: rgba(0,0,0,.35); color: #a1a1aa; }
+    .intel-chip.good { border-color: rgba(233,180,76,.45); color: #f6d38a; background: rgba(233,180,76,.08); }
+    .intel-chip.bad { border-color: rgba(255,61,61,.45); color: #fca5a5; background: rgba(255,61,61,.08); }
+    .intel-chip.cool { border-color: rgba(56,189,248,.45); color: #7dd3fc; background: rgba(56,189,248,.08); }
+
+    /* Role picker dialog */
+    .role-dialog { background: transparent; padding: 0; max-width: min(980px, calc(100vw - 24px)); width: 100%; color: inherit;
+      max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+    .role-dialog::backdrop { background: rgba(3,5,10,.84); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+    .role-dialog[open] { animation: dialogIn .35s cubic-bezier(.2,1.2,.4,1); }
+    @keyframes dialogIn { from { transform: translateY(18px) scale(.97); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* Flash Bounty banner */
+    .bounty-banner {
+      position: relative; overflow: hidden; border-radius: 20px;
+      border: 1px solid rgba(255,107,26,.7);
+      background: linear-gradient(120deg, rgba(255,69,0,.24), rgba(11,12,16,.94) 42%, rgba(11,12,16,.94) 58%, rgba(255,140,0,.18));
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      box-shadow: 0 0 0 1px rgba(255,107,26,.25), 0 26px 70px -26px rgba(255,69,0,.85);
     }
+    .bounty-banner.bounty-live { animation: bountyBlink 1.1s ease-in-out infinite; }
+    @keyframes bountyBlink {
+      50% { border-color: rgba(255,210,63,.95); box-shadow: 0 0 0 2px rgba(255,140,0,.5), 0 0 70px -8px rgba(255,69,0,.95); }
+    }
+    .bounty-banner.bounty-live::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(100deg, transparent 35%, rgba(255,210,63,.13) 50%, transparent 65%);
+      background-size: 250% 100%; animation: sheen 2.4s linear infinite;
+    }
+    @keyframes sheen { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+    .bounty-banner.bounty-won { border-color: rgba(233,180,76,.8); background: linear-gradient(120deg, rgba(233,180,76,.22), rgba(11,12,16,.94) 50%, rgba(233,180,76,.12)); }
+    .bounty-timer { font: 800 clamp(30px, 7vw, 46px) "JetBrains Mono", monospace; line-height: 1; color: #fff; text-shadow: 0 0 18px rgba(255,69,0,.85); font-variant-numeric: tabular-nums; }
+    .bounty-track { height: 12px; border-radius: 999px; background: #1b1b22; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,.6); }
+    .bounty-track > div { height: 100%; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+    .bounty-alert { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+      font: 800 11px "JetBrains Mono", monospace; letter-spacing: .14em; color: #160a04; background: linear-gradient(180deg, #ffd23f, #ff8c00); }
 
     /* Effects layered on the fighter cards */
     .fx-layer { position: absolute; inset: 0; pointer-events: none; border-radius: 16px; z-index: 5; }
+    /* Tank: neon blue / steel force field */
     .shield-fx {
-      border: 2px solid #22d3ee; opacity: 0; transition: opacity .3s;
-      box-shadow: inset 0 0 30px rgba(34,211,238,.35), 0 0 24px rgba(34,211,238,.5);
-      background: radial-gradient(circle at 50% 0%, rgba(34,211,238,.18), transparent 60%),
-        repeating-linear-gradient(60deg, rgba(34,211,238,.07) 0 2px, transparent 2px 22px),
-        repeating-linear-gradient(-60deg, rgba(34,211,238,.07) 0 2px, transparent 2px 22px);
+      border: 2px solid #38bdf8; opacity: 0; transition: opacity .3s;
+      box-shadow: inset 0 0 34px rgba(56,189,248,.35), 0 0 26px rgba(56,189,248,.55);
+      background:
+        radial-gradient(120% 70% at 50% 0%, rgba(186,230,253,.22), transparent 60%),
+        repeating-linear-gradient(60deg, rgba(148,163,184,.10) 0 2px, transparent 2px 22px),
+        repeating-linear-gradient(-60deg, rgba(148,163,184,.10) 0 2px, transparent 2px 22px),
+        repeating-linear-gradient(0deg, rgba(56,189,248,.06) 0 2px, transparent 2px 22px);
     }
     .shield-on .shield-fx { opacity: 1; animation: shieldPulse 2s ease-in-out infinite; }
-    @keyframes shieldPulse { 50% { box-shadow: inset 0 0 44px rgba(34,211,238,.5), 0 0 36px rgba(34,211,238,.75); } }
+    @keyframes shieldPulse { 50% { box-shadow: inset 0 0 50px rgba(56,189,248,.55), 0 0 40px rgba(56,189,248,.8); } }
+    .shield-deploy .shield-fx { animation: shieldDeploy .7s cubic-bezier(.2,1.4,.4,1); opacity: 1; }
+    @keyframes shieldDeploy { from { transform: scale(.85); opacity: 0; filter: brightness(2.2); } to { transform: none; opacity: 1; filter: none; } }
     .shield-flash .shield-fx { animation: shieldFlash .6s ease-out; opacity: 1; }
-    @keyframes shieldFlash { 0% { background-color: rgba(34,211,238,.55); } 100% { background-color: transparent; } }
-    .pump-fx { overflow: hidden; display: none; }
-    .pump-on .pump-fx { display: block; }
-    .pump-fx span { position: absolute; bottom: -40px; font-size: 26px; animation: rocket 1.6s linear infinite; }
-    @keyframes rocket { from { transform: translateY(0) rotate(-45deg); opacity: 1; } to { transform: translateY(-520px) rotate(-45deg); opacity: 0; } }
+    @keyframes shieldFlash { 0% { background-color: rgba(56,189,248,.6); } 100% { background-color: transparent; } }
+    /* Buff Master: golden command aura */
+    .aura-fx { opacity: 0; transition: opacity .4s; border: 2px solid rgba(246,211,138,.85);
+      box-shadow: inset 0 0 40px rgba(233,180,76,.28), 0 0 34px rgba(233,180,76,.5);
+      background: radial-gradient(90% 60% at 50% 100%, rgba(233,180,76,.16), transparent 70%); }
+    .aura-on .aura-fx { opacity: 1; animation: auraGlow 2.4s ease-in-out infinite; }
+    @keyframes auraGlow { 50% { box-shadow: inset 0 0 60px rgba(246,211,138,.42), 0 0 54px rgba(233,180,76,.75); } }
+    .shield-on.aura-on .aura-fx { inset: 6px; }
+    .shockwave { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
+      border: 3px solid #f6d38a; box-shadow: 0 0 30px #e9b44c, inset 0 0 20px #e9b44c; z-index: 6; pointer-events: none;
+      animation: shockwave 1s ease-out forwards; }
+    .shockwave.late { animation-delay: .18s; opacity: 0; }
+    @keyframes shockwave { 0% { transform: scale(.2); opacity: 1; } 100% { transform: scale(16); opacity: 0; } }
+    /* Sniper: laser reticle + critical explosion */
+    .sniper-fx { position: absolute; inset: 0; z-index: 7; pointer-events: none; display: grid; place-items: center; overflow: hidden; border-radius: 16px; }
+    .sniper-fx svg { width: 170px; height: 170px; filter: drop-shadow(0 0 8px #ff3d3d); animation: reticleIn .55s cubic-bezier(.2,.9,.3,1) forwards; }
+    @keyframes reticleIn { 0% { transform: scale(2.6) rotate(-90deg); opacity: 0; } 70% { opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+    .sniper-fx .laser { position: absolute; left: 0; top: 50%; width: 100%; height: 3px; margin-top: -1px; opacity: 0;
+      background: linear-gradient(90deg, transparent, #ff3d3d 25%, #fff 50%, #ff3d3d 75%, transparent);
+      box-shadow: 0 0 14px #ff3d3d, 0 0 30px #ff3d3d; transform-origin: left; animation: laser .4s .5s ease-out forwards; }
+    @keyframes laser { 0% { opacity: 1; transform: scaleX(0); } 60% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
+    .sniper-fx.out { transition: opacity .3s; opacity: 0; }
+    .crit-flash { position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: 16px;
+      background: radial-gradient(circle, rgba(255,61,61,.6), transparent 70%); animation: critFlash .7s ease-out forwards; }
+    @keyframes critFlash { from { opacity: 1; } to { opacity: 0; } }
     .boom {
       position: absolute; left: 50%; top: 45%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 50%;
       background: radial-gradient(circle, #fff 0%, #ffd23f 18%, #ff6b1a 40%, rgba(255,61,61,.7) 60%, transparent 72%);
@@ -241,9 +324,9 @@
     .shake { animation: shake .5s ease-in-out; }
     @keyframes shake { 0%,100% { transform: translate(0) } 20% { transform: translate(-7px, 3px) } 40% { transform: translate(6px,-4px) } 60% { transform: translate(-5px,2px) } 80% { transform: translate(4px,-2px) } }
     .float-up {
-      position: absolute; left: 50%; top: 40%; transform: translateX(-50%); z-index: 7; pointer-events: none;
-      font: 700 28px "JetBrains Mono", monospace; text-shadow: 0 2px 0 #000, 0 0 16px currentColor;
-      animation: floatUp 1.3s ease-out forwards;
+      position: absolute; left: 50%; top: 40%; transform: translateX(-50%); z-index: 8; pointer-events: none; white-space: nowrap;
+      font: 800 26px "JetBrains Mono", monospace; text-shadow: 0 2px 0 #000, 0 0 16px currentColor;
+      animation: floatUp 1.4s ease-out forwards;
     }
     @keyframes floatUp { from { opacity: 0; transform: translate(-50%, 20px) scale(.8); } 15% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -90px) scale(1.15); } }
     .fx-badge { font: 700 11px "JetBrains Mono", monospace; padding: 2px 8px; border-radius: 999px; }
@@ -264,7 +347,9 @@
     .roast-modal::backdrop { background: rgba(3,5,10,.82); backdrop-filter: blur(4px); }
 
     @media (prefers-reduced-motion: reduce) {
-      .winner-pop, .die.rolling, .pump-fx span, .boom, .shake, .float-up, .float-buy, .shield-on .shield-fx { animation: none; }
+      .winner-pop, .boom, .shake, .float-up, .float-buy, .shield-on .shield-fx, .aura-on .aura-fx, .shield-deploy .shield-fx,
+      .bounty-banner.bounty-live, .bounty-banner.bounty-live::after, .role-fire.armed, .sniper-fx svg, .sniper-fx .laser, .crit-flash, .role-dialog[open] { animation: none; }
+      .shockwave, .sniper-fx .laser { display: none; }
       .boom { display: none; }
       .live-dot, .sizzle, .spin-ring, body::before { animation: none; }
       .bar-fill, .flip-inner { transition: none; }
@@ -457,12 +542,12 @@
       </div>
     </section>
 
-    <!-- ========== 4. MEME BATTLE CASINO ARENA ========== -->
+    <!-- ========== 4. DEGEN RAID ARENA: SQUAD ROLES & FLASH BOUNTIES ========== -->
     <section id="battle" class="border-t border-line bg-panel/40 scroll-mt-28">
       <div class="max-w-6xl mx-auto px-4 py-16">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
           <div>
-            <p class="eyebrow font-mono text-[11px] text-amber tracking-[0.18em] uppercase mb-4">New battle every hour</p>
+            <p class="eyebrow font-mono text-[11px] text-amber tracking-[0.18em] uppercase mb-4">New battle every hour · Squad strategy</p>
             <h2 class="text-3xl sm:text-[44px] font-bold leading-tight metal-text">Degen Raid Arena <span class="font-mono text-lg text-ash align-middle"><span id="battleRound">--:00</span> UTC</span></h2>
           </div>
           <div class="font-mono text-sm text-ash sm:text-right">
@@ -476,13 +561,16 @@
             <span class="text-5xl sm:text-6xl sizzle" aria-hidden="true">🏆</span>
             <div class="flex-1">
               <p class="text-2xl sm:text-4xl font-bold leading-tight">Win <span class="flame-text">0.2 SOL</span> every hour</p>
-              <p class="mt-1 text-sm sm:text-base text-slate-300">The fighter with the most points when the timer hits <b>0:00</b> takes the prize. Pick a side, cast spells, raid X with your army.</p>
+              <p class="mt-1 text-sm sm:text-base text-slate-300">Pick a side, choose your class (🏹 Sniper, 🛡️ Tank or 🧙‍♂️ Buff Master) and coordinate with your squad. Highest score when the timer hits <b>0:00</b> takes the prize.</p>
               <p class="mt-2 text-xs font-mono text-ash">Prize sent by @Crypto_Cycles1 after each battle: straight to the wallet for SOL fighters, X fighters DM to claim.</p>
             </div>
           </div>
           <p id="lastWinner" class="mt-4 font-mono text-xs sm:text-sm text-slate-300 border-t border-line pt-3 hidden"></p>
         </div>
         <p id="holderStatus" class="mb-4 font-mono text-xs text-ash"></p>
+
+        <!-- Flash Bounty: live objective every 15-20 min -->
+        <div id="bountyBanner" class="bounty-banner hidden mb-6 p-4 sm:p-6" role="status" aria-live="polite"></div>
 
         <div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 items-stretch">
           <article id="memeA" class="meme-card relative overflow-hidden rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
@@ -492,7 +580,7 @@
           <article id="memeB" class="meme-card relative overflow-hidden rounded-2xl border border-line bg-ink p-5 flex flex-col"></article>
         </div>
 
-        <!-- Score bar (points) -->
+        <!-- Score bar -->
         <div class="mt-8">
           <div class="flex justify-between gap-2 font-mono text-xs sm:text-sm mb-2">
             <span class="text-neon truncate" id="pctA">50%</span>
@@ -505,35 +593,13 @@
           <p class="mt-2 text-center font-mono text-xs text-ash" id="totalVotes">0 votes</p>
         </div>
 
-        <!-- Buff deck -->
+        <!-- Your squad role -->
         <div class="mt-10">
           <div class="flex items-baseline justify-between gap-3 mb-3">
-            <h3 class="font-bold text-lg">Your spell deck</h3>
-            <p id="deckHint" class="font-mono text-xs text-ash text-right">Pick a side to unlock your spells</p>
+            <h3 class="font-bold text-lg">Your squad role</h3>
+            <p id="deckHint" class="font-mono text-xs text-ash text-right">Pick a side to choose your class</p>
           </div>
-          <div id="buffDeck" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <button class="buff-card" data-buff="dice" disabled>
-              <span class="buff-emoji">🎲</span><span class="buff-name">Roll the Dice</span>
-              <span class="buff-desc">2 dice, +2 to +12 pts for your team</span><span class="buff-cd"></span>
-            </button>
-            <button class="buff-card" data-buff="shield" disabled>
-              <span class="buff-emoji">🛡️</span><span class="buff-name">Shield Boost</span>
-              <span class="buff-desc">Blocks every Rug Bomb for 2 min</span><span class="buff-cd"></span>
-            </button>
-            <button class="buff-card" data-buff="bomb" disabled>
-              <span class="buff-emoji">💣</span><span class="buff-name">FUD Rug Bomb</span>
-              <span class="buff-desc">-5% on the enemy score (unless shielded)</span><span class="buff-cd"></span>
-            </button>
-            <button class="buff-card" data-buff="pump" disabled>
-              <span class="buff-emoji">🚀</span><span class="buff-name">FOMO Pump</span>
-              <span class="buff-desc">x2 on all your team's actions for 30s</span><span class="buff-cd"></span>
-            </button>
-          </div>
-          <!-- Dice tray -->
-          <div id="diceTray" class="hidden mt-4 rounded-2xl border border-line bg-ink p-4 flex items-center justify-center gap-4">
-            <span class="die" id="die1">⚀</span><span class="die" id="die2">⚀</span>
-            <span id="diceResult" class="font-mono font-bold text-xl text-neon"></span>
-          </div>
+          <div id="squadPanel"></div>
         </div>
 
         <!-- Live action log -->
@@ -549,6 +615,23 @@
         </div>
 
       </div>
+
+      <!-- Role picker: 3 big cards, one click to join -->
+      <dialog id="roleDialog" class="role-dialog" aria-labelledby="roleDialogTitle">
+        <div class="glass rounded-3xl p-5 sm:p-8">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div class="min-w-0">
+              <p class="font-mono text-[11px] tracking-[0.18em] uppercase text-amber">Choose your class</p>
+              <h3 id="roleDialogTitle" class="mt-1 text-2xl sm:text-3xl font-bold metal-text truncate">Join the squad</h3>
+              <p class="mt-1 text-sm text-ash">One class per battle. Your squad needs all three, so check who's missing ↓</p>
+            </div>
+            <button id="roleDialogClose" class="shrink-0 w-10 h-10 rounded-full border border-line text-slate-300 hover:text-white hover:border-flame grid place-items-center" aria-label="Close">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <div id="rolePicker" class="grid sm:grid-cols-3 gap-3 sm:gap-4"></div>
+        </div>
+      </dialog>
     </section>
 
     <!-- ========== 5. TOKENOMICS & AD-BURN ========== -->
@@ -1563,18 +1646,52 @@
     { name: 'Charlie Conspiracy', img: IMG('1itoun.jpg'), top: 'The dev, the KOL, the "random" whale', bottom: "It's all the same guy" },
   ];
   // Fighters are real accounts roasted on the site, paired server-side (same pair for every visitor).
-  // Points, shields, pumps, cooldowns and the action log all live in Supabase (see use_buff).
+  // Points, classes, shields, auras, Flash Bounties and cooldowns all live in Supabase
+  // (RPCs: get_battle, join_squad, use_role). The browser only displays and animates.
   const escapeHTML = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let fighters = null;   // { a, b } for the round on screen, or null while the arena is empty
   let arena = null;      // last server state + the local time it arrived
   let lastActionId = null;
-  const DIE_FACES = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
-  const BUFF_INFO = {
-    dice: { emoji: '🎲', name: 'Roll the Dice' },
-    shield: { emoji: '🛡️', name: 'Shield Boost' },
-    bomb: { emoji: '💣', name: 'Rug Bomb' },
-    pump: { emoji: '🚀', name: 'FOMO Pump' },
+  let pendingSide = null; // side chosen in the role picker
+  let squadKey = null;    // which squad panel layout is on screen
+  let roleBusy = false;
+
+  // Balance mirrors private.game() in Supabase (display only, the server decides).
+  const ROLES = {
+    sniper: {
+      emoji: '🏹', name: 'Sniper', tag: 'Instant damage',
+      power: 'One devastating shot that wipes <b class="text-white">20%</b> of the enemy score.',
+      rule: '1 shot per battle · bounces off enemy shields',
+      cta: 'Fire sniper shot', short: 'snipers',
+    },
+    tank: {
+      emoji: '🛡️', name: 'Tank', tag: 'Team protector',
+      power: 'Heavy shield on your team for <b class="text-white">3 min</b>: immune to Snipers, other penalties cut by 80%.',
+      rule: '+10 pts · recharge 5 min',
+      cta: 'Deploy shield', short: 'tanks',
+    },
+    buff: {
+      emoji: '🧙‍♂️', name: 'Buff Master', tag: 'Commander · support',
+      power: 'Command Aura for <b class="text-white">2 min</b>: your team\'s Sniper shots hit <b class="text-white">x2</b>.',
+      rule: '+10 pts · recharge 5 min',
+      cta: 'Activate aura', short: 'buff masters',
+    },
   };
+  const BOUNTIES = {
+    speed_run: {
+      emoji: '⚡', name: 'SPEED RUN', role: 'tank',
+      goal: (t) => `First team to deploy <b>${t} Tank shields</b> gets a <b class="text-neon">permanent +25%</b> on its final score`,
+      unit: 'shields',
+    },
+    sniper_showdown: {
+      emoji: '🎯', name: 'SNIPER SHOWDOWN', role: 'sniper',
+      goal: (t) => `First team to land <b>${t} Sniper shots</b> <b class="text-flame">steals 10%</b> of the enemy score`,
+      unit: 'shots landed',
+    },
+  };
+  const RETICLE_SVG = `<svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="#ff3d3d" stroke-width="2.2">
+      <circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="18" stroke-dasharray="4 5"/><circle cx="50" cy="50" r="2.5" fill="#ff3d3d"/>
+      <path d="M50 4v22M50 74v22M4 50h22M74 50h22" stroke-linecap="round"/></svg>`;
 
   function toFighter(f) {
     return f.kind === 'x'
@@ -1607,8 +1724,15 @@
     return { day, round, memeA: MEMES[i], memeB: MEMES[j] };
   }
 
+  const remaining = (secs) => (arena ? Math.max(0, (secs || 0) - Math.floor((Date.now() - arena.at) / 1000)) : 0);
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  const other = (side) => (side === 'a' ? 'b' : 'a');
+  const scoreOf = (st, side) => (st[side].score !== undefined ? st[side].score : st[side].points);
+  const teamColor = (side) => (side === 'a' ? 'neon' : 'flame');
+
+  // ---------- Fighter cards ----------
   function fighterHeaderHTML(fighter, side) {
-    const color = side === 'a' ? 'neon' : 'flame';
+    const color = teamColor(side);
     if (!fighter) {
       return `
       <div class="flex items-center gap-3 mb-4">
@@ -1634,18 +1758,17 @@
         </a>
         <div class="text-right shrink-0">
           <p class="font-mono font-bold text-xl text-${color}"><span data-points="${side}">0</span></p>
-          <p class="font-mono text-[10px] text-ash -mt-1">PTS</p>
+          <p class="font-mono text-[10px] text-ash -mt-1">SCORE</p>
         </div>
       </div>
       <div class="flex flex-wrap gap-1.5 mb-3 min-h-[20px]" data-badges="${side}"></div>`;
   }
 
   function memeCardHTML(meme, fighter, side) {
-    const color = side === 'a' ? 'neon' : 'flame';
-    const rockets = [8, 26, 44, 62, 80].map((x, k) => `<span style="left:${x}%;animation-delay:${k * 0.3}s">🚀</span>`).join('');
+    const color = teamColor(side);
     return `
       <div class="fx-layer shield-fx"></div>
-      <div class="fx-layer pump-fx">${rockets}</div>
+      <div class="fx-layer aura-fx"></div>
       ${fighterHeaderHTML(fighter, side)}
       <figure class="meme-frame relative aspect-[4/3] rounded-xl overflow-hidden bg-black border border-line select-none">
         <img src="${meme.img}" alt="${escapeHTML(meme.name)} meme: ${escapeHTML(meme.top + ' ' + meme.bottom)}" referrerpolicy="no-referrer" class="w-full h-full object-contain" />
@@ -1653,12 +1776,13 @@
         ${meme.bottom ? `<figcaption class="meme-text bottom-2">${escapeHTML(meme.bottom)}</figcaption>` : ''}
       </figure>
       <p class="mt-3 font-mono text-xs text-ash flex-1">${escapeHTML(meme.name)}</p>
-      ${fighter ? `<p class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ash" data-supporters="${side}"></p>` : ''}
+      ${fighter ? `<p class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ash" data-supporters="${side}"></p>
+      <p class="mt-2 flex flex-wrap gap-1.5" data-squad="${side}"></p>` : ''}
       <button data-side="${side}" ${fighter ? '' : 'disabled'} class="vote-btn mt-4 w-full rounded-xl border-2 border-${color} text-${color} font-bold py-3 flex items-center justify-center gap-2 hover:bg-${color} hover:text-ink transition disabled:opacity-40 disabled:pointer-events-none">
         <i data-lucide="swords" class="w-4 h-4"></i> <span>${fighter ? 'Join team ' + escapeHTML(fighter.label) : 'Waiting for a fighter'}</span>
       </button>
       ${fighter ? `<button data-raid="${side}" class="raid-btn glow-hover-neon mt-2 w-full rounded-xl bg-slate-100 text-ink font-bold py-3 flex items-center justify-center gap-2 hover:bg-white">
-        📢 Call Your Army / Raid on X
+        📢 Call Squad on X
       </button>` : ''}`;
   }
 
@@ -1670,13 +1794,15 @@
     try { data = await rpc('get_battle', { p_day: b.day, p_round: b.round }); } catch {}
     fighters = data && data.a ? { a: toFighter(data.a), b: toFighter(data.b) } : null;
     lastActionId = null;
+    squadKey = null;
+    seenBounty = null;
 
     $('memeA').innerHTML = memeCardHTML(b.memeA, fighters && fighters.a, 'a');
     $('memeB').innerHTML = memeCardHTML(b.memeB, fighters && fighters.b, 'b');
     document.querySelectorAll('.fighter-avatar').forEach((img) =>
       img.addEventListener('error', () => { img.src = img.dataset.fallback; }, { once: true }));
-    document.querySelectorAll('.vote-btn').forEach((btn) => btn.addEventListener('click', () => vote(btn.dataset.side)));
-    document.querySelectorAll('.raid-btn').forEach((btn) => btn.addEventListener('click', () => raidOnX(btn.dataset.raid)));
+    document.querySelectorAll('.vote-btn').forEach((btn) => btn.addEventListener('click', () => openRolePicker(btn.dataset.side)));
+    document.querySelectorAll('.raid-btn').forEach((btn) => btn.addEventListener('click', () => callSquadOnX(btn.dataset.raid)));
     refreshIcons();
 
     if (fighters) {
@@ -1687,32 +1813,32 @@
       $('totalVotes').textContent = data
         ? `The arena needs ${2 - data.pool} more roasted account${data.pool === 1 ? '' : 's'}. Roast someone ↑`
         : 'Arena offline, try again later';
-      renderDeck();
+      renderSquad();
+      renderBounty();
       $('actionLog').innerHTML = '<li class="text-ash">The arena opens as soon as 2 accounts get roasted.</li>';
     }
   }
 
   // Store a fresh server state, replay other people's new actions, redraw everything.
   function applyArena(state, { replay = true } = {}) {
+    if (!state || !state.a) return;
     const newest = state.actions[0] ? state.actions[0].id : 0;
     if (replay && lastActionId !== null) {
-      state.actions.filter((a) => a.id > lastActionId).slice(0, 3).reverse().forEach(playActionFx);
+      state.actions.filter((a) => a.id > lastActionId).slice(0, 3).reverse().forEach((a) => playActionFx(a));
     }
     lastActionId = Math.max(lastActionId || 0, newest);
     arena = { state, at: Date.now() };
     if (state.queue !== undefined) $('queueCount').textContent = state.queue;
     updateBattleBars();
     renderLog();
-    renderDeck();
+    renderSquad();
+    renderBounty();
   }
-
-  const remaining = (secs) => (arena ? Math.max(0, secs - Math.floor((Date.now() - arena.at) / 1000)) : 0);
-  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
   function updateBattleBars() {
     const st = arena && arena.state;
-    const pa0 = st ? st.a.points : 0, pb0 = st ? st.b.points : 0, total = pa0 + pb0;
-    const pa = total ? Math.round((pa0 / total) * 100) : 50;
+    const sa = st ? scoreOf(st, 'a') : 0, sb = st ? scoreOf(st, 'b') : 0, total = sa + sb;
+    const pa = total ? Math.round((sa / total) * 100) : 50;
     $('barA').style.width = pa + '%';
     $('barB').style.width = 100 - pa + '%';
     $('pctA').textContent = fighters ? `${fighters.a.label} · ${pa}%` : '';
@@ -1723,64 +1849,342 @@
     $('totalVotes').textContent = votes
       ? `${votes.toLocaleString('en-US')} ${votes === 1 ? 'degen' : 'degens'} in the arena · ${total.toLocaleString('en-US')} pts at stake`
       : 'No one picked a side yet, be the first';
-    document.querySelectorAll('[data-points]').forEach((el) => (el.textContent = st[el.dataset.points].points.toLocaleString('en-US')));
+    document.querySelectorAll('[data-points]').forEach((el) => (el.textContent = scoreOf(st, el.dataset.points).toLocaleString('en-US')));
 
-    // Shield / pump effects with live countdowns
     ['a', 'b'].forEach((side) => {
       const card = $(side === 'a' ? 'memeA' : 'memeB');
-      const shield = remaining(st[side].shield), pump = remaining(st[side].pump);
+      const shield = remaining(st[side].shield), aura = remaining(st[side].aura), mult = Number(st[side].mult || 1);
       card.classList.toggle('shield-on', shield > 0);
-      card.classList.toggle('pump-on', pump > 0);
+      card.classList.toggle('aura-on', aura > 0);
       const badges = card.querySelector(`[data-badges="${side}"]`);
       if (badges) {
         badges.innerHTML =
-          (shield ? `<span class="fx-badge bg-cyan-400/15 text-cyan-300 border border-cyan-400/40">🛡️ ${mmss(shield)}</span>` : '') +
-          (pump ? `<span class="fx-badge bg-flame/15 text-flame border border-flame/40">🚀 x2 ${mmss(pump)}</span>` : '');
+          (shield ? `<span class="fx-badge bg-sky-400/15 text-sky-300 border border-sky-400/40">🛡️ Shield ${mmss(shield)}</span>` : '') +
+          (aura ? `<span class="fx-badge bg-neon/15 text-neon border border-neon/40">🧙‍♂️ Aura x2 ${mmss(aura)}</span>` : '') +
+          (mult > 1 ? `<span class="fx-badge bg-amber/15 text-amber border border-amber/40">⚡ Score x${mult.toFixed(2)}</span>` : '');
+      }
+      const sup = card.querySelector(`[data-supporters="${side}"]`);
+      if (sup) {
+        const online = st.votes[side + '_online'] || 0, n = st.votes[side] || 0, holders = st.votes[side + '_holders'] || 0;
+        sup.innerHTML = `<span class="flex items-center gap-1.5 text-slate-200"><span class="w-2 h-2 rounded-full bg-neon live-dot"></span><b>${online}</b> online</span>`
+          + `<span>${n} in the squad</span>` + (holders ? `<span class="text-neon">✅ ${holders} holder${holders === 1 ? '' : 's'}</span>` : '');
+      }
+      const squad = card.querySelector(`[data-squad="${side}"]`);
+      if (squad && st.roles) {
+        const r = st.roles[side];
+        squad.innerHTML = ['sniper', 'tank', 'buff'].map((k) =>
+          `<span class="intel-chip${r[k] ? '' : ' bad'}" title="${ROLES[k].name}s">${ROLES[k].emoji} ${r[k]}</span>`).join('');
       }
     });
 
-    ['a', 'b'].forEach((side) => {
-      const el = document.querySelector(`[data-supporters="${side}"]`);
-      if (!el) return;
-      const online = st.votes[side + '_online'] || 0, total = st.votes[side] || 0, holders = st.votes[side + '_holders'] || 0;
-      el.innerHTML = `<span class="flex items-center gap-1.5 text-slate-200"><span class="w-2 h-2 rounded-full bg-neon live-dot"></span><b>${online}</b> unique supporter${online === 1 ? '' : 's'} connected</span>`
-        + `<span>${total} in the army</span>` + (holders ? `<span class="text-neon">✅ ${holders} holder${holders === 1 ? '' : 's'}</span>` : '');
-    });
+    const voted = st.votes.voted, role = st.votes.role;
     document.querySelectorAll('.vote-btn').forEach((btn) => {
-      if (!st.votes.voted) return;
-      btn.disabled = true;
-      btn.classList.add('pointer-events-none');
-      btn.querySelector('span').textContent = btn.dataset.side === st.votes.voted ? 'Your team ✓' : 'Enemy team';
-      if (btn.dataset.side !== st.votes.voted) btn.classList.add('opacity-40');
+      const label = btn.querySelector('span');
+      if (!voted) { btn.disabled = !fighters; btn.classList.remove('opacity-40', 'pointer-events-none'); return; }
+      const mine = btn.dataset.side === voted;
+      btn.disabled = !(mine && !role); // legacy voters can still pick a class
+      btn.classList.toggle('pointer-events-none', btn.disabled);
+      btn.classList.toggle('opacity-40', !mine);
+      label.textContent = mine ? (role ? `Your team ✓ · ${ROLES[role].emoji} ${ROLES[role].name}` : 'Pick your class →') : 'Enemy team';
     });
   }
 
-  function renderDeck() {
+  // ---------- Role picker ----------
+  function rolePickerHTML(side) {
     const st = arena && arena.state;
-    const voted = st && st.votes.voted;
-    $('deckHint').textContent = !fighters ? 'The arena is waiting for fighters'
-      : voted ? `Playing for team ${fighters[voted].label}` : 'Pick a side to unlock your spells';
-    document.querySelectorAll('.buff-card').forEach((card) => {
-      const cd = voted ? remaining((st.cooldowns || {})[card.dataset.buff] || 0) : 0;
-      card.disabled = !voted || cd > 0 || card.dataset.busy === '1';
-      card.classList.toggle('cooling', cd > 0);
-      card.querySelector('.buff-cd').textContent = cd > 0 ? mmss(cd) : '';
-    });
+    const counts = st && st.roles ? st.roles[side] : null;
+    return ['sniper', 'tank', 'buff'].map((k) => {
+      const r = ROLES[k];
+      const n = counts ? counts[k] : 0;
+      return `
+        <button type="button" class="role-card" data-role="${k}" data-pick="${k}">
+          <div class="flex items-center justify-between gap-3">
+            <span class="role-icon" aria-hidden="true">${r.emoji}</span>
+            <span class="intel-chip${n ? '' : ' bad'}">${n ? `${n} in squad` : 'Squad needs one'}</span>
+          </div>
+          <span class="role-tag">${r.tag}</span>
+          <span class="role-name">${r.name}</span>
+          <span class="role-power">${r.power}</span>
+          <span class="role-rule mt-auto pt-2 border-t border-line">${r.rule}</span>
+        </button>`;
+    }).join('');
   }
 
+  function openRolePicker(side) {
+    if (!fighters) return;
+    pendingSide = side;
+    $('roleDialogTitle').textContent = `Join team ${fighters[side].label}`;
+    const picker = $('rolePicker');
+    picker.innerHTML = rolePickerHTML(side);
+    picker.querySelectorAll('[data-pick]').forEach((btn) => btn.addEventListener('click', () => joinSquad(pendingSide, btn.dataset.pick)));
+    const dlg = $('roleDialog');
+    if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); }
+    else dlg.setAttribute('open', '');
+    refreshIcons();
+    sound.whoosh();
+  }
+  function closeRolePicker() {
+    const dlg = $('roleDialog');
+    if (dlg.open) dlg.close ? dlg.close() : dlg.removeAttribute('open');
+  }
+
+  async function joinSquad(side, role) {
+    const b = getBattle();
+    const btns = $('rolePicker').querySelectorAll('[data-pick]');
+    btns.forEach((x) => (x.disabled = true));
+    try {
+      const st = await rpc('join_squad', { p_day: b.day, p_round: b.round, p_side: side, p_role: role, p_holder: holderVerified });
+      closeRolePicker();
+      applyArena(st, { replay: false });
+      playActionFx({ side: st.votes.voted || side, action: 'join', value: 10, role }, true);
+      toast(`${ROLES[role].emoji} You joined as ${ROLES[role].name}${holderVerified ? ' (✅ Holder)' : ''}. Your power is ready ↓`);
+      setTimeout(() => $('squadPanel').scrollIntoView({ behavior: 'smooth', block: 'center' }), 350);
+    } catch (e) {
+      toast(String(e.message).includes('400') ? 'This battle just ended, a new one is starting' : 'Could not join, try again');
+    } finally {
+      btns.forEach((x) => (x.disabled = false));
+    }
+  }
+
+  // ---------- Squad panel ----------
+  function renderSquad() {
+    const st = arena && arena.state;
+    const voted = st && st.votes.voted, role = st && st.votes.role;
+    const key = !fighters ? 'empty' : !voted ? 'pick' : !role ? 'legacy' : 'role:' + role + ':' + voted;
+    $('deckHint').textContent = !fighters ? 'The arena is waiting for fighters'
+      : !voted ? '1 click: pick a side, then your class'
+      : `Fighting for ${fighters[voted].label}`;
+    const panel = $('squadPanel');
+
+    if (key !== squadKey) {
+      squadKey = key;
+      if (key === 'empty' || key === 'pick') {
+        panel.innerHTML = `<div class="grid sm:grid-cols-3 gap-3 sm:gap-4">${['sniper', 'tank', 'buff'].map((k) => `
+          <div class="role-card" data-role="${k}">
+            <div class="flex items-center gap-3"><span class="role-icon" aria-hidden="true">${ROLES[k].emoji}</span>
+              <div><span class="role-tag block">${ROLES[k].tag}</span><span class="role-name">${ROLES[k].name}</span></div></div>
+            <span class="role-power">${ROLES[k].power}</span>
+            <span class="role-rule">${ROLES[k].rule}</span>
+          </div>`).join('')}</div>
+          <p class="mt-3 text-center font-mono text-xs text-ash">${key === 'pick' ? '↑ Hit <b class="text-slate-200">Join team</b> on a card above to pick your class' : 'Classes unlock when the arena opens'}</p>`;
+      } else if (key === 'legacy') {
+        panel.innerHTML = `<div class="glass rounded-2xl p-5 text-center">
+          <p class="font-bold text-lg">You're in team ${escapeHTML(fighters[voted].label)}, now choose your class</p>
+          <button id="legacyPick" class="mt-4 rounded-xl bg-flame text-ink font-bold px-6 py-3 glow-hover-flame">Pick my class</button></div>`;
+        $('legacyPick').addEventListener('click', () => openRolePicker(voted));
+      } else {
+        const r = ROLES[role];
+        panel.innerHTML = `
+          <div class="grid lg:grid-cols-[1.1fr_1fr] gap-4">
+            <div class="role-card" data-role="${role}">
+              <div class="flex items-center gap-4">
+                <span class="role-icon" style="width:76px;height:76px;font-size:42px" aria-hidden="true">${r.emoji}</span>
+                <div class="min-w-0">
+                  <span class="role-tag block">Your class · ${r.tag}</span>
+                  <span class="role-name block">${r.name}</span>
+                  <span class="font-mono text-xs text-ash">Team ${escapeHTML(fighters[voted].label)}</span>
+                </div>
+              </div>
+              <span class="role-power">${r.power}</span>
+              <button id="roleFire" class="role-fire mt-2" data-role="${role}"><span id="roleFireLabel">${r.emoji} ${r.cta}</span></button>
+              <p id="roleStatus" class="font-mono text-xs text-ash text-center min-h-[16px]"></p>
+            </div>
+            <div class="glass rounded-2xl p-5 flex flex-col gap-4">
+              <div>
+                <p class="font-mono text-[11px] tracking-[0.16em] uppercase text-amber mb-2">Battlefield intel</p>
+                <div id="intelChips" class="flex flex-wrap gap-2"></div>
+              </div>
+              <p id="intelTip" class="text-sm text-slate-300 leading-relaxed"></p>
+              <button id="squadCall" class="mt-auto w-full rounded-xl bg-slate-100 text-ink font-bold py-3 flex items-center justify-center gap-2 glow-hover-neon hover:bg-white">📢 Call Squad on X</button>
+            </div>
+          </div>`;
+        $('roleFire').addEventListener('click', useRole);
+        $('squadCall').addEventListener('click', () => callSquadOnX(voted));
+      }
+    }
+    if (key.startsWith('role:')) updateSquadLive();
+  }
+
+  // Timers & tactical tips, refreshed every second without rebuilding the panel
+  function updateSquadLive() {
+    const st = arena && arena.state;
+    if (!st || !st.votes.role || !$('roleFire')) return;
+    const my = st.votes.voted, opp = other(my), role = st.votes.role;
+    const cd = remaining((st.cooldowns || {})[role]);
+    const myShield = remaining(st[my].shield), oppShield = remaining(st[opp].shield);
+    const myAura = remaining(st[my].aura), oppAura = remaining(st[opp].aura);
+    const btn = $('roleFire'), status = $('roleStatus'), label = $('roleFireLabel');
+    const r = ROLES[role];
+
+    btn.disabled = roleBusy || cd > 0;
+    if (cd > 0) {
+      btn.classList.remove('armed'); delete btn.dataset.armed;
+      label.textContent = role === 'sniper' ? '✓ Shot fired' : `Recharging ${mmss(cd)}`;
+      status.textContent = role === 'sniper' ? 'One shot per battle. Your next rifle is ready next hour.' : 'Your power is recharging.';
+    } else if (!btn.dataset.armed) {
+      label.textContent = role === 'sniper' && myAura ? `${r.emoji} Fire CRITICAL shot (x2)` : `${r.emoji} ${r.cta}`;
+      status.textContent = role === 'sniper'
+        ? (oppShield ? `⚠️ Enemy shield up for ${mmss(oppShield)}. Your only shot would bounce.` : myAura ? '🔥 Aura active: your shot deals −40%!' : 'Ready. You only get one shot, time it well.')
+        : role === 'tank' ? (myShield ? `Shield already up (${mmss(myShield)}). Re-deploying refreshes it to 3:00.` : 'Ready. Your team is exposed!')
+        : (myAura ? `Aura already active (${mmss(myAura)}). Re-casting refreshes it to 2:00.` : 'Ready. Cast it right before your Snipers fire.');
+    }
+
+    const chips = [];
+    chips.push(myShield ? `<span class="intel-chip cool">🛡️ Our shield ${mmss(myShield)}</span>` : '<span class="intel-chip bad">🛡️ We are exposed</span>');
+    chips.push(oppShield ? `<span class="intel-chip bad">🛡️ Enemy shield ${mmss(oppShield)}</span>` : '<span class="intel-chip good">🎯 Enemy exposed</span>');
+    if (myAura) chips.push(`<span class="intel-chip good">🧙‍♂️ Our aura ${mmss(myAura)}</span>`);
+    if (oppAura) chips.push(`<span class="intel-chip bad">🧙‍♂️ Enemy aura ${mmss(oppAura)}</span>`);
+    const roles = st.roles ? st.roles[my] : null;
+    if (roles) chips.push(`<span class="intel-chip">Squad: 🏹${roles.sniper} 🛡️${roles.tank} 🧙‍♂️${roles.buff}</span>`);
+    $('intelChips').innerHTML = chips.join('');
+
+    const live = activeBounty();
+    let tip;
+    if (live && BOUNTIES[live.kind].role === role) tip = `<b class="text-amber">${BOUNTIES[live.kind].emoji} ${BOUNTIES[live.kind].name} is live and it's YOUR job.</b> Every ${role === 'tank' ? 'shield' : 'landed shot'} counts for the bounty.`;
+    else if (oppAura && !myShield) tip = '<b class="text-red-400">Enemy Buff Master is charging their Snipers (x2).</b> Tanks: shield up now!';
+    else if (role === 'buff' && roles && !roles.sniper) tip = 'Your squad has no Sniper yet: an aura does nothing without shooters. Call one on X.';
+    else if (role === 'sniper' && oppShield) tip = 'Wait for the enemy shield to drop, or ask your Buff Master for an aura first.';
+    else if (role === 'tank') tip = 'Keep the shield up when the enemy has Snipers left. It also cuts bounty steals by 80%.';
+    else tip = 'Coordinate: Buff Master casts the aura, Tanks hold the shield, Snipers fire inside the aura window.';
+    $('intelTip').innerHTML = tip;
+  }
+
+  async function useRole() {
+    const st = arena && arena.state;
+    if (!st || roleBusy) return;
+    const btn = $('roleFire');
+    const my = st.votes.voted, opp = other(my), role = st.votes.role;
+    // The sniper only has one shot: double-tap to confirm a shot into a shield.
+    if (role === 'sniper' && remaining(st[opp].shield) > 0 && !btn.dataset.armed) {
+      btn.dataset.armed = '1'; btn.classList.add('armed');
+      $('roleFireLabel').textContent = '⚠️ Shield up! Tap again to fire anyway';
+      setTimeout(() => { delete btn.dataset.armed; btn.classList.remove('armed'); updateSquadLive(); }, 3500);
+      return;
+    }
+    delete btn.dataset.armed; btn.classList.remove('armed');
+    roleBusy = true; updateSquadLive();
+    const b = getBattle();
+    try {
+      const res = await rpc('use_role', { p_day: b.day, p_round: b.round });
+      const r = res.result;
+      applyArena(res.state, { replay: false });
+      if (role === 'sniper') {
+        playActionFx({ side: opp, action: r.blocked ? 'snipe_blocked' : r.crit ? 'snipe_crit' : 'snipe', value: r.value, role }, true);
+        toast(r.blocked ? 'Your shot bounced off their shield 🛡️' : `${r.crit ? 'CRITICAL ' : ''}HIT: −${r.value} pts 🎯`);
+      } else {
+        playActionFx({ side: my, action: role === 'tank' ? 'tank' : 'aura', value: r.value, role }, true);
+        toast(role === 'tank' ? 'Shield deployed for 3 min 🛡️' : 'Command Aura active: Snipers x2 for 2 min 🧙‍♂️');
+      }
+      if (r.bounty_won) setTimeout(() => playActionFx({ side: my, action: 'bounty_won', value: r.bounty_won === 'speed_run' ? 25 : r.steal, role: r.bounty_won }, true), 900);
+    } catch (e) {
+      const m = String(e.message);
+      toast(m.includes('400') ? 'Not so fast, degen. Your power is recharging (or the battle just ended)' : 'Action failed, try again');
+      pollArena(true);
+    } finally {
+      roleBusy = false; updateSquadLive();
+    }
+  }
+
+  // ---------- Flash Bounty banner ----------
+  let seenBounty = null; // idx of the last bounty we alerted for
+  function activeBounty() {
+    const st = arena && arena.state;
+    if (!st || !st.bounties) return null;
+    return st.bounties.find((x) => x.status === 'active' && remaining(x.ends_in) > 0) || null;
+  }
+
+  function renderBounty() {
+    const el = $('bountyBanner');
+    const st = arena && arena.state;
+    if (!st || !st.bounties || !fighters) { el.classList.add('hidden'); return; }
+    const elapsed = Math.floor((Date.now() - arena.at) / 1000);
+    const live = activeBounty();
+    const recent = st.bounties.filter((x) => (x.status === 'won' || x.status === 'failed') && x.resolved_ago !== null && x.resolved_ago + elapsed < 40).pop();
+    const next = st.bounties.find((x) => x.status === 'upcoming');
+    el.classList.remove('hidden', 'bounty-live', 'bounty-won');
+
+    if (live) {
+      const info = BOUNTIES[live.kind];
+      const t = remaining(live.ends_in);
+      const pa = Math.min(100, (live.a / live.target) * 100), pb = Math.min(100, (live.b / live.target) * 100);
+      el.classList.add('bounty-live');
+      el.innerHTML = `
+        <div class="relative z-[1] flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+          <div class="flex items-center gap-4 flex-1 min-w-0">
+            <span class="text-5xl sm:text-6xl shrink-0" aria-hidden="true">${info.emoji}</span>
+            <div class="min-w-0">
+              <span class="bounty-alert">⚠ FLASH BOUNTY</span>
+              <p class="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-white">${info.name}</p>
+              <p class="mt-1 text-sm text-slate-300">${info.goal(live.target)}</p>
+            </div>
+          </div>
+          <div class="lg:w-[340px] shrink-0">
+            <div class="flex items-end justify-between gap-3 mb-2">
+              <span class="font-mono text-[11px] text-ash uppercase tracking-widest">Time left</span>
+              <span class="bounty-timer">${mmss(t)}</span>
+            </div>
+            ${['a', 'b'].map((s) => `
+              <div class="flex items-center gap-2 mt-2">
+                <span class="w-24 truncate font-mono text-xs text-${teamColor(s)}">${escapeHTML(fighters[s].label)}</span>
+                <div class="bounty-track flex-1"><div class="bg-${teamColor(s)}" style="width:${s === 'a' ? pa : pb}%"></div></div>
+                <span class="w-14 text-right font-mono text-xs text-slate-200">${s === 'a' ? live.a : live.b}/${live.target}</span>
+              </div>`).join('')}
+          </div>
+        </div>`;
+      if (seenBounty !== live.idx) {
+        const fresh = seenBounty !== null || live.ends_in > 170; // don't alarm on page load mid-bounty
+        seenBounty = live.idx;
+        if (fresh) { sound.alarm(); toast(`${info.emoji} FLASH BOUNTY: ${info.name}! 3 minutes on the clock`); }
+      }
+    } else if (recent) {
+      const info = BOUNTIES[recent.kind];
+      if (recent.status === 'won') {
+        el.classList.add('bounty-won');
+        const team = escapeHTML(fighters[recent.winner].label);
+        el.innerHTML = `<div class="flex items-center gap-4"><span class="text-4xl" aria-hidden="true">🏆</span>
+          <div><p class="font-mono text-[11px] tracking-[0.16em] uppercase text-neon">${info.emoji} ${info.name} · claimed</p>
+          <p class="text-lg sm:text-xl font-bold text-white"><span class="text-${teamColor(recent.winner)}">${team}</span> ${recent.kind === 'speed_run' ? 'locked a permanent <span class="text-neon">+25% score</span>' : `stole <span class="text-flame">${recent.reward} pts</span> from the enemy`}</p></div></div>`;
+      } else {
+        el.innerHTML = `<div class="flex items-center gap-4"><span class="text-4xl" aria-hidden="true">⌛</span>
+          <div><p class="font-mono text-[11px] tracking-[0.16em] uppercase text-ash">${info.emoji} ${info.name} · expired</p>
+          <p class="text-lg font-bold text-slate-200">Nobody claimed the bounty. Coordinate better next time.</p></div></div>`;
+      }
+    } else if (next) {
+      const s = remaining(next.starts_in);
+      el.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3">
+        <p class="flex items-center gap-3 font-mono text-xs sm:text-sm text-slate-300"><span class="w-2 h-2 rounded-full bg-flame live-dot"></span>
+          Next <b class="text-amber">FLASH BOUNTY</b> ${s > 0 ? `in <b class="text-white">${mmss(s)}</b>` : 'incoming…'}</p>
+        <p class="font-mono text-[11px] text-ash">⚡ Speed Run · 🎯 Sniper Showdown · get your squad ready</p></div>`;
+    } else {
+      el.classList.add('hidden');
+    }
+  }
+
+  // ---------- Log ----------
   function describeAction(a) {
     const team = fighters ? escapeHTML(fighters[a.side].label) : 'Team ' + a.side.toUpperCase();
     const color = a.side === 'a' ? 'text-neon' : 'text-flame';
-    const who = `<span class="text-slate-400">${a.holder ? '✅ Holder' : 'A supporter'} (${escapeHTML(a.actor)})</span>`;
+    const T = `<b class="${color}">${team}</b>`;
+    const who = `<span class="text-slate-400">${a.holder ? '✅ Holder' : 'A degen'} (${escapeHTML(a.actor)})</span>`;
+    const R = ROLES[a.role];
+    const B = BOUNTIES[a.role];
     switch (a.action) {
-      case 'vote': return `${who} joined <b class="${color}">${team}</b> ⚔️ +${a.value} pts`;
-      case 'dice': return `${who} rolled 🎲 for <b class="${color}">${team}</b>: <b>+${a.value} pts</b>`;
-      case 'shield': return `${who} raised a 🛡️ Shield on <b class="${color}">${team}</b> (2 min)`;
-      case 'pump': return `${who} fired a 🚀 FOMO Pump: <b class="${color}">${team}</b> x2 for 30s`;
-      case 'bomb': return a.value
-        ? `${who} dropped a 💣 Rug Bomb on <b class="${color}">${team}</b>: <b class="text-red-400">-${a.value} pts</b>`
-        : `${who} dropped a 💣 Rug Bomb on <b class="${color}">${team}</b>… nothing left to rug 🤷`;
-      case 'blocked': return `${who}'s 💣 Rug Bomb bounced off <b class="${color}">${team}</b>'s 🛡️ Shield`;
+      case 'join': return R ? `${who} joined ${T} as ${R.emoji} <b>${R.name}</b>${a.value ? ` · +${a.value} pts` : ''}` : `${who} joined ${T}`;
+      case 'snipe': return `${who} 🏹 sniped ${T}: <b class="text-red-400">−${a.value} pts</b>`;
+      case 'snipe_crit': return `${who} 🏹 landed a <b class="text-red-400">CRITICAL x2</b> shot on ${T}: <b class="text-red-400">−${a.value} pts</b>`;
+      case 'snipe_blocked': return `${who}'s 🏹 shot bounced off ${T}'s 🛡️ shield`;
+      case 'tank': return `${who} 🛡️ deployed a heavy shield on ${T} (3 min) · +${a.value} pts`;
+      case 'aura': return `${who} 🧙‍♂️ raised a Command Aura on ${T}: Snipers x2 for 2 min`;
+      case 'bounty_start': return B ? `<b class="text-amber">⚠ FLASH BOUNTY: ${B.emoji} ${B.name} is live!</b> 3 minutes on the clock` : 'Flash Bounty is live';
+      case 'bounty_won': return B ? `🏆 ${T} won ${B.emoji} <b>${B.name}</b>: ${a.role === 'speed_run' ? '<b class="text-neon">+25% permanent score</b>' : `stole <b class="text-flame">${a.value} pts</b>`}` : `🏆 ${T} won a bounty`;
+      case 'bounty_fail': return B ? `⌛ ${B.emoji} ${B.name} expired, nobody claimed it` : 'Bounty expired';
+      // actions from the previous arena version (earlier this hour)
+      case 'vote': return `${who} joined ${T} ⚔️ +${a.value} pts`;
+      case 'dice': return `${who} rolled 🎲 for ${T}: <b>+${a.value} pts</b>`;
+      case 'shield': return `${who} raised a 🛡️ Shield on ${T}`;
+      case 'pump': return `${who} fired a 🚀 FOMO Pump for ${T}`;
+      case 'bomb': return `${who} dropped a 💣 Rug Bomb on ${T}: −${a.value} pts`;
+      case 'blocked': return `${who}'s 💣 bounced off ${T}'s 🛡️ Shield`;
       default: return `${who} did something shady`;
     }
   }
@@ -1792,128 +2196,93 @@
           const t = new Date(a.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           return `<li class="flex gap-2"><span class="text-ash shrink-0">${t}</span><span>${describeAction(a)}</span></li>`;
         }).join('')
-      : '<li class="text-ash">No action yet. Pick a side and throw the first spell.</li>';
+      : '<li class="text-ash">No action yet. Pick a side, choose your class and make the first move.</li>';
     renderArenaFeed(actions);
   }
 
   function renderArenaFeed(actions) {
     const items = actions.length
       ? actions.slice(0, 10).map(describeAction)
-      : ['🏆 0.2 SOL for the winner of every hourly battle', '📢 Call your army on X', '💣 Rug Bomb the enemy, 🛡️ shield your team'];
+      : ['🏆 0.2 SOL for the winner of every hourly battle', '🏹 Snipers wipe 20% of the enemy score', '🛡️ Tanks shield the squad', '🧙‍♂️ Buff Masters double every shot', '⚡ Flash Bounties every 15-20 min'];
     let strip = items;
     while (strip.length < 6) strip = strip.concat(items);
     const html = strip.map((t) => `<span class="px-5">${t}</span><span class="text-flame/50">◆</span>`).join('');
     const track = $('arenaFeed');
-    if (track.dataset.html === html) return; // don't restart the scroll if nothing changed
+    if (track.dataset.html === html) return;
     track.dataset.html = html;
     track.innerHTML = html + html;
     track.style.setProperty('--dur', strip.length * 6 + 's');
   }
 
-  // Visual + sound feedback for an action (yours, or someone else's seen on the next poll)
+  // ---------- Visual + sound FX (yours, or someone else's seen on the next poll) ----------
   function playActionFx(a, mine = false) {
+    if (a.action === 'bounty_start' || a.action === 'bounty_fail') return; // the banner handles these
     const card = $(a.side === 'a' ? 'memeA' : 'memeB');
-    const floatText = (text, color) => {
+    if (!card) return;
+    const add = (el, ms) => { card.appendChild(el); setTimeout(() => el.remove(), ms); };
+    const floatText = (text, color, delay = 0) => setTimeout(() => {
       const el = document.createElement('div');
-      el.className = 'float-up'; el.style.color = color; el.textContent = text;
-      card.appendChild(el); setTimeout(() => el.remove(), 1400);
-    };
-    if (a.action === 'bomb') {
-      const boom = document.createElement('div'); boom.className = 'boom';
-      card.appendChild(boom); setTimeout(() => boom.remove(), 800);
-      card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
-      floatText(a.value ? `-${a.value} 💥` : 'NOTHING TO RUG', '#ff3d3d');
-      sound.boom();
-      if (mine && typeof confetti === 'function') {
-        const r = card.getBoundingClientRect();
-        confetti({ particleCount: 60, spread: 360, startVelocity: 28, ticks: 120, scalar: 0.8, disableForReducedMotion: true,
-          colors: ['#ff3d3d', '#ff6b1a', '#ffd23f', '#1f2937'],
-          origin: { x: (r.left + r.width / 2) / innerWidth, y: (r.top + r.height * 0.45) / innerHeight } });
-      }
-    } else if (a.action === 'blocked') {
-      card.classList.remove('shield-flash'); void card.offsetWidth; card.classList.add('shield-flash');
-      floatText('BLOCKED 🛡️', '#22d3ee');
+      el.className = 'float-up'; el.style.color = color; el.textContent = text; add(el, 1500);
+    }, delay);
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (a.action === 'snipe' || a.action === 'snipe_crit' || a.action === 'snipe_blocked') {
+      const fx = document.createElement('div');
+      fx.className = 'sniper-fx';
+      fx.innerHTML = RETICLE_SVG + '<span class="laser"></span>';
+      add(fx, 1300);
+      setTimeout(() => fx.classList.add('out'), 950);
+      sound.laser();
+      const impact = reduced ? 0 : 560;
+      setTimeout(() => {
+        if (a.action === 'snipe_blocked') {
+          card.classList.remove('shield-flash'); void card.offsetWidth; card.classList.add('shield-flash');
+          floatText('BLOCKED 🛡️', '#38bdf8');
+          sound.shield();
+          return;
+        }
+        const boom = document.createElement('div'); boom.className = 'boom'; add(boom, 800);
+        if (a.action === 'snipe_crit') { const f = document.createElement('div'); f.className = 'crit-flash'; add(f, 750); }
+        card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+        floatText(a.action === 'snipe_crit' ? `CRITICAL −${a.value}` : `−${a.value} 🎯`, '#ff3d3d');
+        sound.boom();
+        if (mine && typeof confetti === 'function') {
+          const r = card.getBoundingClientRect();
+          confetti({ particleCount: a.action === 'snipe_crit' ? 110 : 60, spread: 360, startVelocity: 30, ticks: 120, scalar: 0.8, disableForReducedMotion: true,
+            colors: ['#ff3d3d', '#ff6b1a', '#ffd23f', '#1f2937'],
+            origin: { x: (r.left + r.width / 2) / innerWidth, y: (r.top + r.height * 0.45) / innerHeight } });
+        }
+      }, impact);
+    } else if (a.action === 'tank') {
+      card.classList.remove('shield-deploy'); void card.offsetWidth; card.classList.add('shield-deploy');
+      setTimeout(() => card.classList.remove('shield-deploy'), 800);
+      floatText('🛡️ SHIELD UP', '#38bdf8');
       sound.shield();
-    } else if (a.action === 'shield') {
-      floatText('🛡️ SHIELD UP', '#22d3ee');
-      sound.shield();
-    } else if (a.action === 'pump') {
-      floatText('🚀 x2 PUMP', '#ff6b1a');
-      sound.whoosh();
-    } else if (a.action === 'dice' || a.action === 'vote') {
-      floatText(`+${a.value}`, a.side === 'a' ? '#e9b44c' : '#ff6b1a');
+    } else if (a.action === 'aura') {
+      ['', ' late'].forEach((c) => { const w = document.createElement('div'); w.className = 'shockwave' + c; add(w, 1300); });
+      floatText('🧙‍♂️ AURA x2', '#f6d38a');
+      sound.aura();
+    } else if (a.action === 'bounty_won') {
+      floatText(a.role === 'speed_run' ? '⚡ +25% SCORE' : `🎯 +${a.value} STOLEN`, '#ffd23f');
+      sound.chaching();
+      if (mine && typeof confetti === 'function') confetti({ particleCount: 120, spread: 110, startVelocity: 45, origin: { y: 0.6 }, colors: ['#ffd23f', '#e9b44c', '#ff6b1a', '#ffffff'], disableForReducedMotion: true });
+    } else if (a.action === 'join' || a.action === 'vote') {
+      if (a.value) floatText(`+${a.value}`, a.side === 'a' ? '#e9b44c' : '#ff6b1a');
     }
   }
 
-  async function vote(side) {
-    const b = getBattle();
-    document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = true));
-    try {
-      applyArena(await rpc('cast_vote', { p_day: b.day, p_round: b.round, p_side: side, p_holder: holderVerified }), { replay: false });
-      playActionFx({ side, action: 'vote', value: 10 }, true);
-      toast(holderVerified ? 'You joined as a ✅ Verified Holder ⚔️ Spells unlocked' : 'You joined the battle ⚔️ Your spells are unlocked');
-    } catch (e) {
-      document.querySelectorAll('.vote-btn').forEach((btn) => (btn.disabled = false));
-      toast(String(e.message).includes('400') ? 'This battle just ended, a new one is starting' : 'Vote failed, try again');
-    }
-  }
-
-  async function rollDiceAnimation(final) {
-    const tray = $('diceTray'), d1 = $('die1'), d2 = $('die2');
-    tray.classList.remove('hidden');
-    $('diceResult').textContent = '';
-    [d1, d2].forEach((d) => { d.classList.remove('rolling'); void d.offsetWidth; d.classList.add('rolling'); });
-    sound.dice();
-    const spin = setInterval(() => {
-      d1.textContent = DIE_FACES[Math.floor(Math.random() * 6)];
-      d2.textContent = DIE_FACES[Math.floor(Math.random() * 6)];
-    }, 70);
-    await new Promise((r) => setTimeout(r, 850));
-    clearInterval(spin);
-    if (final) { d1.textContent = DIE_FACES[final[0] - 1]; d2.textContent = DIE_FACES[final[1] - 1]; }
-  }
-
-  async function useBuff(action, card) {
-    const b = getBattle();
-    card.dataset.busy = '1'; renderDeck();
-    const roll = action === 'dice' ? rollDiceAnimation(null) : null;
-    try {
-      const res = await rpc('use_buff', { p_day: b.day, p_round: b.round, p_action: action });
-      const r = res.result;
-      if (roll) { await roll; await rollDiceAnimation(r.dice); }
-      const my = res.state.votes.voted, opp = my === 'a' ? 'b' : 'a';
-      applyArena(res.state, { replay: false });
-      if (action === 'dice') {
-        $('diceResult').textContent = `${r.dice[0]} + ${r.dice[1]}${r.mult > 1 ? ' x2' : ''} = +${r.value} pts`;
-        playActionFx({ side: my, action: 'dice', value: r.value }, true);
-      } else if (action === 'bomb') {
-        playActionFx({ side: opp, action: r.blocked ? 'blocked' : 'bomb', value: r.value }, true);
-        toast(r.blocked ? 'Blocked by their Shield 🛡️' : r.value ? `Rug Bomb hit: -${r.value} pts 💣` : 'Boom… but they had 0 pts to lose 🤷');
-      } else {
-        playActionFx({ side: my, action }, true);
-      }
-    } catch (e) {
-      if (roll) await roll;
-      toast(String(e.message).includes('400') ? 'Not so fast, degen. That spell is cooling down' : 'Spell failed, try again');
-    } finally {
-      delete card.dataset.busy; renderDeck();
-    }
-  }
-
-  async function pollArena() {
-    if (!fighters || document.visibilityState !== 'visible') return;
+  async function pollArena(force = false) {
+    if (!fighters || (!force && document.visibilityState !== 'visible')) return;
     const b = getBattle();
     try { applyArena(await rpc('get_battle', { p_day: b.day, p_round: b.round })); } catch {}
   }
 
-  // Raid on X: a ready-made tweet to bring a team's army to the site
-  function raidOnX(side) {
+  // ---------- Squad coordination tweet ----------
+  function callSquadOnX(side) {
     if (!fighters) return;
-    const f = fighters[side];
-    const text =
-      `I'm currently fighting in the $COOKED Degen Raid Arena! ⚔️ I need my army to launch a 💣 Rug Bomb or 🚀 FOMO Pump on my opponent so I can win the 0.2 SOL prize!\n\n` +
-      `Team ${f.label} 🔥 Vote here:\n`;
-    window.open('https://twitter.com/intent/tweet?' + new URLSearchParams({ text, url: CONFIG.siteUrl + '#battle', hashtags: 'COOKED,Solana' }),
+    const opp = fighters[other(side)];
+    const text = `NEED SQUAD ON $COOKED! ⚔️ Calling all 🛡️ TANKS and 🏹 SNIPERS to defend my card against ${opp.label}. Activate your roles now:`;
+    window.open('https://twitter.com/intent/tweet?' + new URLSearchParams({ text, url: CONFIG.siteUrl + '#battle' }),
       '_blank', 'noopener,width=600,height=520');
   }
 
@@ -1929,7 +2298,6 @@
     if (currentRoundKey && currentRoundKey !== day + ':' + round) {
       const [pd, pr] = currentRoundKey.split(':');
       currentRoundKey = day + ':' + round;
-      $('diceTray').classList.add('hidden');
       renderBattle();
       announceResult(pd, Number(pr), true);
     }
@@ -2082,6 +2450,12 @@
     shield() { this.tone('sine', 300, 900, 0, 0.45, 0.18); this.tone('triangle', 600, 1800, 0.05, 0.4, 0.08); },
     // Rocket whoosh
     whoosh() { this.noise(0, 0.8, 0.45, 'bandpass', 1200); this.tone('sawtooth', 120, 600, 0, 0.7, 0.05); },
+    // Sniper: laser charge + zap
+    laser() { this.tone('sine', 400, 2400, 0, 0.45, 0.08); this.tone('sawtooth', 2600, 180, 0.5, 0.18, 0.12); this.noise(0.5, 0.12, 0.25, 'highpass', 4000); },
+    // Buff Master: rising golden chord
+    aura() { [523, 659, 784, 1047].forEach((f, k) => this.tone('triangle', f, f * 1.01, k * 0.07, 0.9, 0.09)); this.noise(0, 0.6, 0.12, 'bandpass', 3000); },
+    // Flash Bounty: two-tone siren
+    alarm() { [0, 0.28, 0.56].forEach((t) => { this.tone('square', 880, 880, t, 0.13, 0.05); this.tone('square', 660, 660, t + 0.14, 0.13, 0.05); }); },
     // Cash register: "cha" (noise burst) + "ching" (two bell dings)
     chaching() {
       const ac = this.audio(); if (!ac) return;
@@ -2355,9 +2729,10 @@
     $('winnerOverlay').addEventListener('click', (e) => { if (e.target.id === 'winnerOverlay') hideWinner(); });
     { const prev = roundAt(Date.now() - 3600e3); announceResult(prev.day, prev.round); }
     checkHolder();
-    setInterval(pollArena, 5000);
-    setInterval(() => { if (arena) { updateBattleBars(); renderDeck(); } }, 1000); // live countdowns
-    document.querySelectorAll('.buff-card').forEach((card) => card.addEventListener('click', () => useBuff(card.dataset.buff, card)));
+    setInterval(pollArena, 4000);
+    setInterval(() => { if (arena) { updateBattleBars(); updateSquadLive(); renderBounty(); } }, 1000); // live countdowns
+    $('roleDialogClose').addEventListener('click', closeRolePicker);
+    $('roleDialog').addEventListener('click', (e) => { if (e.target.id === 'roleDialog') closeRolePicker(); });
     $('joinArenaBtn').addEventListener('click', joinArena);
 
     // View Roast modal
