@@ -767,9 +767,10 @@
     xHandle: '@Crypto_Cycles1',
     xUrl: 'https://x.com/Crypto_Cycles1',
     // Paste the token CA (mint address) here at launch: it switches on the Buy buttons and the live chart.
-    tokenMint: '',
-    // Public RPC is rate-limited and often blocks browsers; use a Helius/QuickNode URL in production.
-    rpcUrl: 'https://api.mainnet-beta.solana.com',
+    tokenMint: 'F6Km3ASmByKWXA5RQrgdvDcRsqLsDmTARhtTaREKpump',
+    // Browser-friendly public RPC (api.mainnet-beta blocks browsers). It refuses "indexed" calls,
+    // so balances are read with plain getAccountInfo. A Helius/QuickNode URL also works here.
+    rpcUrl: 'https://solana-rpc.publicnode.com',
     // Shared counters & votes. The publishable key is meant to be public: the database
     // only accepts the 4 RPC functions (rate-limited, one vote per visitor).
     supabaseUrl: 'https://xwzssdpnuamdfksopthc.supabase.co',
@@ -2052,9 +2053,14 @@
     }
     el.textContent = 'Checking your $COOKED balance…';
     try {
+      // Read the wallet's associated token account directly (amount = u64 at byte 64, 6 decimals)
       const conn = new solanaWeb3.Connection(CONFIG.rpcUrl, 'confirmed');
-      const res = await conn.getParsedTokenAccountsByOwner(new solanaWeb3.PublicKey(walletPubkey), { mint: new solanaWeb3.PublicKey(CONFIG.tokenMint) });
-      const amount = res.value.reduce((t, a) => t + (a.account.data.parsed.info.tokenAmount.uiAmount || 0), 0);
+      const mint = new solanaWeb3.PublicKey(CONFIG.tokenMint);
+      const [ata] = solanaWeb3.PublicKey.findProgramAddressSync(
+        [new solanaWeb3.PublicKey(walletPubkey).toBuffer(), new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA').toBuffer(), mint.toBuffer()],
+        new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'));
+      const info = await conn.getAccountInfo(ata);
+      const amount = info ? Number(info.data.readBigUInt64LE(64)) / 1e6 : 0;
       holderVerified = amount > 0;
       el.innerHTML = holderVerified
         ? `<b class="text-neon">✅ Verified Holder</b> · ${amount.toLocaleString('en-US')} $COOKED · your votes carry the badge`
@@ -2314,6 +2320,28 @@
   // =====================================================
   // LAUNCH: Buy buttons + live chart switch on when CONFIG.tokenMint is set
   // =====================================================
+  // DexScreener only shows a chart once it has indexed a trading pair. Until then, point to Pump.fun.
+  async function loadChart(mint, links) {
+    let hasPair = false;
+    try {
+      const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
+      hasPair = ((await res.json()).pairs || []).length > 0;
+    } catch {}
+    if (hasPair) {
+      $('chartWrap').innerHTML = `<iframe title="$COOKED live chart on DexScreener" class="absolute inset-0 w-full h-full border-0" loading="lazy"
+        src="https://dexscreener.com/solana/${encodeURIComponent(mint)}?embed=1&theme=dark&trades=0&info=0"></iframe>`;
+      return;
+    }
+    $('chartWrap').innerHTML = `
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+        <img data-mascot="big" src="${window.MASCOT.big}" alt="" class="visor-glow w-24 h-24 rounded-2xl object-cover ring-1 ring-amber/50" />
+        <p class="mt-5 text-xl sm:text-2xl font-bold metal-text">$COOKED is live on Pump.fun</p>
+        <p class="mt-2 text-sm text-ash max-w-md">The DexScreener chart appears here automatically as soon as it indexes the first trades. Until then, follow the bonding curve live on Pump.fun.</p>
+        <a href="${links.pumpLink}" target="_blank" rel="noopener" class="buy-link glow-hover-flame mt-5 rounded-xl bg-flame text-ink font-bold px-5 py-3">Open the live chart on Pump.fun ↗</a>
+      </div>`;
+    $('chartWrap').querySelector('.buy-link').addEventListener('click', () => sound.chaching());
+  }
+
   function setupLaunch() {
     const mint = CONFIG.tokenMint.trim();
     const links = {
@@ -2329,10 +2357,9 @@
         try { await navigator.clipboard.writeText(mint); toast('Contract address copied'); }
         catch { toast('Copy failed — select it manually'); }
       });
-      $('chartWrap').innerHTML = `<iframe title="$COOKED live chart on DexScreener" class="absolute inset-0 w-full h-full border-0" loading="lazy"
-        src="https://dexscreener.com/solana/${encodeURIComponent(mint)}?embed=1&theme=dark&trades=0&info=0"></iframe>`;
       $('chartOpenLink').href = links.dexLink;
       $('chartOpenLink').classList.remove('hidden');
+      loadChart(mint, links);
       return;
     }
     // Not launched yet: honest placeholders, no fake chart or CA
